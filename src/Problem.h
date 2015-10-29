@@ -1,6 +1,11 @@
 #ifndef ALGO3_TP3_PROBLEM_H
 #define ALGO3_TP3_PROBLEM_H
 
+#include "ColorStorage.h"
+#include "Graph.h"
+#include <vector>
+#include <list>
+
 class Problem {
 public:
     Problem(std::string input) {

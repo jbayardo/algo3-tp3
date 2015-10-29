@@ -1,6 +1,9 @@
 #ifndef ALGO3_TP3_COLORSTORAGE_H
 #define ALGO3_TP3_COLORSTORAGE_H
 
+#include <vector>
+#include <list>
+
 class ColorStorage {
 public:
     ColorStorage(std::size_t vertices) : colors(vertices) { };
