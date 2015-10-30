@@ -1,3 +1,4 @@
+#include <fstream>
 #include <iostream>
 #include "Statistics.h"
 #include "Problem.h"
@@ -28,15 +29,19 @@ int main(int argc, char *argv[]) {
     }
 
     Problem solver(input);
-
+    std::list<std::size_t> result;
     switch (exercise) {
         case 1:
+            result = solver.solve1();
             break;
         case 2:
+            result = solver.solve2();
             break;
         case 3:
+            result = solver.solve3();
             break;
         case 4:
+            result = solver.solve4();
             break;
         default:
             std::cerr << "Parámetro de ejercicio inválido. Debe estar entre 1 y 4." << std::endl;

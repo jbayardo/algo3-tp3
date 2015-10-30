@@ -1,10 +1,12 @@
 #ifndef ALGO3_TP3_PROBLEM_H
 #define ALGO3_TP3_PROBLEM_H
-
+#include <fstream>
+#include <iostream>
 #include "ColorStorage.h"
 #include "Graph.h"
 #include <vector>
 #include <list>
+#include <stdexcept>
 
 class Problem {
 public:

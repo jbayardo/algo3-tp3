@@ -22,7 +22,7 @@ public:
         return colors.size();
     }
 
-    std::vector<std::size_t> ascendingVertexs() {
+    std::vector<std::size_t> ascendingByColor() {
         std::vector<std::size_t> vertex_order(colors.size());
 
         auto comp = [this](std::size_t i, std::size_t j) {
