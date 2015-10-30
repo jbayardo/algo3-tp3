@@ -65,6 +65,11 @@ public:
 
         handle.close();
     }
+
+    std::list<std::size_t> solve1();
+    std::list<std::size_t> solve2();
+    std::list<std::size_t> solve3();
+    std::list<std::size_t> solve4();
 private:
     Graph graph;
     ColorStorage colors;
