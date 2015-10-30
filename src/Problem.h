@@ -21,13 +21,13 @@ public:
 
         handle >> vertices >> edges >> nColors;
 
-        if (c <= 0) {
+        if (nColors <= 0) {
             throw std::runtime_error("Error reading file: number of colors must be higher than 0");
         }
 
         colors = ColorStorage(vertices);
 
-        for (auto vertex = 0; vertex < vertices; ++vertex) {
+        for (std::size_t vertex = 0; vertex < vertices; ++vertex) {
             std::size_t readColors;
             handle >> readColors;
 
@@ -37,7 +37,7 @@ public:
 
             std::list<std::size_t> current;
 
-            for (auto color = 0; color < readColors; ++color) {
+            for (std::size_t c = 0; c < readColors; ++c) {
                 std::size_t color;
                 handle >> color;
 
@@ -53,7 +53,7 @@ public:
 
         graph = Graph(vertices);
 
-        for (auto edge = 0; edge < edges; ++edge) {
+        for (std::size_t edge = 0; edge < edges; ++edge) {
             std::size_t from, to;
             handle >> from >> to;
 
@@ -67,27 +67,10 @@ public:
         handle.close();
     }
 
-    twoSat() {
-        int vertexN = 0;
-        for(int x = 0; x < graph.size; ++x) {
-            vertexN += graph.neighbors(x).size() == 1? 1 : 4;
-        }
-        std::vector<int> vertexCourse(vertexN, -1);
-        Graph implicationGraph(vertexN);
-
-
-
-    }
-
-    korasaju(Graph implicationGraph) {
-        std::stack S;
-        int now = 0;
-        std::vector<bool> checked(implicationGraph.size(), false);
-        S.push_back(0);
-        while(!S.empty()) {
-            
-        }
-    }
+    std::list<std::size_t> solve1();
+    std::list<std::size_t> solve2();
+    std::list<std::size_t> solve3();
+    std::list<std::size_t> solve4();
 private:
     Graph graph;
     ColorStorage colors;
