@@ -8,6 +8,7 @@
 
 class Graph {
 public:
+    Graph() : adjacency(0) {};
     Graph(std::size_t vertices) : adjacency(vertices) { };
 
     std::size_t size() const { return adjacency.size(); }
@@ -59,7 +60,7 @@ std::list<Graph> components(Graph &graph) {
                         next.push(neighbor);
 
                         // Creamos sus conexiones en el grafo nuevo
-                        component.connect(current, next);
+                        component.connect(current, neighbor); //TODO:chequear!
                     }
                 }
 
