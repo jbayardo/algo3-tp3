@@ -4,6 +4,7 @@
 #include <vector>
 #include <list>
 #include <algorithm>
+#include <queue>
 
 class Graph {
 public:
@@ -23,8 +24,8 @@ public:
         adjacency[b].push_back(a);
     }
 
-    const std::list<std::size_t> neighbors(std::size_t a) const { return adjacency[a]; }
-    std::list<std::size_t> neighbors(std::size_t a) const { return adjacency[a]; }
+    const std::list<std::size_t>& neighbors(std::size_t a) const { return adjacency[a]; }
+    // std::list<std::size_t> neighbors(std::size_t a) const { return adjacency[a]; }
 private:
     std::vector<std::list<std::size_t>> adjacency;
 };
@@ -48,7 +49,7 @@ std::list<Graph> components(Graph &graph) {
             next.push(i);
 
             while (!next.empty()) {
-                std::size_t current = next.top();
+                std::size_t current = next.front();
                 next.pop();
 
                 // Recorremos los vecinos, agregando lo que haga falta
