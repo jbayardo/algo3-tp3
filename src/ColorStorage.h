@@ -7,7 +7,7 @@
 
 class ColorStorage {
 public:
-    ColorStorage() : colors(0) { }; //Hay que tenerlos si o si
+    ColorStorage() : colors(0) { };
     ColorStorage(std::size_t vertices) : colors(vertices) { };
 
     void add(std::size_t vertex, std::list<std::size_t> &iColors) {

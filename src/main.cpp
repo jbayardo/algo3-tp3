@@ -1,7 +1,8 @@
-#include <fstream>
-#include <iostream>
 #include "Statistics.h"
 #include "Problem.h"
+
+#include <fstream>
+#include <iostream>
 
 /*
  * ./tp <ejercicio> <entrada> <salida> <corridas>
@@ -13,8 +14,8 @@ int main(int argc, char *argv[]) {
     }
 
     int exercise = std::atoi(argv[1]);
-    std::string input = argv[2];
-    std::string output = argv[3];
+    std::string input(argv[2]);
+    std::string output(argv[3]);
     int runs;
 
     if (argc == 4) {
@@ -23,31 +24,18 @@ int main(int argc, char *argv[]) {
         runs = std::atoi(argv[4]);
     }
 
-    if (runs <= 0) {
-        std::cerr << "Parametro de corridas inválido, debe ser mayor a 0." << std::endl;
-        return 1;
+    Problem solver(input);
+    Coloring result(solver.solve(exercise, runs));
+
+    std::ofstream handle;
+    handle.open(output, std::ofstream::out);
+
+    if (!handle.is_open()) {
+        throw std::runtime_error("Fallo al abrir el archivo de salida");
     }
 
-    Problem solver(input);
-    std::list<std::size_t> result;
-    switch (exercise) {
-        case 1:
-            result = solver.solve1();
-            break;
-        case 2:
-            result = solver.solve2();
-            break;
-        case 3:
-            result = solver.solve3();
-            break;
-        case 4:
-            result = solver.solve4();
-            break;
-        default:
-            std::cerr << "Parámetro de ejercicio inválido. Debe estar entre 1 y 4." << std::endl;
-            return 1;
-            break;
-    }
+    handle << result;
+    handle.close();
 
     std::string path = std::string(output);
     std::string basename = path.substr(0, path.find_last_of('.'));
