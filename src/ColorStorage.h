@@ -14,11 +14,11 @@ public:
         colors[vertex].splice(colors[vertex].begin(), iColors); //Agrego colores nuevos al inicio
     }                                                           //No hay orden
 
-    std::list<std::size_t> get(std::size_t vertex) const {
+    const std::list<std::size_t> inline &get(std::size_t vertex) const {
         return colors[vertex];
     }
 
-    std::size_t size() const {
+    std::size_t inline size() const {
         return colors.size();
     }
 

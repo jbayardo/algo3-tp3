@@ -1,6 +1,7 @@
 #include <fstream>
 #include <stdexcept>
 #include "Problem.h"
+#include "Statistics.h"
 
 Problem::Problem(std::string input) {
     std::ifstream handle;
@@ -96,7 +97,33 @@ Coloring Problem::solve(int exercise, int runs) const {
 Coloring Problem::solve1() const {
 }
 
+#include <stack>
+
 Coloring Problem::solve2() const {
+    Timer timer("Backtracking Timer");
+    std::stack<Coloring> pending;
+
+    // Generamos el coloreo vacio
+    pending.push(Coloring(graph));
+
+    while (!pending.empty()) {
+        Coloring current = pending.top();
+        pending.pop();
+
+        // Chequeo si redujimos a 2 list coloring
+        if (2 list coloring) {
+            return ...;
+        } else {
+            // Genero todas las alternativas
+            for () {
+                Coloring generated(current);
+
+                if (generated.admissible(colors)) {
+                    pending.push(generated);
+                }
+            }
+        }
+    }
 }
 
 Coloring Problem::solve3() const {

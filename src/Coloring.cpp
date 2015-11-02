@@ -1,22 +1,29 @@
 #include <sstream>
 #include <limits>
+#include <stdexcept>
 #include "Coloring.h"
 
-Coloring::Coloring(std::size_t vertices) : colors(vertices, uncolored()), left(vertices) { }
+Coloring::Coloring(const Graph &g) :
+        graph(g),
+        colors(g.size(), uncolored()),
+        left(g.size()) { }
 
-Coloring::Coloring(const Coloring &c) : colors(c.colors), left(c.left) { }
+Coloring::Coloring(const Coloring &c) :
+        graph(c.graph),
+        colors(c.colors),
+        left(c.left) { }
 
 Coloring &Coloring::operator=(const Coloring &r) {
     if (this != &r) {
+        if (&graph != &r.graph) {
+            throw std::runtime_error("Los coloreos deben pertenecer a un mismo grafo para ser asignados");
+        }
+
         this->colors = r.colors;
         this->left = r.left;
     }
 
     return *this;
-}
-
-std::size_t inline Coloring::size() const {
-    return colors.size();
 }
 
 bool inline Coloring::complete() const {
@@ -53,11 +60,11 @@ std::ostream & operator<<(std::ostream &stream, const Coloring &coloring) {
     std::stringstream output;
 
     if (coloring.complete()) {
-        for (std::size_t i = 0; i < coloring.size() - 1; ++i) {
+        for (std::size_t i = 0; i < coloring.graph.size() - 1; ++i) {
             output << coloring.get(i) << ' ';
         }
 
-        output << coloring.get(coloring.size() - 1) << std::endl;
+        output << coloring.get(coloring.graph.size() - 1) << std::endl;
     } else {
         output << "X" << std::endl;
     }
