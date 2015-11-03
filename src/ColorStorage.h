@@ -26,7 +26,7 @@ public:
         std::vector<std::size_t> vertex_order(colors.size());
 
         auto comp = [this](std::size_t i, std::size_t j) {
-            return this->colors[i].size() > this->colors[j].size();
+            return this->colors[i].size() < this->colors[j].size();
         };
 
         std::sort(vertex_order.begin(), vertex_order.end(), comp);

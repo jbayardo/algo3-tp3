@@ -127,6 +127,33 @@ Coloring Problem::solve2() const {
 }
 
 Coloring Problem::solve3() const {
+    auto vertex_order = graph.descendingByDegree();
+    auto coloring = Coloring(graph);
+
+    for (auto& v: vertex_order) {
+        auto conflicts = std::numeric_limits<std::size_t>::max();
+        auto choice = 0;
+
+        for (auto& c: colors.get(v)) {
+            auto current_conflicts = 0;
+
+            for (auto& n: graph.neighbors(v)) {
+                if (coloring.get(n) == c) {
+                    current_conflicts++;
+                }
+            }
+
+            if (current_conflicts < conflicts) {
+                choice = c;
+                conflicts = current_conflicts;
+                if (current_conflicts == 0) {
+                    break;
+                }
+            }
+        }
+        coloring.set(v, choice);
+    }
+
 }
 
 Coloring Problem::solve4() const {
