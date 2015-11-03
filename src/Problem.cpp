@@ -167,6 +167,18 @@ twoSat() {
 			}
 		}	
 	}
+
+	int size = implicationGraph.size()
+	std::vector<bool> isInStack(size, false);
+	std::stack<int> nodes;
+	int now = 0;
+	while (nodes.size() != size) {
+		while (isInStack[now]) ++now;
+		
+		std::stack<int> dfs;
+		std::vector<bool> isInDfsStack(size, false);
+		while (dfs.)
+	}
 }
 
 korasaju(Graph implicationGraph) {
