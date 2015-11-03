@@ -1,5 +1,5 @@
 
-#include <iterator> 
+#include <iterator>
 #include <fstream>
 #include <stdexcept>
 #include "Problem.h"
@@ -165,7 +165,7 @@ twoSat() {
 				}
 				c++;
 			}
-		}	
+		}
 	}
 
 	int size = implicationGraph.size()
@@ -174,7 +174,7 @@ twoSat() {
 	int now = 0;
 	while (nodes.size() != size) {
 		while (isInStack[now]) ++now;
-		
+
 		std::stack<int> dfs;
 		std::vector<bool> isInDfsStack(size, false);
 		while (dfs.)
@@ -187,7 +187,7 @@ korasaju(Graph implicationGraph) {
 	std::vector<bool> checked(implicationGraph.size(), false);
 	S.push_back(0);
 	while(!S.empty()) {
-		
+
 	}
 }
 
@@ -244,7 +244,8 @@ Coloring Problem::solve3() const {
         }
         coloring.set(v, choice);
     }
-
+    assert coloring.complete();
+    return coloring;
 }
 
 Coloring Problem::solve4() const {
