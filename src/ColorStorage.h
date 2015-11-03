@@ -7,7 +7,7 @@
 
 class ColorStorage {
 public:
-    ColorStorage() : colors(0) { }; //Hay que tenerlos si o si
+    ColorStorage() : colors(0) { };
     ColorStorage(std::size_t vertices) : colors(vertices), totalNumber(0) { };
 
     void add(std::size_t vertex, std::list<std::size_t> &iColors) {
@@ -21,13 +21,14 @@ public:
         totalNumber += iColors.size();
     }                                                           //No hay orden
 
-    std::list<std::size_t> get(std::size_t vertex) const {
+    const std::list<std::size_t> inline &get(std::size_t vertex) const {
         return colors[vertex];
     }
     int totalNumber() const {
     	return totalNumber;
     }
-    std::size_t size() const {
+
+    std::size_t inline size() const {
         return colors.size();
     }
 
