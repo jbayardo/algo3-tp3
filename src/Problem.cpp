@@ -3,7 +3,6 @@
 #include <list>
 #include <stack>
 #include <stdexcept>
-#include <iterator> 
 #include <fstream>
 #include "DGraph.h"
 #include "Problem.h"
@@ -128,7 +127,7 @@ twoSat() {
 	// For every vertex
 	for (int i = 0; i < end; ++i) {
 		std::list<std::size_t>& myColors = colors.get(i)
-		// go through its neighbors
+		// go through its neighbours
 		for (auto neighbor : graph.neighbors(i)) {
 			int ic = 0;
 			// Check if there is an intersection in its colors
@@ -169,30 +168,84 @@ twoSat() {
 				}
 				c++;
 			}
-		}	
+		}
 	}
 
-	int size = implicationGraph.size()
-	std::vector<bool> isInStack(size, false);
-	std::stack<int> nodes;
-	int now = 0;
-	while (nodes.size() != size) {
-		while (isInStack[now]) ++now;
-		
-		std::stack<int> dfs;
-		std::vector<bool> isInDfsStack(size, false);
-		while (dfs.)
-	}
+	std::list<std::list<int>> s_c_c = korasaju(implicationGraph);
+
+
 }
 
-korasaju(Graph implicationGraph) {
-	std::stack S;
+std::list<std::list<int>> korasaju(Graph implicationGraph) {
+	std::stack<int> nodes;
+	int size = implicationGraph.size();
 	int now = 0;
-	std::vector<bool> checked(implicationGraph.size(), false);
-	S.push_back(0);
-	while(!S.empty()) {
-		
+	std::vector<bool> isInStack(implicationGraph.size(), false);
+
+	while (nodes.size() != size) {
+		while (isInStack[now]) ++now;
+
+		std::stack<int> dfs;
+		std::vector<bool> discovered(size, false);
+		dfs.push(now);
+		// Perform a dfs from this vertex
+		int v;
+		while (!dfs.empty()) {
+			v = dfs.top(); 
+			dfs.pop();
+			if (!discovered[v]) {
+				discovered[v] = true;
+				int expansion = 0;
+				for (auto neighbor : implicationGraph.neighbours(v)) {
+					if (!discovered[neighbor]) {
+						expansion++;
+						dfs.push(discovered);
+					}
+				}
+				if (expansion == 0) break;
+			}
+		}
+		// When we get to a vertex that cant keep expanding we push it into the original stack
+		if (!dfs.empty() && !isInStack[v]) {
+			nodes.push(v);
+			isInStack[v] = true;
+		}
 	}
+
+	// Reverse edges
+	implicationGraph.transpose();
+
+	std::list<std::list<int>> res;
+	while (!nodes.empty()) {
+		// Ignore nodes already processed
+		while (!isInStack[nodes.top()]) nodes.pop();
+		if (nodes.empty()) break;
+		
+		int now = nodes.top();
+		nodes.pop();
+
+		// Start new strongly connected component
+		res.push_back(std::list<int>());
+		res.back.push_back(now);
+		isInStack[now] = false;
+
+		// Complete SCC with nodes found while doing a DFS
+		std::stack<int> dfs;
+		dfs.push(now);
+		while (!dfs.empty()) {
+			int v = dfs.top(); 
+			dfs.pop();
+			for (auto neighbor : implicationGraph.neighbours(v)) {
+				if (isInStack[neighbor]) {
+					res.back.push_back(neighbor);
+					isInStack[neighbor] = false;
+					dfs.push(neighbor);
+				}
+			}
+		}
+	}
+
+	return res;	
 }
 
 Coloring Problem::solve2() const {
@@ -204,24 +257,40 @@ Coloring Problem::solve2() const {
     while (!pending.empty()) {
         Coloring current = pending.top();
         pending.pop();
-
-        // Chequeo si redujimos a 2 list coloring
-        if (2 list coloring) {
-            return ...;
-        } else {
-            // Genero todas las alternativas
-            for () {
-                Coloring generated(current);
-
-                if (generated.admissible(colors)) {
-                    pending.push(generated);
-                }
-            }
-        }
     }
 }
 
 Coloring Problem::solve3() const {
+    auto vertex_order = graph.descendingByDegree();
+    auto coloring = Coloring(graph);
+
+    for (auto& v: vertex_order) {
+        auto conflicts = std::numeric_limits<std::size_t>::max();
+        auto choice = 0;
+
+        for (auto& c: colors.get(v)) {
+            auto current_conflicts = coloring.conflicts(c);
+
+            if (current_conflicts < conflicts) {
+                choice = c;
+                conflicts = current_conflicts;
+
+                if (current_conflicts == 0) {
+                    break;
+                }
+            }
+        }
+
+        coloring.set(v, choice);
+    }
+
+#ifdef DEBUG
+    if (!coloring.complete()) {
+        throw std::runtime_error("La heuristica golosa devolvió un coloreo incompleto");
+    }
+#endif
+
+    return coloring;
 }
 
 /**
@@ -230,14 +299,14 @@ Coloring Problem::solve3() const {
  */
 Coloring neighbour(Coloring next) {
     // Calculamos la cantidad de vecinos que vamos a mirar
-    std::size_t size = 10;
+    std::size_t size = 5;
 
     if (next.size() < size) {
         size = next.size();
     }
 
     // Obtenemos las colisiones
-    std::vector<std::size_t> collisions = next.perVertexCollision();
+    std::vector<std::size_t> conflicts = next.perVertexConflicts();
     std::vector<std::size_t> vertices(size, std::numeric_limits<std::size_t>::max());
 
     // Obtenemos el mejor vecino
@@ -246,9 +315,9 @@ Coloring neighbour(Coloring next) {
         // TODO: hacer menos cancro
         vertices[n] = n;
 
-        for (std::size_t i = 0; i < collisions.size(); ++i) {
+        for (std::size_t i = 0; i < conflicts.size(); ++i) {
             // Si el elemento actual tiene mas colisiones que el que habiamos seleccionado
-            if (collisions[i] > collisions[vertices[n]]) {
+            if (conflicts[i] > conflicts[vertices[n]]) {
                 // Si el elemento actual no habia sido seleccionado previamente, lo seteamos
                 bool skip = false;
 
@@ -266,8 +335,19 @@ Coloring neighbour(Coloring next) {
 
         // Obtengo el mejor color para el vertice que no sea el actual
         Coloring current(next);
-        /* TODO: hay que integrar esta porqueria en el colorstorage
-         */
+
+        /* TODO: hay que integrar esta porqueria en el colorstorage */
+        for (auto &color : colors.get(vertices[n])) {
+            Coloring temporal(next);
+
+            if (color != temporal.get(vertices[n])) {
+                temporal.set(vertices[n], color);
+
+                if (temporal.conflicts(vertices[n]) < current.conflicts(vertices[n])) {
+                    current = temporal;
+                }
+            }
+        }
 
         // Si mejora el coloreo actual, lo reemplazo!
         if (current.collisions() < next.collisions()) {
@@ -280,12 +360,6 @@ Coloring neighbour(Coloring next) {
 
 Coloring Problem::solve4() const {
     Coloring current = solve3();
-
-#ifdef DEBUG
-    if (!beginning.complete()) {
-        throw std::runtime_error("La heuristica golosa devolvió un coloreo incompleto");
-    }
-#endif
 
     // TODO: esto es delicado, podriamos quedarnos iterando en ciclos si no limitamos las iteraciones
     for (std::size_t iterations = 0; iterations < 1000; ++iterations) {

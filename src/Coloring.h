@@ -66,12 +66,28 @@ public:
      */
     std::size_t inline unset(std::size_t index);
 
-    /*! Verifica si un coloreo es admisible, es decir, si los colores pertenecen a las listas de los nodos y ningún
-     * nodo tiene el mismo color en su vecindad.
+    /*! Cuenta conflictos de coloreo para un nodo
      *
-     * @return true si el coloreo es admisible
+     * @param index número de nodo
+     * @return cantidad de conflictos con sus vecinos coloreados
      */
-    bool admissible(const ColorStorage &storage) const;
+    std::size_t conflicts(std::size_t index) const;
+
+    std::vector<std::size_t> perVertexConflicts() const {
+        std::vector<std::size_t> conflicts(size(), 0);
+
+        for (std::size_t i = 0; i < size(); ++i) {
+            if (isset(i)) {
+                for (auto &neighbour : graph.neighbours(i)) {
+                    if (isset(neighbour) && get(neighbour) != get(i)) {
+                        ++conflicts[i];
+                    }
+                }
+            }
+        }
+
+        return conflicts;
+    }
 
     /*! Destructor
      */

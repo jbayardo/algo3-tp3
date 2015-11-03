@@ -11,7 +11,9 @@ public:
     std::size_t inline size() const;
     std::size_t inline degree(std::size_t a) const;
     void connect(std::size_t a, std::size_t b);
-    const std::list<std::size_t> inline &neighbors(std::size_t a) const;
+    const std::list<std::size_t> inline &neighbours(std::size_t a) const;
+    std::vector<std::size_t> descendingByDegree();
+    virtual ~Graph();
 private:
     std::vector<std::list<std::size_t>> adjacency;
 };

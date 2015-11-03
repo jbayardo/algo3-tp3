@@ -35,14 +35,34 @@ bool inline Coloring::complete() const {
 }
 
 bool inline Coloring::isset(std::size_t index) const {
+#ifdef DEBUG
+    if (index >= size()) {
+        throw std::out_of_range("Indice fuera de rango");
+    }
+#endif
+
     return (colors[index] != uncolored());
 }
 
 std::size_t inline Coloring::get(std::size_t index) const {
+#ifdef DEBUG
+    if (index >= size()) {
+        throw std::out_of_range("Indice fuera de rango");
+    }
+#endif
+
     return colors[index];
 }
 
 std::size_t inline Coloring::set(std::size_t index, std::size_t color) {
+#ifdef DEBUG
+    if (index >= size()) {
+        throw std::out_of_range("Indice fuera de rango");
+    }
+
+    // TODO: verificar que el color esté en rango para el índice
+#endif
+
     if (colors[index] == uncolored()) {
         --left;
     }
@@ -51,11 +71,39 @@ std::size_t inline Coloring::set(std::size_t index, std::size_t color) {
 }
 
 std::size_t inline Coloring::unset(std::size_t index) {
+#ifdef DEBUG
+    if (index >= size()) {
+        throw std::out_of_range("Indice fuera de rango");
+    }
+#endif
+
     if (colors[index] != uncolored()) {
         ++left;
     }
 
     return (colors[index] = uncolored());
+}
+
+std::size_t Coloring::conflicts(std::size_t index) const {
+#ifdef DEBUG
+    if (index >= size()) {
+        throw std::out_of_range("Indice fuera de rango");
+    }
+
+    if (!isset(index)) {
+        throw std::runtime_error("No podemos computar conflictos para un nodo sin colorear");
+    }
+#endif
+
+    std::size_t amount = 0;
+
+    for (auto &neighbour : graph.neighbours(index)) {
+        if (isset(neighbour) && get(neighbour) == get(index)) {
+            ++amount;
+        }
+    }
+
+    return amount;
 }
 
 Coloring::~Coloring() { }
@@ -75,26 +123,4 @@ std::ostream & operator<<(std::ostream &stream, const Coloring &coloring) {
 
     stream << output;
     return stream;
-}
-
-bool Coloring::admissible(const ColorStorage &storage) const {
-    for (std::size_t i = 0; i < colors.size(); ++i) {
-        // Sólo chequeamos los nodos coloreados
-        if (get(i) != uncolored()) {
-            // Chequeamos que el color asignado sea válido
-            if (std::find(storage.get(i).begin(), storage.get(i).end(), get(i)) == storage.get(i).end()) {
-                return false;
-            }
-
-            // Verificamos que todos los vecinos no tengan el mismo color
-            for (auto &neighbor : graph.neighbors(i)) {
-                // Sólo chequeamos los que esten coloreados y no hayan sido chequeados
-                if (neighbor > i && get(neighbor) != uncolored() && get(neighbor) == get(i)) {
-                    return false;
-                }
-            }
-        }
-    }
-
-    return true;
 }
