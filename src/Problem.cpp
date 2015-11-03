@@ -168,27 +168,80 @@ twoSat() {
 		}	
 	}
 
-	int size = implicationGraph.size()
-	std::vector<bool> isInStack(size, false);
-	std::stack<int> nodes;
-	int now = 0;
-	while (nodes.size() != size) {
-		while (isInStack[now]) ++now;
-		
-		std::stack<int> dfs;
-		std::vector<bool> isInDfsStack(size, false);
-		while (dfs.)
-	}
+	std::list<std::list<int>> s_c_c = korasaju(implicationGraph);
+
+	
 }
 
-korasaju(Graph implicationGraph) {
-	std::stack S;
+std::list<std::list<int>> korasaju(Graph implicationGraph) {
+	std::stack<int> nodes;
+	int size = implicationGraph.size();
 	int now = 0;
-	std::vector<bool> checked(implicationGraph.size(), false);
-	S.push_back(0);
-	while(!S.empty()) {
-		
+	std::vector<bool> isInStack(implicationGraph.size(), false);
+
+	while (nodes.size() != size) {
+		while (isInStack[now]) ++now;
+		std::stack<int> dfs;
+		std::vector<bool> discovered(size, false);
+		dfs.push(now);
+		// Perform a dfs from this vertex
+		int v;
+		while (!dfs.empty()) {
+			v = dfs.top(); 
+			dfs.pop();
+			if (!discovered[v]) {
+				discovered[v] = true;
+				int expansion = 0;
+				for (auto neighbor : implicationGraph.neighbors(v)) {
+					if (!discovered[neighbor]) {
+						expansion++;
+						dfs.push(discovered);
+					}
+				}
+				if (expansion == 0) break;
+			}
+		}
+		// When we get to a vertex that cant keep expanding we push it into the original stack
+		if (!dfs.empty() && !isInStack[v]) {
+			nodes.push(v);
+			isInStack[v] = true;
+		}
 	}
+
+	// Reverse edges
+	implicationGraph.transpose();
+
+	std::list<std::list<int>> res;
+	while (!nodes.empty()) {
+		// Ignore nodes already processed
+		while (!isInStack[nodes.top()]) nodes.pop();
+		if (nodes.empty()) break;
+		
+		int now = nodes.top();
+		nodes.pop();
+
+		// Start new strongly connected component
+		res.push_back(std::list<int>());
+		res.back.push_back(now);
+		isInStack[now] = false;
+
+		// Complete SCC with nodes found while doing a DFS
+		std::stack<int> dfs;
+		dfs.push(now);
+		while (!dfs.empty()) {
+			int v = dfs.top(); 
+			dfs.pop();
+			for (auto neighbor : implicationGraph.neighbors(v)) {
+				if (isInStack[neighbor]) {
+					res.back.push_back(neighbor);
+					isInStack[neighbor] = false;
+					dfs.push(neighbor);
+				}
+			}
+		}
+	}
+
+	return res;	
 }
 
 Coloring Problem::solve2() const {
