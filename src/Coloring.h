@@ -27,6 +27,12 @@ public:
      */
     Coloring & operator=(const Coloring &r);
 
+    /*! Cantidad de nodos en el coloreo
+     *
+     * @return nodos en el coloreo
+     */
+    std::size_t inline size() const;
+
     /*!
      * @return true si todos los nodos tienen un color
      */
@@ -60,32 +66,12 @@ public:
      */
     std::size_t inline unset(std::size_t index);
 
-    /*! Verifiac si un coloreo es admisible, es decir, si los colores pertenecen a las listas de los nodos y ningún
+    /*! Verifica si un coloreo es admisible, es decir, si los colores pertenecen a las listas de los nodos y ningún
      * nodo tiene el mismo color en su vecindad.
      *
      * @return true si el coloreo es admisible
      */
-    bool admissible(const ColorStorage &storage) {
-        for (std::size_t i = 0; i < colors.size(); ++i) {
-            // Sólo chequeamos los nodos coloreados
-            if (get(i) != uncolored()) {
-                // Chequeamos que el color asignado sea válido
-                if (std::find(storage.get(i).begin(), storage.get(i).end(), get(i)) == storage.get(i).end()) {
-                    return false;
-                }
-
-                // Verificamos que todos los vecinos no tengan el mismo color
-                for (auto &neighbor : graph.neighbors(i)) {
-                    // Sólo chequeamos los que esten coloreados y no hayan sido chequeados
-                    if (neighbor > i && get(neighbor) != uncolored() && get(neighbor) == get(i)) {
-                        return false;
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
+    bool admissible(const ColorStorage &storage) const;
 
     /*! Destructor
      */
@@ -98,7 +84,6 @@ public:
         return std::numeric_limits<std::size_t>::max();
     }
 private:
-
     std::vector<std::size_t> colors;
     std::size_t left;
     const Graph &graph;

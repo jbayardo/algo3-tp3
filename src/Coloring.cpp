@@ -26,6 +26,10 @@ Coloring &Coloring::operator=(const Coloring &r) {
     return *this;
 }
 
+std::size_t inline Coloring::size() const {
+    return graph.size();
+}
+
 bool inline Coloring::complete() const {
     return (left == 0);
 }
@@ -71,4 +75,26 @@ std::ostream & operator<<(std::ostream &stream, const Coloring &coloring) {
 
     stream << output;
     return stream;
+}
+
+bool Coloring::admissible(const ColorStorage &storage) const {
+    for (std::size_t i = 0; i < colors.size(); ++i) {
+        // Sólo chequeamos los nodos coloreados
+        if (get(i) != uncolored()) {
+            // Chequeamos que el color asignado sea válido
+            if (std::find(storage.get(i).begin(), storage.get(i).end(), get(i)) == storage.get(i).end()) {
+                return false;
+            }
+
+            // Verificamos que todos los vecinos no tengan el mismo color
+            for (auto &neighbor : graph.neighbors(i)) {
+                // Sólo chequeamos los que esten coloreados y no hayan sido chequeados
+                if (neighbor > i && get(neighbor) != uncolored() && get(neighbor) == get(i)) {
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
 }

@@ -11,9 +11,17 @@ public:
     DGraph() : adjacency(0) {};
     DGraph(std::size_t vertices) : adjacency(vertices) { };
 
-    std::size_t size() const { return adjacency.size(); }
-    std::size_t outDegree(std::size_t a) const { return adjacency[a].size(); }
-    std::size_t inDegree(std::size_t a) const { return parents[a].size(); }
+    std::size_t inline size() const {
+        return adjacency.size();
+    }
+
+    std::size_t inline outDegree(std::size_t a) const {
+        return adjacency[a].size();
+    }
+
+    std::size_t inline inDegree(std::size_t a) const {
+        return parents[a].size();
+    }
 
     void connect(std::size_t a, std::size_t b) {
 #ifdef DEBUG

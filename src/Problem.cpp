@@ -1,7 +1,11 @@
 
+#include <vector>
+#include <list>
+#include <stack>
+#include <stdexcept>
 #include <iterator> 
 #include <fstream>
-#include <stdexcept>
+#include "DGraph.h"
 #include "Problem.h"
 #include "Statistics.h"
 
@@ -220,5 +224,79 @@ Coloring Problem::solve2() const {
 Coloring Problem::solve3() const {
 }
 
+/**
+ * @param input coloreo de entrada
+ * @return mejor coloreo vecino
+ */
+Coloring neighbour(Coloring next) {
+    // Calculamos la cantidad de vecinos que vamos a mirar
+    std::size_t size = 10;
+
+    if (next.size() < size) {
+        size = next.size();
+    }
+
+    // Obtenemos las colisiones
+    std::vector<std::size_t> collisions = next.perVertexCollision();
+    std::vector<std::size_t> vertices(size, std::numeric_limits<std::size_t>::max());
+
+    // Obtenemos el mejor vecino
+    for (std::size_t n = 0; n < size; ++n) {
+        // Tomamos el n-esimo vertice con más colisiones
+        // TODO: hacer menos cancro
+        vertices[n] = n;
+
+        for (std::size_t i = 0; i < collisions.size(); ++i) {
+            // Si el elemento actual tiene mas colisiones que el que habiamos seleccionado
+            if (collisions[i] > collisions[vertices[n]]) {
+                // Si el elemento actual no habia sido seleccionado previamente, lo seteamos
+                bool skip = false;
+
+                for (std::size_t j = 0; j < n; ++j) {
+                    if (vertices[j] == i) {
+                        skip = true;
+                    }
+                }
+
+                if (!skip) {
+                    vertices[n] = i;
+                }
+            }
+        }
+
+        // Obtengo el mejor color para el vertice que no sea el actual
+        Coloring current(next);
+        /* TODO: hay que integrar esta porqueria en el colorstorage
+         */
+
+        // Si mejora el coloreo actual, lo reemplazo!
+        if (current.collisions() < next.collisions()) {
+            next = current;
+        }
+    }
+
+    return next;
+}
+
 Coloring Problem::solve4() const {
+    Coloring current = solve3();
+
+#ifdef DEBUG
+    if (!beginning.complete()) {
+        throw std::runtime_error("La heuristica golosa devolvió un coloreo incompleto");
+    }
+#endif
+
+    // TODO: esto es delicado, podriamos quedarnos iterando en ciclos si no limitamos las iteraciones
+    for (std::size_t iterations = 0; iterations < 1000; ++iterations) {
+        Coloring next = neighbour(current);
+
+        if (next.collisions() >= current.collisions()) {
+            return current;
+        } else {
+            current = next;
+        }
+    }
+
+    return current;
 }
