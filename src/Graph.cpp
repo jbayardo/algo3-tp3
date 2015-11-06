@@ -5,20 +5,6 @@ Graph::Graph() : adjacency(0) { }
 
 Graph::Graph(std::size_t vertices) : adjacency(vertices) { }
 
-std::size_t inline Graph::size() const {
-    return adjacency.size();
-}
-
-std::size_t inline Graph::degree(std::size_t a) const {
-#ifdef DEBUG
-    if (a >= size()) {
-        throw std::out_of_range("Indice fuera de rango");
-    }
-#endif
-
-    return adjacency[a].size();
-}
-
 void Graph::connect(std::size_t a, std::size_t b) {
 #ifdef DEBUG
     if (a >= size()) {
@@ -38,17 +24,7 @@ void Graph::connect(std::size_t a, std::size_t b) {
     adjacency[b].push_back(a);
 }
 
-const std::list<std::size_t> inline &Graph::neighbours(std::size_t a) const {
-#ifdef DEBUG
-    if (a >= size()) {
-        throw std::out_of_range("Indice fuera de rango");
-    }
-#endif
-
-    return adjacency[a];
-}
-
-std::vector<std::size_t> Graph::descendingByDegree() {
+std::vector<std::size_t> Graph::descendingByDegree() const {
     std::vector<std::size_t> vertex_order(size());
 
     auto comp = [this](std::size_t i, std::size_t j) {
@@ -60,4 +36,4 @@ std::vector<std::size_t> Graph::descendingByDegree() {
     return vertex_order;
 }
 
-~Graph::Graph() { }
+Graph::~Graph() { }

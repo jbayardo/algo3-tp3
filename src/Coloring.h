@@ -31,25 +31,46 @@ public:
      *
      * @return nodos en el coloreo
      */
-    std::size_t inline size() const;
+    inline std::size_t size() const {
+        return graph.size();
+    }
 
     /*!
      * @return true si todos los nodos tienen un color
      */
-    bool inline complete() const;
+
+    inline bool complete() const {
+        return (left == 0);
+    }
 
     /*!
      * @param index número de nodo
      * @return true si el nodo index está coloreado
      */
-    bool inline isset(std::size_t index) const;
+    inline bool isset(std::size_t index) const {
+    #ifdef DEBUG
+        if (index >= size()) {
+            throw std::out_of_range("Indice fuera de rango");
+        }
+    #endif
+
+        return (colors[index] != uncolored());
+    }
 
     /*! Devuelve el color de un nodo
      *
      * @param index número de nodo
      * @return color del nodo index, uncolored() si no tiene color
      */
-    std::size_t inline get(std::size_t index) const;
+    inline std::size_t  get(std::size_t index) const {
+    #ifdef DEBUG
+        if (index >= size()) {
+            throw std::out_of_range("Indice fuera de rango");
+        }
+    #endif
+
+        return colors[index];
+    }
 
     /*! Cambia el color de un nodo
      *
@@ -57,14 +78,40 @@ public:
      * @param color nuevo color a asignar
      * @return antiguo color del nodo index, uncolored() si no tenía color
      */
-    std::size_t inline set(std::size_t index, std::size_t color);
+    inline std::size_t  set(std::size_t index, std::size_t color) {
+    #ifdef DEBUG
+        if (index >= size()) {
+            throw std::out_of_range("Indice fuera de rango");
+        }
+
+        // TODO: verificar que el color esté en rango para el índice
+    #endif
+
+        if (colors[index] == uncolored()) {
+            --left;
+        }
+
+        return (colors[index] = color);
+    }
 
     /*! Descolorea un nodo
      *
      * @param index número de nodo
      * @return antiguo color del nodo index, uncolored() si no tenía color
      */
-    std::size_t inline unset(std::size_t index);
+    inline std::size_t  unset(std::size_t index) {
+    #ifdef DEBUG
+        if (index >= size()) {
+            throw std::out_of_range("Indice fuera de rango");
+        }
+    #endif
+
+        if (colors[index] != uncolored()) {
+            ++left;
+        }
+
+        return (colors[index] = uncolored());
+    }
 
     /*! Cuenta conflictos de coloreo para un nodo
      *
@@ -74,19 +121,19 @@ public:
     std::size_t conflicts(std::size_t index) const;
 
     std::vector<std::size_t> perVertexConflicts() const {
-        std::vector<std::size_t> conflicts(size(), 0);
+        std::vector<std::size_t> vertex_conflicts(this->size(), 0);
 
         for (std::size_t i = 0; i < size(); ++i) {
             if (isset(i)) {
                 for (auto &neighbour : graph.neighbours(i)) {
-                    if (isset(neighbour) && get(neighbour) != get(i)) {
-                        ++conflicts[i];
+                    if (this->isset(neighbour) && get(neighbour) != get(i)) {
+                        ++vertex_conflicts[i];
                     }
                 }
             }
         }
 
-        return conflicts;
+        return vertex_conflicts;
     }
 
     /*! Destructor
@@ -96,13 +143,23 @@ public:
     /*!
      * @return valor para representar que un nodo no está coloreado
      */
-    std::size_t static inline uncolored() {
+    inline std::size_t static  uncolored() {
         return std::numeric_limits<std::size_t>::max();
     }
+
+    inline std::size_t collisions() const {
+        auto current_collisions = 0;
+
+        for (auto &c: perVertexConflicts()){
+            current_collisions += c;
+        }
+
+        return current_collisions;
+    }
 private:
+    const Graph &graph;
     std::vector<std::size_t> colors;
     std::size_t left;
-    const Graph &graph;
 };
 
 #endif //ALGO3_TP3_COLORING_H

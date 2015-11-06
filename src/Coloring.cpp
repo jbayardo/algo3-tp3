@@ -26,64 +26,6 @@ Coloring &Coloring::operator=(const Coloring &r) {
     return *this;
 }
 
-std::size_t inline Coloring::size() const {
-    return graph.size();
-}
-
-bool inline Coloring::complete() const {
-    return (left == 0);
-}
-
-bool inline Coloring::isset(std::size_t index) const {
-#ifdef DEBUG
-    if (index >= size()) {
-        throw std::out_of_range("Indice fuera de rango");
-    }
-#endif
-
-    return (colors[index] != uncolored());
-}
-
-std::size_t inline Coloring::get(std::size_t index) const {
-#ifdef DEBUG
-    if (index >= size()) {
-        throw std::out_of_range("Indice fuera de rango");
-    }
-#endif
-
-    return colors[index];
-}
-
-std::size_t inline Coloring::set(std::size_t index, std::size_t color) {
-#ifdef DEBUG
-    if (index >= size()) {
-        throw std::out_of_range("Indice fuera de rango");
-    }
-
-    // TODO: verificar que el color esté en rango para el índice
-#endif
-
-    if (colors[index] == uncolored()) {
-        --left;
-    }
-
-    return (colors[index] = color);
-}
-
-std::size_t inline Coloring::unset(std::size_t index) {
-#ifdef DEBUG
-    if (index >= size()) {
-        throw std::out_of_range("Indice fuera de rango");
-    }
-#endif
-
-    if (colors[index] != uncolored()) {
-        ++left;
-    }
-
-    return (colors[index] = uncolored());
-}
-
 std::size_t Coloring::conflicts(std::size_t index) const {
 #ifdef DEBUG
     if (index >= size()) {
