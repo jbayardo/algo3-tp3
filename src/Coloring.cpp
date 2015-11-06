@@ -63,6 +63,6 @@ std::ostream & operator<<(std::ostream &stream, const Coloring &coloring) {
         output << "X" << std::endl;
     }
 
-    stream << output;
+    stream << output.str();
     return stream;
 }
