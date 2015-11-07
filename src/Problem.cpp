@@ -1,12 +1,4 @@
-
-#include <vector>
-#include <list>
-#include <stack>
-#include <stdexcept>
-#include <fstream>
-#include "DGraph.h"
 #include "Problem.h"
-#include "Statistics.h"
 
 Problem::Problem(std::string input) {
     std::ifstream handle;
@@ -269,8 +261,8 @@ Coloring greedy_order(std::vector<std::size_t> vertex_order,
     auto coloring = Coloring(graph);
 
     for (auto& v: vertex_order) {
-        auto conflicts = std::numeric_limits<std::size_t>::max();
-        auto choice = 0;
+        auto choice = colors.get(v).front();
+        auto conflicts = coloring.conflicts(choice);
 
         for (auto& c: colors.get(v)) {
             auto current_conflicts = coloring.conflicts(c);
@@ -284,10 +276,8 @@ Coloring greedy_order(std::vector<std::size_t> vertex_order,
                 }
             }
         }
-
         coloring.set(v, choice);
     }
-
 #ifdef DEBUG
     if (!coloring.complete()) {
         throw std::runtime_error("La heuristica golosa devolvió un coloreo incompleto");
@@ -300,8 +290,13 @@ Coloring greedy_order(std::vector<std::size_t> vertex_order,
 
 Coloring Problem::solve3() const {
     auto vertex_order = graph.descendingByDegree();
-    return greedy_order(vertex_order, graph, colors);
+    auto result = greedy_order(vertex_order, graph, colors);
+    if (!result.complete()) {
+        vertex_order = colors.ascendingByColor();
+        result = greedy_order(vertex_order, graph, colors);
+    }
 
+    return result;
 }
 
 /**
