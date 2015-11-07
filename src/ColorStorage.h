@@ -8,7 +8,7 @@
 class ColorStorage {
 public:
     ColorStorage() : colors(0) { };
-    ColorStorage(std::size_t vertices) : colors(vertices), _totalNumber(0) { };
+    ColorStorage(std::size_t vertices) : colors(vertices), _total_number(0) { };
 
     void add(std::size_t vertex, std::list<std::size_t> &iColors) {
 #ifdef DEBUG
@@ -18,14 +18,14 @@ public:
         }
 #endif
         colors[vertex].splice(colors[vertex].begin(), iColors); //Agrego colores nuevos al inicio
-        _totalNumber += iColors.size();
+        _total_number += iColors.size();
     }                                                           //No hay orden
 
     const std::list<std::size_t> inline &get(std::size_t vertex) const {
         return colors[vertex];
     }
-    int totalNumber() const {
-    	return _totalNumber;
+    std::size_t total_number() const {
+    	return _total_number;
     }
 
     std::size_t inline size() const {
@@ -49,7 +49,7 @@ public:
     }
 private:
     std::vector<std::list<std::size_t>> colors;
-    int _totalNumber;
+    std::size_t _total_number;
 };
 
 #endif //ALGO3_TP3_COLORSTORAGE_H
