@@ -165,14 +165,24 @@ Coloring Problem::solve1() const {
 		}
 	}
 
-	std::list<std::list<int>> s_c_c = korasaju(implication_graph);
+	std::vector<std::size_t> node_scc(implication_graph.size());
+	std::list<std::list<std::size_t>> s_c_c = korasaju(implication_graph, node_scc);
 
 	Coloring c(graph);
+	// Check if variable and negation are in the same strongly connected component
+	for (auto node : vertex_data) {
+		for (auto state : node) {
+			if (node_scc[state.is] == node_scc[state.isNot]) return c;
+		}
+	}
+
+
+
 	return c;
 }
 
-std::list<std::list<int>> korasaju(DGraph& implication_graph) {
-	std::stack<int> nodes;
+std::list<std::list<std::size_t>> korasaju(DGraph& implication_graph, std::vector<std::size_t>& node_scc) {
+	std::stack<std::size_t> nodes;
 	int size = implication_graph.size();
 	int now = 0;
 	std::vector<bool> is_in_stack(implication_graph.size(), false);
@@ -180,7 +190,7 @@ std::list<std::list<int>> korasaju(DGraph& implication_graph) {
 	while (nodes.size() != size) {
 		while (is_in_stack[now]) ++now;
 
-		std::stack<int> dfs;
+		std::stack<std::size_t> dfs;
 		std::vector<bool> discovered(size, false);
 		dfs.push(now);
 		// Perform a dfs from this vertex
@@ -209,7 +219,8 @@ std::list<std::list<int>> korasaju(DGraph& implication_graph) {
 	// Reverse edges
 	implication_graph.transpose();
 
-	std::list<std::list<int>> res;
+	int scc_number = 0;
+	std::list<std::list<std::size_t>> res;
 	while (!nodes.empty()) {
 		// Ignore nodes already processed
 		while (!is_in_stack[nodes.top()]) nodes.pop();
@@ -219,12 +230,13 @@ std::list<std::list<int>> korasaju(DGraph& implication_graph) {
 		nodes.pop();
 
 		// Start new strongly connected component
-		res.push_back(std::list<int>());
+		res.push_back(std::list<std::size_t>());
 		res.back().push_back(now);
 		is_in_stack[now] = false;
+		node_scc[now] = scc_number;
 
 		// Complete the SCC with nodes found while doing a DFS
-		std::stack<int> dfs;
+		std::stack<std::size_t> dfs;
 		dfs.push(now);
 		while (!dfs.empty()) {
 			int v = dfs.top();
@@ -233,10 +245,12 @@ std::list<std::list<int>> korasaju(DGraph& implication_graph) {
 				if (is_in_stack[neighbour]) {
 					res.back().push_back(neighbour);
 					is_in_stack[neighbour] = false;
+					node_scc[neighbour] = scc_number;
 					dfs.push(neighbour);
 				}
 			}
 		}
+		++scc_number;
 	}
 
 	return res;

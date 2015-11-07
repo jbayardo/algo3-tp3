@@ -31,6 +31,6 @@ private:
     ColorStorage colors;
 };
 
-std::list<std::list<int>> korasaju(DGraph& i_g);
+std::list<std::list<std::size_t>> korasaju(DGraph& i_g, std::vector<std::size_t>& node_scc);
 
 #endif //ALGO3_TP3_PROBLEM_H
