@@ -178,7 +178,9 @@ std::list<std::list<std::size_t>> korasaju(DGraph& implication_graph) {
 	std::vector<bool> is_in_stack(implication_graph.size(), false);
 
 	while (nodes.size() != size) {
-		while (is_in_stack[now]) ++now;
+		while (is_in_stack[now]) {
+            ++now;
+        }
 
 		std::stack<std::size_t> dfs;
 		std::vector<bool> discovered(size, false);
