@@ -25,7 +25,11 @@ void Graph::connect(std::size_t a, std::size_t b) {
 }
 
 std::vector<std::size_t> Graph::descendingByDegree() const {
-    std::vector<std::size_t> vertex_order(size());
+    std::vector<std::size_t> vertex_order;
+
+    for (std::size_t i = 0; i < size(); i++) {
+        vertex_order.push_back(i);
+    }
 
     auto comp = [this](std::size_t i, std::size_t j) {
         return this->degree(i) > this->degree(j);

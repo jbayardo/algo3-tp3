@@ -32,8 +32,12 @@ public:
         return colors.size();
     }
 
-    std::vector<std::size_t> ascendingByColor() {
-        std::vector<std::size_t> vertex_order(colors.size());
+    std::vector<std::size_t> ascendingByColor() const{
+        std::vector<std::size_t> vertex_order;
+
+        for (std::size_t i = 0; i < colors.size(); i++) {
+            vertex_order.push_back(i);
+        }
 
         auto comp = [this](std::size_t i, std::size_t j) {
             return this->colors[i].size() < this->colors[j].size();
