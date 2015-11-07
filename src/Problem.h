@@ -1,6 +1,14 @@
 #ifndef ALGO3_TP3_PROBLEM_H
 #define ALGO3_TP3_PROBLEM_H
 
+
+#include <vector>
+#include <list>
+#include <stack>
+#include <stdexcept>
+#include <fstream>
+#include "DGraph.h"
+#include "Statistics.h"
 #include "Graph.h"
 #include "ColorStorage.h"
 #include "Coloring.h"
