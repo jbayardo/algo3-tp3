@@ -93,166 +93,168 @@ Coloring Problem::solve(int exercise, int runs) const {
     }
 }
 
-// Coloring Problem::solve1() const {
+Coloring Problem::solve1() const {
+	struct state {
+		std::size_t is;
+		std::size_t isNot;
+		std::size_t color;
+	};
 
-// }
+	std::vector<std::vector<state>> vertex_data(graph.size(), std::vector<state>(2));
+	DGraph implication_graph(colors.total_number()*2);
+	int v = 0;
+	int end = graph.size();
 
-// twoSat() {
-// 	struct state {
-// 		int is;
-// 		int isNot;
-// 	};
+	// Assign a vertex for every node's color and its negation, in the new graph
+	for (int i = 0; i < end; ++i) {
+		int li = 0;
+		for (auto color : colors.get(i)) {
+			vertex_data[i][li].color = color;
+			vertex_data[i][li].is = v++;
+			vertex_data[i][li++].isNot = v++;
 
-// 	std::vector<std::vector<state>> vertexData(graph.size(), std::vector<state>(2));
-// 	DGraph implicationGraph(colors.totalNumber()*2);
-// 	int v = 0;
-// 	int end = graph.size();
+		}
+	}
 
-// 	// Assign a vertex for every node's color and its negation, in the new graph
-// 	for (int i = 0; i < end; ++i) {
-// 		int li = 0;
-// 		for (auto color : colors.get(i)) {
-// 			vertexData[i][li].is = v++;
-// 			vertexData[i][li++].isNot = v++;
-// 		}
-// 	}
+	// Build the implications
+	// For every vertex
+	for (int i = 0; i < end; ++i) {
+		std::list<std::size_t> myColors = colors.get(i);
+		// go through its neighbours
+		for (auto neighbour : graph.neighbours(i)) {
+			int ic = 0;
+			// Check if there is an intersection in its colors
+			for (auto myColor : myColors) {
+				int icn = 0;
+				// Go through every neighbour possible color
+				for (auto neighbourColor : colors.get(neighbour)) {
+					if (myColor == neighbourColor) {
+						// if its the same color I can color just one node at the same time
+						implication_graph.connect(vertex_data[i][ic].is, vertex_data[neighbour][icn].isNot);
+						implication_graph.connect(vertex_data[i][ic].isNot, vertex_data[neighbour][icn].is);
+					} else {
+						// if its a different color, I can color both nodes in freely
+						// TODO: Check
+						implication_graph.connect(vertex_data[i][ic].is, vertex_data[neighbour][icn].is);
+						implication_graph.connect(vertex_data[i][ic].is, vertex_data[neighbour][icn].isNot);
+						implication_graph.connect(vertex_data[i][ic].isNot, vertex_data[neighbour][icn].is);
+						implication_graph.connect(vertex_data[i][ic].isNot, vertex_data[neighbour][icn].isNot);
+					}
+					icn++;
+				}
+				ic++;
+			}
+		}
 
-// 	// Build the implications
-// 	// For every vertex
-// 	for (int i = 0; i < end; ++i) {
-// 		std::list<std::size_t>& myColors = colors.get(i)
-// 		// go through its neighbours
-// 		for (auto neighbor : graph.neighbors(i)) {
-// 			int ic = 0;
-// 			// Check if there is an intersection in its colors
-// 			for (auto myColor : myColors) {
-// 				int icn = 0;
-// 				// Go through every neighbor possible color
-// 				for (auto neighborColor, colors.get(neighbor)) {
-// 					if (myColor == neighborColor) {
-// 						// if its the same color I can color just one node at the same time
-// 						implicationGraph.connect(vertexData[i][ic].is, vertexData[neighbor][icn].isNot);
-// 						implicationGraph.connect(vertexData[i][ic].isNot, vertexData[neighbor][icn].is);
-// 					} else {
-// 						// if its a different color, I can color both nodes in freely
-// 						implicationGraph.connect(vertexData[i][ic].is, vertexData[neighbor][icn].is);
-// 						implicationGraph.connect(vertexData[i][ic].is, vertexData[neighbor][icn].isNot);
-// 						implicationGraph.connect(vertexData[i][ic].isNot, vertexData[neighbor][icn].is);
-// 						implicationGraph.connect(vertexData[i][ic].isNot, vertexData[neighbor][icn].isNot);
-// 					}
-// 					icn++;
-// 				}
-// 				ic++;
-// 			}
-// 		}
+		if (myColors.size() == 1) {
+			// if a vertex has only one color I have to build a truth statement somehow
+			implication_graph.connect(vertex_data[i][0].isNot, vertex_data[i][0].is);
+		} else {
+			int c = 0;
+			for (auto color : myColors) {
+				int oc = 0;
+				for (auto otherColor : myColors) {
+					if (color != otherColor) {
+						implication_graph.connect(vertex_data[i][c].is, vertex_data[i][oc].isNot);
+						implication_graph.connect(vertex_data[i][c].isNot, vertex_data[i][oc].is);
+					}
+					oc++;
+				}
+				c++;
+			}
+		}
+	}
 
-// 		if (myColors.size() == 1) {
-// 			// if a vertex has only one color I have to build a truth statement somehow
-// 			implicationGraph.connect(vertexData[i][0].isNot, vertexData[neighbor][0].is);
-// 		} else {
-// 			int c = 0;
-// 			for (auto color : myColors) {
-// 				int oc = 0;
-// 				for (auto otherColor : myColors) {
-// 					if (color != otherColor) {
-// 						implicationGraph.connect(vertexData[i][c].is, vertexData[neighbor][oc].isNot);
-// 						implicationGraph.connect(vertexData[i][c].isNot, vertexData[neighbor][oc].is);
-// 					}
-// 					oc++;
-// 				}
-// 				c++;
-// 			}
-// 		}
-// 	}
+	std::list<std::list<int>> s_c_c = korasaju(implication_graph);
 
-// 	std::list<std::list<int>> s_c_c = korasaju(implicationGraph);
+	Coloring c(graph);
+	return c;
+}
 
+std::list<std::list<int>> korasaju(DGraph& implication_graph) {
+	std::stack<int> nodes;
+	int size = implication_graph.size();
+	int now = 0;
+	std::vector<bool> is_in_stack(implication_graph.size(), false);
 
-// }
+	while (nodes.size() != size) {
+		while (is_in_stack[now]) ++now;
 
-// std::list<std::list<int>> korasaju(Graph implicationGraph) {
-// 	std::stack<int> nodes;
-// 	int size = implicationGraph.size();
-// 	int now = 0;
-// 	std::vector<bool> isInStack(implicationGraph.size(), false);
+		std::stack<int> dfs;
+		std::vector<bool> discovered(size, false);
+		dfs.push(now);
+		// Perform a dfs from this vertex
+		int v;
+		while (!dfs.empty()) {
+			v = dfs.top();
+			dfs.pop();
+			if (!discovered[v]) {
+				discovered[v] = true;
+				int expansion = 0;
+				for (auto neighbour : implication_graph.neighbours(v)) {
+					if (!discovered[neighbour]) {
+						expansion++;
+						dfs.push(neighbour);
+					}
+				}
+				// When we get to a vertex that cant keep expanding we push it into the original stack
+				if (expansion == 0 && !is_in_stack[v]) {
+					nodes.push(v);
+					is_in_stack[v] = true;
+				}
+			}
+		}
+	}
 
-// 	while (nodes.size() != size) {
-// 		while (isInStack[now]) ++now;
+	// Reverse edges
+	implication_graph.transpose();
 
-// 		std::stack<int> dfs;
-// 		std::vector<bool> discovered(size, false);
-// 		dfs.push(now);
-// 		// Perform a dfs from this vertex
-// 		int v;
-// 		while (!dfs.empty()) {
-// 			v = dfs.top();
-// 			dfs.pop();
-// 			if (!discovered[v]) {
-// 				discovered[v] = true;
-// 				int expansion = 0;
-// 				for (auto neighbor : implicationGraph.neighbours(v)) {
-// 					if (!discovered[neighbor]) {
-// 						expansion++;
-// 						dfs.push(discovered);
-// 					}
-// 				}
-// 				if (expansion == 0) break;
-// 			}
-// 		}
-// 		// When we get to a vertex that cant keep expanding we push it into the original stack
-// 		if (!dfs.empty() && !isInStack[v]) {
-// 			nodes.push(v);
-// 			isInStack[v] = true;
-// 		}
-// 	}
+	std::list<std::list<int>> res;
+	while (!nodes.empty()) {
+		// Ignore nodes already processed
+		while (!is_in_stack[nodes.top()]) nodes.pop();
+		if (nodes.empty()) break;
 
-// 	// Reverse edges
-// 	implicationGraph.transpose();
+		now = nodes.top();
+		nodes.pop();
 
-// 	std::list<std::list<int>> res;
-// 	while (!nodes.empty()) {
-// 		// Ignore nodes already processed
-// 		while (!isInStack[nodes.top()]) nodes.pop();
-// 		if (nodes.empty()) break;
+		// Start new strongly connected component
+		res.push_back(std::list<int>());
+		res.back().push_back(now);
+		is_in_stack[now] = false;
 
-// 		int now = nodes.top();
-// 		nodes.pop();
+		// Complete the SCC with nodes found while doing a DFS
+		std::stack<int> dfs;
+		dfs.push(now);
+		while (!dfs.empty()) {
+			int v = dfs.top();
+			dfs.pop();
+			for (auto neighbour : implication_graph.neighbours(v)) {
+				if (is_in_stack[neighbour]) {
+					res.back().push_back(neighbour);
+					is_in_stack[neighbour] = false;
+					dfs.push(neighbour);
+				}
+			}
+		}
+	}
 
-// 		// Start new strongly connected component
-// 		res.push_back(std::list<int>());
-// 		res.back.push_back(now);
-// 		isInStack[now] = false;
+	return res;
+}
 
-// 		// Complete SCC with nodes found while doing a DFS
-// 		std::stack<int> dfs;
-// 		dfs.push(now);
-// 		while (!dfs.empty()) {
-// 			int v = dfs.top();
-// 			dfs.pop();
-// 			for (auto neighbor : implicationGraph.neighbours(v)) {
-// 				if (isInStack[neighbor]) {
-// 					res.back.push_back(neighbor);
-// 					isInStack[neighbor] = false;
-// 					dfs.push(neighbor);
-// 				}
-// 			}
-// 		}
-// 	}
+Coloring Problem::solve2() const {
+    Timer timer("Backtracking Timer");
+    std::stack<Coloring> pending;
+    // Generamos el coloreo vacio
+    pending.push(Coloring(graph));
 
-// 	return res;
-// }
-
-// Coloring Problem::solve2() const {
-//     Timer timer("Backtracking Timer");
-//     std::stack<Coloring> pending;
-//     // Generamos el coloreo vacio
-//     pending.push(Coloring(graph));
-
-//     while (!pending.empty()) {
-//         Coloring current = pending.top();
-//         pending.pop();
-//     }
-// }
+    while (!pending.empty()) {
+        Coloring current = pending.top();
+        pending.pop();
+    }
+    Coloring c(graph);
+    return c;
+}
 
 
 Coloring greedy_order(std::vector<std::size_t> vertex_order,

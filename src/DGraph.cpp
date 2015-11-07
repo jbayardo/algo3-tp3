@@ -1,43 +1,23 @@
 #include <algorithm>
 #include "DGraph.h"
 
-DGraph::DGraph() : adjacency(0) { }
+DGraph::DGraph() : _adjacency(0) { }
 
-DGraph::DGraph(std::size_t vertices) : adjacency(vertices) { }
-
-std::size_t inline DGraph::size() const {
-    return adjacency.size();
-}
-
-std::size_t inline DGraph::inDegree(std::size_t a) const {
-    return parents[a].size();
-}
-
-std::size_t inline DGraph::outDegree(std::size_t a) const {
-    return adjacency[a].size();
-}
+DGraph::DGraph(std::size_t vertices) : _adjacency(vertices), _parents(vertices) { }
 
 void DGraph::connect(std::size_t a, std::size_t b) {
 #ifdef DEBUG
-    if (std::find(adjacency[a].begin(), adjacency[a].end(), b) != adjacency[a].end()) {
+    if (std::find(_adjacency[a].begin(), _adjacency[a].end(), b) != _adjacency[a].end()) {
         throw std::runtime_error("Nodes already connected");
     }
 #endif
 
-    adjacency[a].push_back(b);
-    parents[b].push_back(a);
-}
-
-const std::list<std::size_t> inline &DGraph::neighbors(std::size_t a) const {
-    return adjacency[a];
-}
-
-const std::list<std::size_t> inline &DGraph::parents(std::size_t a) const {
-    return parents[a];
+    _adjacency[a].push_back(b);
+    _parents[b].push_back(a);
 }
 
 void DGraph::transpose() {
-	for (std::size_t i = 0; i < adjacency.size(); ++i) {
-		adjacency[i].swap(parents[i]);
+	for (std::size_t i = 0; i < _adjacency.size(); ++i) {
+		_adjacency[i].swap(_parents[i]);
 	}
 }
