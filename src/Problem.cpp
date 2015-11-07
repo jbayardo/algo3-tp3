@@ -165,32 +165,31 @@ Coloring Problem::solve1() const {
 		}
 	}
 
-	std::list<std::list<int>> s_c_c = korasaju(implication_graph);
+	std::list<std::list<std::size_t>> s_c_c = korasaju(implication_graph);
 
 	Coloring c(graph);
 	return c;
 }
 
-std::list<std::list<int>> korasaju(DGraph& implication_graph) {
-	std::stack<int> nodes;
-	int size = implication_graph.size();
-	int now = 0;
+std::list<std::list<std::size_t>> korasaju(DGraph& implication_graph) {
+	std::stack<std::size_t> nodes;
+	std::size_t size = implication_graph.size();
+	std::size_t now = 0;
 	std::vector<bool> is_in_stack(implication_graph.size(), false);
 
 	while (nodes.size() != size) {
 		while (is_in_stack[now]) ++now;
 
-		std::stack<int> dfs;
+		std::stack<std::size_t> dfs;
 		std::vector<bool> discovered(size, false);
 		dfs.push(now);
 		// Perform a dfs from this vertex
-		int v;
-		while (!dfs.empty()) {
-			v = dfs.top();
-			dfs.pop();
+        while (!dfs.empty()) {
+            std::size_t v = dfs.top();
+		    dfs.pop();
 			if (!discovered[v]) {
 				discovered[v] = true;
-				int expansion = 0;
+				std::size_t expansion = 0;
 				for (auto neighbour : implication_graph.neighbours(v)) {
 					if (!discovered[neighbour]) {
 						expansion++;
@@ -209,7 +208,7 @@ std::list<std::list<int>> korasaju(DGraph& implication_graph) {
 	// Reverse edges
 	implication_graph.transpose();
 
-	std::list<std::list<int>> res;
+	std::list<std::list<std::size_t>> res;
 	while (!nodes.empty()) {
 		// Ignore nodes already processed
 		while (!is_in_stack[nodes.top()]) nodes.pop();
@@ -219,15 +218,15 @@ std::list<std::list<int>> korasaju(DGraph& implication_graph) {
 		nodes.pop();
 
 		// Start new strongly connected component
-		res.push_back(std::list<int>());
+		res.push_back(std::list<std::size_t>());
 		res.back().push_back(now);
 		is_in_stack[now] = false;
 
 		// Complete the SCC with nodes found while doing a DFS
-		std::stack<int> dfs;
+		std::stack<std::size_t> dfs;
 		dfs.push(now);
 		while (!dfs.empty()) {
-			int v = dfs.top();
+			std::size_t v = dfs.top();
 			dfs.pop();
 			for (auto neighbour : implication_graph.neighbours(v)) {
 				if (is_in_stack[neighbour]) {

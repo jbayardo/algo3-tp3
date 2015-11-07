@@ -31,6 +31,9 @@ private:
     ColorStorage colors;
 };
 
-std::list<std::list<int>> korasaju(DGraph& i_g);
+std::list<std::list<std::size_t>> korasaju(DGraph& i_g);
+Coloring greedy_order(std::vector<std::size_t> vertex_order,
+                      const Graph& graph,
+                      const ColorStorage& colors);
 
 #endif //ALGO3_TP3_PROBLEM_H
