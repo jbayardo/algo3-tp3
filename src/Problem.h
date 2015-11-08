@@ -31,7 +31,7 @@ private:
     ColorStorage colors;
 };
 
-std::list<std::list<std::size_t>> korasaju(DGraph& i_g);
+std::list<std::list<std::size_t>> korasaju(DGraph& i_g, std::vector<std::size_t>& node_scc);
 Coloring greedy_order(std::vector<std::size_t> vertex_order,
                       const Graph& graph,
                       const ColorStorage& colors);
