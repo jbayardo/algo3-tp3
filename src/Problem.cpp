@@ -210,19 +210,20 @@ std::list<std::list<std::size_t>> korasaju(DGraph& implication_graph, std::vecto
 	std::vector<bool> is_in_stack(implication_graph.size(), false);
 
 	while (nodes.size() != size) {
-		while (is_in_stack[now]) ++now;
+		while (is_in_stack[now]) {
+            ++now;
+        }
 
 		std::stack<std::size_t> dfs;
 		std::vector<bool> discovered(size, false);
 		dfs.push(now);
 		// Perform a dfs from this vertex
-		int v;
-		while (!dfs.empty()) {
-			v = dfs.top();
-			dfs.pop();
+        while (!dfs.empty()) {
+            std::size_t v = dfs.top();
+		    dfs.pop();
 			if (!discovered[v]) {
 				discovered[v] = true;
-				int expansion = 0;
+				std::size_t expansion = 0;
 				for (auto neighbour : implication_graph.neighbours(v)) {
 					if (!discovered[neighbour]) {
 						expansion++;
@@ -240,7 +241,7 @@ std::list<std::list<std::size_t>> korasaju(DGraph& implication_graph, std::vecto
 
 	// Reverse edges
 	implication_graph.transpose();
-
+	
 	int scc_number = 0;
 	std::list<std::list<std::size_t>> res;
 	while (!nodes.empty()) {
@@ -261,7 +262,7 @@ std::list<std::list<std::size_t>> korasaju(DGraph& implication_graph, std::vecto
 		std::stack<std::size_t> dfs;
 		dfs.push(now);
 		while (!dfs.empty()) {
-			int v = dfs.top();
+			std::size_t v = dfs.top();
 			dfs.pop();
 			for (auto neighbour : implication_graph.neighbours(v)) {
 				if (is_in_stack[neighbour]) {
