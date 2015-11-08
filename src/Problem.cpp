@@ -101,7 +101,9 @@ Coloring Problem::solve1() const {
 	};
 
 	std::vector<std::vector<state>> vertex_data(graph.size(), std::vector<state>(2));
+	std::vector<std::size_t> state_to_vertex(colors.total_number()*2);
 	DGraph implication_graph(colors.total_number()*2);
+
 	int v = 0;
 	int end = graph.size();
 
@@ -110,9 +112,15 @@ Coloring Problem::solve1() const {
 		int li = 0;
 		for (auto color : colors.get(i)) {
 			vertex_data[i][li].color = color;
-			vertex_data[i][li].is = v++;
-			vertex_data[i][li++].isNot = v++;
 
+			vertex_data[i][li].is = v;
+			state_to_vertex[v] = i;
+
+			++v;
+			vertex_data[i][li++].isNot = v;
+			state_to_vertex[v] = i;
+
+			++v;
 		}
 	}
 
@@ -176,7 +184,21 @@ Coloring Problem::solve1() const {
 		}
 	}
 
+	DGraph condensed(s_c_c.size());
 
+	// Build the condesed graph
+	for (int i = 0; i < node_scc.size(); ++i) {
+		for (auto neighbour : implication_graph.neighbours(i)) {
+			// TODO: Ver de no conectar dos veces el mismo nodo 
+			// TODO: tener cuidado con los judios, estan siempre observando
+			if (node_scc[i] != node_scc[neighbour]) {
+				condensed.connect(node_scc[i], node_scc[neighbour]);
+			}
+		}
+	}
+
+	std::vector<bool> s_c_c_states(s_c_c.size());
+	// TODO
 
 	return c;
 }

@@ -8,7 +8,8 @@ DGraph::DGraph(std::size_t vertices) : _adjacency(vertices), _parents(vertices) 
 void DGraph::connect(std::size_t a, std::size_t b) {
 #ifdef DEBUG
     if (std::find(_adjacency[a].begin(), _adjacency[a].end(), b) != _adjacency[a].end()) {
-        throw std::runtime_error("Nodes already connected");
+        // throw std::runtime_error("Nodes already connected");
+        return;
     }
 #endif
 
