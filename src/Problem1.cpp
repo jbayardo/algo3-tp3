@@ -4,7 +4,7 @@
 
 std::list<std::list<std::size_t>> korasaju(DGraph& implication_graph, std::vector<std::size_t>& node_scc) {
     std::stack<std::size_t> nodes;
-    int size = implication_graph.size();
+    std::size_t size = implication_graph.size();
     int now = 0;
     std::vector<bool> is_in_stack(implication_graph.size(), false);
 
@@ -172,7 +172,7 @@ Coloring Problem::solve1() const {
     DGraph condensed(s_c_c.size());
 
     // Build the condesed graph
-    for (int i = 0; i < node_scc.size(); ++i) {
+    for (std::size_t i = 0; i < node_scc.size(); ++i) {
         for (auto &neighbour : implication_graph.neighbours(i)) {
             // TODO: Ver de no conectar dos veces el mismo nodo
             // TODO: tener cuidado con los judios, estan siempre observando
