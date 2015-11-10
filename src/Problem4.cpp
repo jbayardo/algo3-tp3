@@ -1,11 +1,12 @@
 #include "Problem.h"
+#include "ConflictColoring.h"
 #include "Statistics.h"
 
 /**
  * @param input coloreo de entrada
  * @return mejor coloreo vecino
  */
-Coloring neighbour(Coloring next, const ColorStorage &colors) {
+ConflictColoring neighbour(ConflictColoring next, const ColorStorage &colors) {
     // Calculamos la cantidad de vecinos que vamos a mirar
     std::size_t size = 5;
 
@@ -41,10 +42,10 @@ Coloring neighbour(Coloring next, const ColorStorage &colors) {
         }
 
         // Obtengo el mejor color para el vertice que no sea el actual
-        Coloring current(next);
+        ConflictColoring current(next);
 
         for (auto &color : colors.get(vertices[n])) {
-            Coloring temporal(next);
+            ConflictColoring temporal(next);
 
             if (color != temporal.get(vertices[n])) {
                 temporal.set(vertices[n], color);
@@ -66,10 +67,10 @@ Coloring neighbour(Coloring next, const ColorStorage &colors) {
 
 Coloring Problem::solve4() const {
     Timer timer("Exercise 4 Timer");
-    Coloring current = solve3();
+    ConflictColoring current = solve3();
 
     for (std::size_t iterations = 0; iterations < 1000; ++iterations) {
-        Coloring next = neighbour(current, colors);
+        ConflictColoring next = neighbour(current, colors);
 
         if (next.conflicts() >= current.conflicts()) {
             return current;
@@ -85,7 +86,7 @@ Coloring Problem::solve4() const {
  * @param input coloreo de entrada
  * @return mejor coloreo vecino
  */
-Coloring neighbour2(Coloring next, const Graph &graph, const ColorStorage &colors) {
+ConflictColoring neighbour2(ConflictColoring next, const Graph &graph, const ColorStorage &colors) {
     std::size_t best = 0;
     double current = 0.0;
 
@@ -120,10 +121,10 @@ Coloring neighbour2(Coloring next, const Graph &graph, const ColorStorage &color
 
 Coloring Problem::solve5() const {
     Timer timer("Exercise 5 Timer");
-    Coloring current = solve3();
+    ConflictColoring current(solve3());
 
     for (std::size_t iterations = 0; iterations < 1000; ++iterations) {
-        Coloring next = neighbour2(current, graph, colors);
+        ConflictColoring next = neighbour2(current, graph, colors);
 
         if (next.conflicts() >= current.conflicts()) {
             return current;

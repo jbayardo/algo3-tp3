@@ -15,28 +15,20 @@ class Coloring {
     friend std::ostream &operator<<(std::ostream &, const Coloring &);
 public:
     /*! Constructor
-     *
      * @param g grafo de referencia
      */
     Coloring(const Graph &g) :
             graph(g),
             colors(g.size(), uncolored()),
-            collisions(g.size(), 0),
-            left(g.size()),
-            total_collisions(0),
-            updated(true) { }
+            left(g.size()) { }
 
     /*! Constructor por copia
-     *
      * @param c coloreo a copiar
      */
     Coloring(const Coloring &c) :
             graph(c.graph),
             colors(c.colors),
-            collisions(c.colors),
-            left(c.left),
-            total_collisions(c.total_collisions),
-            updated(c.updated) { }
+            left(c.left) { }
 
     /*! Operador de asignación
      *
@@ -49,10 +41,7 @@ public:
             }
 
             this->colors = r.colors;
-            this->collisions = r.collisions;
             this->left = r.left;
-            this->total_collisions = r.total_collisions;
-            this->updated = r.updated;
         }
 
         return *this;
@@ -89,11 +78,11 @@ public:
      * @return color del nodo index, uncolored() si no tiene color
      */
     inline std::size_t get(std::size_t index) const {
-    #ifdef DEBUG
+#ifdef DEBUG
         if (index >= size()) {
             throw std::out_of_range("Indice fuera de rango");
         }
-    #endif
+#endif
 
         return colors[index];
     }
@@ -104,14 +93,14 @@ public:
      * @param color nuevo color a asignar
      * @return antiguo color del nodo index, uncolored() si no tenía color
      */
-    inline std::size_t set(std::size_t index, std::size_t color) {
-    #ifdef DEBUG
+    inline virtual std::size_t set(std::size_t index, std::size_t color) {
+#ifdef DEBUG
         if (index >= size()) {
             throw std::out_of_range("Indice fuera de rango");
         }
 
         // TODO: verificar que el color esté en rango para el índice
-    #endif
+#endif
 
         if (colors[index] == uncolored() && color != uncolored()) {
             --left;
@@ -119,7 +108,6 @@ public:
             ++left;
         }
 
-        updated = false;
         return (colors[index] = color);
     }
 
@@ -132,43 +120,9 @@ public:
         return set(index, uncolored());
     }
 
-    /*! Devuelve la cantidad de conflictos para todos los nodos en total, contados por única vez.
-     *
-     * @return cantidad de conflictos en total
+    /*! Destructor
      */
-    std::size_t conflicts() {
-        update_collisions();
-        return total_collisions;
-    }
-
-    /*! Devuelve la cantidad de conflictos de un nodo
-     *
-     * @param index número de nodo
-     * @return cantidad de conflictos con sus vecinos coloreados
-     */
-    std::size_t conflicts(std::size_t index) {
-#ifdef DEBUG
-        if (index >= size()) {
-            throw std::out_of_range("Indice fuera de rango");
-        }
-
-        if (!isset(index)) {
-            throw std::runtime_error("No podemos computar conflictos para un nodo sin colorear");
-        }
-#endif
-        update_collisions();
-        return collisions[index];
-    }
-
-    /*! Devuelve la cantidad de conflictos para cada vertice. Si el vertice no está coloreado, la cantidad de conflictos
-     * es 0.
-     *
-     * @return arreglo con la cantidad de conflictos de cada vertice
-     */
-    const std::vector<std::size_t> &perVertexConflicts() {
-        update_collisions();
-        return collisions;
-    }
+    virtual ~Coloring() { }
 
     /*!
      * @return valor para representar que un nodo no está coloreado
@@ -176,42 +130,10 @@ public:
     inline std::size_t static uncolored() {
         return std::numeric_limits<std::size_t>::max();
     }
-
-    /*! Destructor
-     */
-    virtual ~Coloring() { }
-private:
-    /*! Actualiza la cantidad de colisiones por vertice y demás indicadores */
-    void update_collisions() {
-        if (updated) {
-            return;
-        }
-
-        total_collisions = 0;
-
-        for (std::size_t i = 0; i < size(); ++i) {
-            collisions[i] = 0;
-
-            if (isset(i)) {
-                for (std::size_t neighbour : graph.neighbours(i)) {
-                    if (isset(neighbour) && get(neighbour) == get(i)) {
-                        ++collisions[i];
-                        ++total_collisions;
-                    }
-                }
-            }
-        }
-
-        total_collisions /= 2;
-        updated = true;
-    }
-
+protected:
     const Graph &graph;
     std::vector<std::size_t> colors;
-    std::vector<std::size_t> collisions;
     std::size_t left;
-    std::size_t total_collisions;
-    bool updated;
 };
 
 inline std::ostream &operator<<(std::ostream &stream, const Coloring &coloring) {
