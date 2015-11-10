@@ -14,7 +14,7 @@ Coloring neighbour(Coloring next, const ColorStorage &colors) {
     }
 
     // Obtenemos las colisiones
-    std::vector<std::size_t> conflicts = next.perVertexConflicts();
+    const std::vector<std::size_t> &conflicts = next.perVertexConflicts();
     std::vector<std::size_t> vertices(size, std::numeric_limits<std::size_t>::max());
 
     // Obtenemos el mejor vecino

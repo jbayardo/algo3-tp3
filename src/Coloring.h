@@ -12,7 +12,7 @@
 /*! Guarda un coloreo parcial o total para un grafo.
  */
 class Coloring {
-    friend std::ostream &operator<<(std::ostream &stream, const Coloring &bracelet);
+    friend std::ostream &operator<<(std::ostream &, const Coloring &);
 public:
     /*! Constructor
      *
@@ -21,7 +21,10 @@ public:
     Coloring(const Graph &g) :
             graph(g),
             colors(g.size(), uncolored()),
-            left(g.size()) { }
+            collisions(g.size(), 0),
+            left(g.size()),
+            total_collisions(0),
+            updated(true) { }
 
     /*! Constructor por copia
      *
@@ -30,7 +33,10 @@ public:
     Coloring(const Coloring &c) :
             graph(c.graph),
             colors(c.colors),
-            left(c.left) { }
+            collisions(c.colors),
+            left(c.left),
+            total_collisions(c.total_collisions),
+            updated(c.updated) { }
 
     /*! Operador de asignación
      *
@@ -43,7 +49,10 @@ public:
             }
 
             this->colors = r.colors;
+            this->collisions = r.collisions;
             this->left = r.left;
+            this->total_collisions = r.total_collisions;
+            this->updated = r.updated;
         }
 
         return *this;
@@ -66,17 +75,12 @@ public:
     }
 
     /*!
+     *
      * @param index número de nodo
      * @return true si el nodo index está coloreado
      */
     inline bool isset(std::size_t index) const {
-    #ifdef DEBUG
-        if (index >= size()) {
-            throw std::out_of_range("Indice fuera de rango");
-        }
-    #endif
-
-        return (colors[index] != uncolored());
+        return (get(index) != uncolored());
     }
 
     /*! Devuelve el color de un nodo
@@ -115,6 +119,7 @@ public:
             ++left;
         }
 
+        updated = false;
         return (colors[index] = color);
     }
 
@@ -127,61 +132,42 @@ public:
         return set(index, uncolored());
     }
 
-    /*! Cuenta conflictos de coloreo para el grafo
+    /*! Devuelve la cantidad de conflictos para todos los nodos en total, contados por única vez.
      *
      * @return cantidad de conflictos en total
      */
-    std::size_t conflicts() const {
-        auto current_collisions = 0;
-
-        for (auto &c: perVertexConflicts()){
-            current_collisions += c;
-        }
-
-        return current_collisions;
+    std::size_t conflicts() {
+        update_collisions();
+        return total_collisions;
     }
 
-    /*! Cuenta conflictos de coloreo para un nodo
+    /*! Devuelve la cantidad de conflictos de un nodo
      *
      * @param index número de nodo
      * @return cantidad de conflictos con sus vecinos coloreados
      */
-    std::size_t conflicts(std::size_t index) const {
+    std::size_t conflicts(std::size_t index) {
 #ifdef DEBUG
         if (index >= size()) {
-        throw std::out_of_range("Indice fuera de rango");
-    }
+            throw std::out_of_range("Indice fuera de rango");
+        }
 
-    if (!isset(index)) {
-        throw std::runtime_error("No podemos computar conflictos para un nodo sin colorear");
-    }
+        if (!isset(index)) {
+            throw std::runtime_error("No podemos computar conflictos para un nodo sin colorear");
+        }
 #endif
-
-        std::size_t amount = 0;
-
-        for (std::size_t neighbour : graph.neighbours(index)) {
-            if (isset(neighbour) && get(neighbour) == get(index)) {
-                ++amount;
-            }
-        }
-
-        return amount;
+        update_collisions();
+        return collisions[index];
     }
 
-    std::vector<std::size_t> perVertexConflicts() const {
-        std::vector<std::size_t> vertex_conflicts(this->size(), 0);
-
-        for (std::size_t i = 0; i < size(); ++i) {
-            if (isset(i)) {
-                for (std::size_t neighbour : graph.neighbours(i)) {
-                    if (this->isset(neighbour) && get(neighbour) != get(i)) {
-                        ++vertex_conflicts[i];
-                    }
-                }
-            }
-        }
-
-        return vertex_conflicts;
+    /*! Devuelve la cantidad de conflictos para cada vertice. Si el vertice no está coloreado, la cantidad de conflictos
+     * es 0.
+     *
+     * @return arreglo con la cantidad de conflictos de cada vertice
+     */
+    const std::vector<std::size_t> &perVertexConflicts() {
+        update_collisions();
+        return collisions;
     }
 
     /*!
@@ -195,12 +181,40 @@ public:
      */
     virtual ~Coloring() { }
 private:
+    /*! Actualiza la cantidad de colisiones por vertice y demás indicadores */
+    void update_collisions() {
+        if (updated) {
+            return;
+        }
+
+        total_collisions = 0;
+
+        for (std::size_t i = 0; i < size(); ++i) {
+            collisions[i] = 0;
+
+            if (isset(i)) {
+                for (std::size_t neighbour : graph.neighbours(i)) {
+                    if (isset(neighbour) && get(neighbour) == get(i)) {
+                        ++collisions[i];
+                        ++total_collisions;
+                    }
+                }
+            }
+        }
+
+        total_collisions /= 2;
+        updated = true;
+    }
+
     const Graph &graph;
     std::vector<std::size_t> colors;
+    std::vector<std::size_t> collisions;
     std::size_t left;
+    std::size_t total_collisions;
+    bool updated;
 };
 
-std::ostream &operator<<(std::ostream &stream, const Coloring &coloring) {
+inline std::ostream &operator<<(std::ostream &stream, const Coloring &coloring) {
     std::stringstream output;
 
     if (coloring.complete()) {
