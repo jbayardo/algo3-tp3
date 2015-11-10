@@ -6,6 +6,9 @@
 #include <algorithm>
 #include <map>
 
+typedef std::vector<std::list<std::size_t>> ColorLists;
+
+
 class ColorStorage {
 public:
     ColorStorage() : colors(0) { };
@@ -33,9 +36,9 @@ public:
         return colors.size();
     }
 
-    std::vector<std::list<std::size_t>> sortByFrequency() const {
+    ColorLists sortByFrequency() const {
         std::map<std::size_t, std::size_t> frequencies;
-        std::vector<std::list<std::size_t>> colors_by_frequency(colors);
+        ColorLists colors_by_frequency(colors);
 
         for (auto& l: colors_by_frequency) {
             for (auto& c: l) {
@@ -60,7 +63,7 @@ public:
 
 
 private:
-    std::vector<std::list<std::size_t>> colors;
+    ColorLists colors;
     std::size_t _total_number;
 };
 
