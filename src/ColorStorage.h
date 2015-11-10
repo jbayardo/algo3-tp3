@@ -4,6 +4,7 @@
 #include <vector>
 #include <list>
 #include <algorithm>
+#include <map>
 
 class ColorStorage {
 public:
@@ -32,21 +33,32 @@ public:
         return colors.size();
     }
 
-    std::vector<std::size_t> ascendingByColor() const{
-        std::vector<std::size_t> vertex_order;
+    std::vector<std::list<std::size_t>> sortByFrequency() const {
+        std::map<std::size_t, std::size_t> frequencies;
+        std::vector<std::list<std::size_t>> colors_by_frequency(colors);
 
-        for (std::size_t i = 0; i < colors.size(); i++) {
-            vertex_order.push_back(i);
+        for (auto& l: colors_by_frequency) {
+            for (auto& c: l) {
+                if (frequencies.find(c) == frequencies.end()) {
+                    frequencies[c] = 1;
+                }
+                else {
+                    frequencies[c] += 1;
+                }
+            }
         }
 
-        auto comp = [this](std::size_t i, std::size_t j) {
-            return this->colors[i].size() < this->colors[j].size();
-        };
+        for (auto& l: colors_by_frequency) {
+            l.sort( [&frequencies] (std::size_t i, std::size_t j) {
+                        return frequencies[i] < frequencies[j];
+                    }
+                );
+        }
 
-        std::sort(vertex_order.begin(), vertex_order.end(), comp);
-
-        return vertex_order;
+        return colors_by_frequency;
     }
+
+
 private:
     std::vector<std::list<std::size_t>> colors;
     std::size_t _total_number;
