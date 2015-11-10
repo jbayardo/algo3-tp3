@@ -1,9 +1,11 @@
 #include "Problem.h"
+#include "ConflictColoring.h"
+#include "Statistics.h"
 
-Coloring greedy_order(std::vector<std::size_t> vertex_order,
+ConflictColoring greedy_order(std::vector<std::size_t> vertex_order,
                       const Graph& graph,
                       const ColorStorage& colors) {
-    auto coloring = Coloring(graph);
+    auto coloring = ConflictColoring(graph);
 
     for (auto& v: vertex_order) {
         auto choice = colors.get(v).front();
@@ -34,6 +36,7 @@ Coloring greedy_order(std::vector<std::size_t> vertex_order,
 
 
 Coloring Problem::solve3() const {
+    Timer timer("Exercise 3 Timer");
     auto vertex_order = graph.descendingByDegree();
     auto result = greedy_order(vertex_order, graph, colors);
     if (!result.complete()) {

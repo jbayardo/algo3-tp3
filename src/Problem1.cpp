@@ -1,82 +1,8 @@
+#include <list>
+#include <vector>
 #include <stack>
 #include "Problem.h"
 #include "DGraph.h"
-
-std::list<std::list<std::size_t>> korasaju(DGraph& implication_graph, std::vector<std::size_t>& node_scc) {
-    std::stack<std::size_t> nodes;
-    int size = implication_graph.size();
-    int now = 0;
-    std::vector<bool> is_in_stack(implication_graph.size(), false);
-
-    while (nodes.size() != size) {
-        while (is_in_stack[now]) {
-            ++now;
-        }
-
-        std::stack<std::size_t> dfs;
-        std::vector<bool> discovered(size, false);
-        dfs.push(now);
-        // Perform a dfs from this vertex
-        while (!dfs.empty()) {
-            std::size_t v = dfs.top();
-            dfs.pop();
-            if (!discovered[v]) {
-                discovered[v] = true;
-                std::size_t expansion = 0;
-                for (auto neighbour : implication_graph.neighbours(v)) {
-                    if (!discovered[neighbour]) {
-                        expansion++;
-                        dfs.push(neighbour);
-                    }
-                }
-                // When we get to a vertex that cant keep expanding we push it into the original stack
-                if (expansion == 0 && !is_in_stack[v]) {
-                    nodes.push(v);
-                    is_in_stack[v] = true;
-                }
-            }
-        }
-    }
-
-    // Reverse edges
-    implication_graph.transpose();
-
-    int scc_number = 0;
-    std::list<std::list<std::size_t>> res;
-    while (!nodes.empty()) {
-        // Ignore nodes already processed
-        while (!is_in_stack[nodes.top()]) nodes.pop();
-        if (nodes.empty()) break;
-
-        now = nodes.top();
-        nodes.pop();
-
-        // Start new strongly connected component
-        res.push_back(std::list<std::size_t>());
-        res.back().push_back(now);
-        is_in_stack[now] = false;
-        node_scc[now] = scc_number;
-
-        // Complete the SCC with nodes found while doing a DFS
-        std::stack<std::size_t> dfs;
-        dfs.push(now);
-        while (!dfs.empty()) {
-            std::size_t v = dfs.top();
-            dfs.pop();
-            for (auto neighbour : implication_graph.neighbours(v)) {
-                if (is_in_stack[neighbour]) {
-                    res.back().push_back(neighbour);
-                    is_in_stack[neighbour] = false;
-                    node_scc[neighbour] = scc_number;
-                    dfs.push(neighbour);
-                }
-            }
-        }
-        ++scc_number;
-    }
-
-    return res;
-}
 
 Coloring Problem::solve1() const {
     struct state {
@@ -113,12 +39,15 @@ Coloring Problem::solve1() const {
     // For every vertex
     for (int i = 0; i < end; ++i) {
         std::list<std::size_t> myColors = colors.get(i);
+
         // go through its neighbours
         for (auto &neighbour : graph.neighbours(i)) {
             int ic = 0;
+
             // Check if there is an intersection in its colors
             for (auto myColor : myColors) {
                 int icn = 0;
+
                 // Go through every neighbour possible color
                 for (auto neighbourColor : colors.get(neighbour)) {
                     if (myColor == neighbourColor) {
@@ -133,8 +62,10 @@ Coloring Problem::solve1() const {
                         implication_graph.connect(vertex_data[i][ic].isNot, vertex_data[neighbour][icn].is);
                         implication_graph.connect(vertex_data[i][ic].isNot, vertex_data[neighbour][icn].isNot);
                     }
+
                     icn++;
                 }
+
                 ic++;
             }
         }
@@ -158,8 +89,11 @@ Coloring Problem::solve1() const {
         }
     }
 
-    std::vector<std::size_t> node_scc(implication_graph.size());
-    std::list<std::list<std::size_t>> s_c_c = korasaju(implication_graph, node_scc);
+    // Hacemos Kosaraju para el grafo de implicaciones
+    std::pair<std::list<std::list<std::size_t>>, std::vector<std::size_t>> kosaraju = implication_graph.kosaraju();
+
+    std::list<std::list<std::size_t>> &s_c_c = kosaraju.first;
+    std::vector<std::size_t> &node_scc = kosaraju.second;
 
     Coloring c(graph);
     // Check if variable and negation are in the same strongly connected component
