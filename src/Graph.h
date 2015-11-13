@@ -10,34 +10,20 @@ public:
     Graph(std::size_t vertices);
     void connect(std::size_t a, std::size_t b);
     std::vector<std::size_t> descendingByDegree() const;
-    virtual ~Graph();
 
-
-    inline const std::list<std::size_t> &neighbours(std::size_t a) const {
-    #ifdef DEBUG
+    const std::list<std::size_t> inline &neighbours(std::size_t a) const {
+#ifdef DEBUG
         if (a >= size()) {
             throw std::out_of_range("Indice fuera de rango");
         }
-    #endif
+#endif
 
         return adjacency[a];
     }
 
-
-    inline std::size_t size() const {
-        return adjacency.size();
-    }
-
-    inline std::size_t degree(std::size_t a) const {
-    #ifdef DEBUG
-        if (a >= size()) {
-            throw std::out_of_range("Indice fuera de rango");
-        }
-    #endif
-
-        return adjacency[a].size();
-    }
-
+    std::size_t size() const;
+    std::size_t degree(std::size_t a) const;
+    virtual ~Graph();
 private:
     std::vector<std::list<std::size_t>> adjacency;
 };

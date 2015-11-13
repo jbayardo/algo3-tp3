@@ -1,8 +1,6 @@
+#include <iostream>
 #include "Statistics.h"
 #include "Problem.h"
-
-#include <fstream>
-#include <iostream>
 
 /*
  * ./tp <ejercicio> <entrada> <salida> <corridas>

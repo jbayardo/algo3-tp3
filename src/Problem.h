@@ -1,14 +1,6 @@
 #ifndef ALGO3_TP3_PROBLEM_H
 #define ALGO3_TP3_PROBLEM_H
 
-
-#include <vector>
-#include <list>
-#include <stack>
-#include <stdexcept>
-#include <fstream>
-#include "DGraph.h"
-#include "Statistics.h"
 #include "Graph.h"
 #include "ColorStorage.h"
 #include "Coloring.h"
@@ -22,6 +14,7 @@ private:
     Coloring solve2() const;
     Coloring solve3() const;
     Coloring solve4() const;
+    Coloring solve5() const;
 
     std::size_t vertices;
     std::size_t edges;
@@ -30,10 +23,5 @@ private:
     Graph graph;
     ColorStorage colors;
 };
-
-std::list<std::list<std::size_t>> korasaju(DGraph& i_g, std::vector<std::size_t>& node_scc);
-Coloring greedy_order(std::vector<std::size_t> vertex_order,
-                      const Graph& graph,
-                      const ColorStorage& colors);
 
 #endif //ALGO3_TP3_PROBLEM_H
