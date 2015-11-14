@@ -37,7 +37,7 @@ def random_input(n=None):
 
     edges = "\n".join(["%d %d" % (u, v) for (u, v) in all_edges[:m]])
 
-    return print_graph(header(n, m, c), edges, colors)
+    return print_graph(header(n, m, n), edges, colors)
 
 
 def complete_graph(n):
@@ -49,7 +49,7 @@ def complete_graph(n):
     m = len(edges)
     edges = "\n".join(edges)
 
-    return print_graph(header(n, m, c), edges, colors)
+    return print_graph(header(n, m, n), edges, colors)
 
 
 def star_graph(n):
@@ -60,7 +60,7 @@ def star_graph(n):
 
     edges = "\n".join(edges)
 
-    return print_graph(header(n, m, c), edges, colors)
+    return print_graph(header(n, m, n), edges, colors)
 
 
 def complete_bipartite(n):
@@ -73,7 +73,7 @@ def complete_bipartite(n):
     m = len(edges)
     edges = "\n".join(edges)
 
-    return print_graph(header(n, m, c), edges, colors)
+    return print_graph(header(n, m, n), edges, colors)
 
 
 def cycle_graph(n):
@@ -85,7 +85,7 @@ def cycle_graph(n):
 
     edges = "\n".join(edges)
 
-    return print_graph(header(n, m, c), edges, colors)
+    return print_graph(header(n, m, n), edges, colors)
 
 
 def wheel_graph(n):
@@ -97,7 +97,7 @@ def wheel_graph(n):
             ["%d %d" % (n-2, 0)] + ["%d %d" % (n-1, x) for x in xrange(n-1)]
     m = len(edges)
 
-    return print_graph(header(n, m, c), "\n".join(edges), colors)
+    return print_graph(header(n, m, n), "\n".join(edges), colors)
 
 
 def binary_balanced_tree(n):
@@ -123,7 +123,7 @@ def binary_balanced_tree(n):
 
     edges = "\n".join(edges)
 
-    return print_graph(header(n, m, c), edges, colors)
+    return print_graph(header(n, m, n), edges, colors)
 
 
 if __name__ == '__main__':
