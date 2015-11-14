@@ -19,8 +19,8 @@ def header(n, m, c):
 
 
 def get_colors(n, prefix=[]):
-    return {k: set(prefix + [randint(1, c-1)
-            for _ in xrange(randint(1, c-1))])
+    return {k: set(prefix + [randint(1, n-1)
+            for _ in xrange(randint(1, n-1))])
             for k in xrange(n)}
 
 
@@ -28,7 +28,6 @@ def random_input(n=None):
     if n is None:
         n = randint(10, 100)
     m = randint(1, ((n-1)*n)/2)
-    c = n
 
     colors = get_colors(n)
 
@@ -42,8 +41,6 @@ def random_input(n=None):
 
 
 def complete_graph(n):
-    c = n
-
     colors = {k: range(n) for k in xrange(n)}
 
     all_edges = list(combinations(xrange(n), 2))
@@ -56,7 +53,6 @@ def complete_graph(n):
 
 
 def star_graph(n):
-    c = n
     colors = get_colors(n, [1, 2])
 
     edges = ["%d %d" % (x, n-1) for x in xrange(n-1)]
@@ -68,8 +64,6 @@ def star_graph(n):
 
 
 def complete_bipartite(n):
-    c = n
-
     colors = get_colors(n, [1, 2])
 
     A = [x for x in xrange(n) if x&1]
@@ -83,7 +77,6 @@ def complete_bipartite(n):
 
 
 def cycle_graph(n):
-    c = n
     colors = get_colors(n, [1, 2, 3])
 
     edges = ["%d %d" % (x, x+1) for x in xrange(n-1)] + ["%d %d" % (n-1, 0)]
@@ -97,11 +90,11 @@ def cycle_graph(n):
 
 def wheel_graph(n):
     n = max(n, 4)
-    c = n
 
     colors = get_colors(n, [1, 2, 3])
 
-    edges = ["%d %d" % (x, x+1) for x in xrange(n-2)] + ["%d %d" % (n-2, 0)] + ["%d %d" % (n-1, x) for x in xrange(n-1)]
+    edges = ["%d %d" % (x, x+1) for x in xrange(n-2)] + \
+            ["%d %d" % (n-2, 0)] + ["%d %d" % (n-1, x) for x in xrange(n-1)]
     m = len(edges)
 
     return print_graph(header(n, m, c), "\n".join(edges), colors)
@@ -121,8 +114,6 @@ def binary_balanced_tree(n):
                     yield source, target
                 except StopIteration:
                     break
-
-    c = n
 
     colors = get_colors(n, [1, 2])
 
