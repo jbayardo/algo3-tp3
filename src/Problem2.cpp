@@ -4,84 +4,84 @@
 #include "Problem.h"
 #include "Statistics.h"
 
-Coloring Problem::solve2() const {
-    Timer timer("Exercise 2 Timer");
-    // std::stack<Coloring> pending;
-    // // Generamos el coloreo vacio
-    // pending.push(Coloring(graph));
+bool is2ListColoring (const Graph &graph, const ColorStorage &colors, const Coloring &current) {
+    for (std::size_t i = 0; i < graph.size(); ++i) {
+        if (!current.isset(i) && colors.get(i).size() > 2) {
+            return false;
+        }
+    }
 
-    // while (!pending.empty()) {
-    //     Coloring current = pending.top();
-    //     pending.pop();
-
-    //     if () {
-    //         // Reducción a 2-sat
-    //     } else {
-    //         for () {
-    //             pending.push();
-    //         }
-    //     }
-    // }
-    //
-    //Coloring c(graph);
-    //return c;
+    return true;
 }
 
-//checks if it's possible to assign currentColor to vertex v without conflict with neighbours
-// bool isPossibleColor (const Graph& graph, int paintedNodes[],  int v, int currentColor) {
+ColorStorage transform(const Graph &graph, const ColorStorage &colors, const Coloring &current) {
+    ColorStorage output(graph.size());
 
-//     for (int i = 0; i < V; ++i) {
+    for (std::size_t i = 0; i < graph.size(); ++i) {
+        std::list<std::size_t> replacement;
 
-//         if (graph[v][i] && paintedNodes[i] != NULL && c == paintedNodes[i]) {
+        if (colors.get(i).size() <= 2) {
+            replacement = colors.get(i);
+            output.add(i, replacement);
+        } else {
+            if (current.isset(i)) {
+                replacement.push_back(current.get(i));
+                output.add(i, replacement);
+            } else {
+                replacement = colors.get(i);
+                output.add(i, replacement);
+            }
+        }
+    }
 
-//             return false;
+    return output;
+}
 
-//         }
+bool isAdmissible(const Graph &graph, const Coloring &current, std::size_t node, std::size_t colour) {
+    for (auto &neighbour : graph.neighbours(node)) {
+        if (current.isset(neighbour) && current.get(neighbour) == colour) {
+            return false;
+        }
+    }
 
-//     }
-//     return true;
+    return true;
+}
 
-// }
+Coloring coloringExists(const Graph &graph, const ColorStorage &colors, Coloring current, std::size_t node) {
+    // TODO: si descomentas lo de abajo, borra estas 2 lineas.
+    return current;
+/*    if (current.complete()) {
+        return current;
+    } else {
+        // Chequear si es 2 list coloring
+        if (is2ListColoring(graph, colors, current)) {
+            return 2ListColoring(graph, transform(graph, colors, current));
+        }
 
-//backtracking, returns True if there is a possible coloring and stores the coloring in paintedNodes
-// bool coloringExists (const Graph& graph, const ColorLists& colors, int paintedNodes[V], int v) {
-//     //base case, the algorithm called coloringExists without a valid vertex.
-//     if (v == V) {
+        // Probamos con todos los colores
+        for (auto &colour : colors.get(node)) {
+            if (isAdmissible(graph, current, node, colour)) {
+                current.set(node, colour);
 
-//         return true;
+                try {
+                    return coloringExists(graph, colors, current, node + 1);
+                } catch (...) {
+                    continue;
+                }
+            }
+        }
 
-//     } else {
-//         //backtrack for every possible color in current vertex
-//         for (std::list<int>::iterator it = ColorsLists[v].begin(); it != colorsLists[v].end(); ++it) {
+        throw std::runtime_error("Se fue todo a la chota");
+    }*/
+}
 
-//             if (isPossibleColor(graph, paintedNodes, v, *it)) {
-//                 //we paint vertex and backtrack to see possible outcomes with such configuration
-//                 paintedNodes[v] = *it;
+Coloring Problem::solve2() const {
+    Timer timer("Exercise 2 Timer");
+    Coloring current(graph);
 
-//                 if (coloringExists(graph, colors, paintedNodes, v+1)) {
-
-//                     return true;
-
-//                 } else {
-//                     //such coloring didn't develop into a possible solution
-//                     paintedNodes[v] = NULL;
-
-//                 }
-//             }
-
-//         }
-//         return false;
-//     }
-// }
-
-// bool is2ListColoring (const &Graph graph, const ColorLists& colors, int v) {
-//     // for every tuple of two colors, if every vertex has at least one of them, we run 2ListColoring.
-//     // if coloring exists, we return it.
-//     return false;
-
-// }
-
-
-
-
-
+    try {
+        return coloringExists(graph, colors, current, 0);
+    } catch (...) {
+        return current;
+    }
+}
