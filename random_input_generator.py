@@ -1,7 +1,7 @@
 #!/usr/bin/python
-import os
 from random import randint, shuffle, randrange
 from itertools import combinations
+
 
 def print_graph(head, edges, colors):
     color_out = []
@@ -32,7 +32,7 @@ def random_input(n=None):
 
     edges = "\n".join(["%d %d"%(u, v) for (u, v) in all_edges[:m]])
 
-    print print_graph(header(n, m, c), edges, colors)
+    return print_graph(header(n, m, c), edges, colors)
 
 
 def complete_graph(n):
@@ -44,16 +44,16 @@ def complete_graph(n):
 
     edges = "\n".join(["%d %d"%(u, v) for (u, v) in all_edges])
 
-    print print_graph(header(n, (n*(n-1)/2), c), edges, colors)
+    return print_graph(header(n, (n*(n-1)/2), c), edges, colors)
 
 
 def star_graph(n):
     c = n
     colors = {k: set([1, 2] + [randint(1, c-1) for _ in xrange(randint(1, c-1))]) for k in xrange(n+1)}
 
-    edges = "\n".join(["%d %d" % (x, n) for x in xrange(n)])
+    edges = "\n".join(["%d %d" % (x, n-1) for x in xrange(n-1)])
 
-    print print_graph(header(n+1, n-1, c), edges, colors)
+    return print_graph(header(n, n-1, c), edges, colors)
 
 
 def complete_bipartite(n):
@@ -66,17 +66,19 @@ def complete_bipartite(n):
 
     edges = "\n".join(["%d %d" % (x, y) for x in A for y in B])
 
-    print print_graph(header(n, n*n, c), edges, colors)
+    return print_graph(header(n, n*n, c), edges, colors)
 
 
 def cycle_graph(n):
     c = n
 
-    colors = {k: set([1, 2, 3] + [randint(1, c-1) for _ in xrange(randint(1, c-1))]) for k in xrange(n)}
+    colors = {k: set([1, 2, 3] + [randint(1, c-1) for _ in xrange(randint(1, c-1))])
+              for k in xrange(n)}
 
-    edges = "\n".join(["%d %d" % (x, x+1) for x in xrange(n-1)] + ["%d %d" % (n-1, 0)])
+    edges = "\n".join(["%d %d" % (x, x+1) for x in xrange(n-1)] +
+                      ["%d %d" % (n-1, 0)])
 
-    print print_graph(header(n, n, c), edges, colors)
+    return print_graph(header(n, n, c), edges, colors)
 
 
 def wheel_graph(n):
@@ -89,7 +91,7 @@ def wheel_graph(n):
                       ["%d %d" % (n-2, 0)] +
                       ["%d %d" % (n-1, x) for x in xrange(n-1)])
 
-    print print_graph(header(n, 2*(n-1), c), edges, colors)
+    return print_graph(header(n, 2*(n-1), c), edges, colors)
 
 
 def binary_balanced_tree(n):
@@ -117,7 +119,7 @@ def binary_balanced_tree(n):
 
     edges = "\n".join(edges)
 
-    print print_graph(header(n, m, c), edges, colors)
+    return print_graph(header(n, m, c), edges, colors)
 
 if __name__ == '__main__':
-    random_input()
+    print random_input()
