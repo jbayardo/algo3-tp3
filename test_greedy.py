@@ -43,7 +43,9 @@ def test_tree():
 def test_template(input, expected, msg):
     print msg
     results = []
-    for n in xrange(1, 1000):
+    for n in xrange(1, 1001):
+        if n % 250 == 0:
+            print "%d" % (n/10) + "%"
         e = expected(n)
         results.append(run_test(input(n), e))
     print "Optimal cases: %d" % (filter(lambda x: x == 0, results))
