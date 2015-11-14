@@ -56,7 +56,7 @@ public:
 
         for (auto& l: colors_by_frequency) {
             l.sort( [&frequencies] (std::size_t i, std::size_t j) {
-                        return frequencies[i] > frequencies[j];
+                        return frequencies[i] >= frequencies[j];
                     }
                 );
         }

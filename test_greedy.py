@@ -2,7 +2,7 @@
 
 from random_input_generator import *
 import subprocess as s
-
+from multiprocessing import Process
 
 def test_complete():
     test_template(complete_graph,
@@ -24,13 +24,13 @@ def test_bipartite():
 
 def test_cycle():
     test_template(cycle_graph,
-                  lambda x: 2 + x & 1,
+                  lambda x: 2 + (x & 1),
                   "Testing cycle")
 
 
 def test_wheel():
     test_template(wheel_graph,
-                  lambda x: 4 - x & 1,
+                  lambda x: 4 - (x & 1),
                   "Testing wheel")
 
 
@@ -41,16 +41,14 @@ def test_tree():
 
 
 def test_template(input, expected, msg):
-    print msg
     results = []
-    for n in xrange(1, 1001):
-        if n % 250 == 0:
-            print "%d" % (n/10) + "%"
+    for n in xrange(5, 206):
         e = expected(n)
         results.append(run_test(input(n), e))
-    print "Optimal cases: %d" % (filter(lambda x: x == 0, results))
-    print "Not optimal: %d" % (filter(lambda x: x != 0, results))
-    print "Max distance from optimum: %d" % max(results)
+    print msg
+    print "Optimal cases: %d" % len(filter(lambda x: x <= 0, results))
+    print "Not optimal: %d" % len(filter(lambda x: x > 0, results))
+    print "Max distance from optimum: %d\n" % max(results)
 
 
 def run_test(input, expected):
@@ -62,13 +60,12 @@ def run_test(input, expected):
     return colors - expected
 
 
-all_tests = [test_complete,
+all_tests = [test_tree,
              test_star,
              test_bipartite,
              test_cycle,
              test_wheel,
-             test_tree]
+             test_complete]
 
 if __name__ == '__main__':
-    for t in all_tests:
-        t()
+    map(lambda t: t(), all_tests)
