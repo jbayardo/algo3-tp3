@@ -4,6 +4,10 @@
 #include "Problem.h"
 #include "DGraph.h"
 
+#define _TRUE = 1
+#define _FALSE = 0
+#define _NOTSET = 2
+
 Coloring Problem::solve1() const {
     struct state {
         std::size_t is;
@@ -11,9 +15,11 @@ Coloring Problem::solve1() const {
         std::size_t color;
     };
 
-    std::vector<std::vector<state>> vertex_data(graph.size(), std::vector<state>(2));
-    std::vector<std::size_t> state_to_vertex(colors.total_number()*2);
     DGraph implication_graph(colors.total_number()*2);
+    // Aca para cada estado posible de cada variable guardo el nodo que representa su afirmacion y negacion
+    std::vector<std::vector<state>> vertex_data(graph.size(), std::vector<state>(2));
+    // Aca guardo la vuelta, dado un nodo del grafo de implicacion me da el estado al que pertenece
+    std::vector<std::pair<std::size_t,std::size_t> > state_to_vertex(colors.total_number()*2);
 
     int v = 0;
     int end = graph.size();
@@ -25,11 +31,11 @@ Coloring Problem::solve1() const {
             vertex_data[i][li].color = color;
 
             vertex_data[i][li].is = v;
-            state_to_vertex[v] = i;
+            state_to_vertex[v] = std::make_pair(i,li);
 
             ++v;
             vertex_data[i][li++].isNot = v;
-            state_to_vertex[v] = i;
+            state_to_vertex[v] = std::make_pair(i,li);
 
             ++v;
         }
@@ -116,8 +122,74 @@ Coloring Problem::solve1() const {
         }
     }
 
-    std::vector<bool> s_c_c_states(s_c_c.size());
-    // TODO
+    std::vector<char> s_c_c_states(s_c_c.size(), _NOTSET);
+
+    actual_scc = s_c_c.size() - 1;
+    for (auto it = s_c_c.rbegin(); it != s_c_c.rend(); it++) {
+        if (s_c_c_states[actual_scc] == _NOTSET) {
+            s_c_c_states[actual_scc] = _TRUE;
+        }
+        if (s_c_c_states[actual_scc] == _TRUE) {
+            // Itero por cada nodo de la componente fuertemente conexa
+            for (auto node : it) {
+                std::size_t orig_node = state_to_vertex[node].first;
+                std::size_t state_number = state_to_vertex[node].second;
+                state node_state = vertex_data[orig_node][state_number];
+                if (node_state.is == node) {
+                    // El nodo representa una variable no negada en el grafo de implicaciones
+                    // Por lo tanto el estado vale, entonces coloreamos el nodo del color de este estado
+                    c.set(orig_node, node_state.color);
+                    // La negacion de esta variable ahora es falsa porque su no negacion es verdadera
+                    if (s_c_c_states[node_scc[node_state.isNot]] != _FALSE && s_c_c_states[node_scc[node_state.isNot]] != _NOTSET) {
+                        // Colision!! 
+                        return c;
+                    } else {
+                        s_c_c_states[node_scc[node_state.isNot]] = _FALSE;
+                    }
+                } else {
+                    // El nodo representa una variable negada en el grafo de implicaciones
+                    // La variable no negada es falsa porque su negacion es verdadera
+                    if (s_c_c_states[node_scc[node_state.is]] != _FALSE && s_c_c_states[node_scc[node_state.is]] != _NOTSET) {
+                        // Colision!!
+                        return c;
+                    } else {
+                        s_c_c_states[node_scc[node_state.is]] = _FALSE;
+                    }
+                }
+            }
+        } else {
+            // Itero por cada nodo de la componente fuertemente conexa
+            for (auto node : it) {
+                std::size_t orig_node = state_to_vertex[node].first;
+                std::size_t state_number = state_to_vertex[node].second;
+                state node_state = vertex_data[orig_node][state_number];
+                if (node_state.isNot == node) {
+                    // El nodo representa una variable negada en el grafo de implicaciones
+                    // Como la negacion es falsa, entonces la afirmacion es verdadera
+                    // Por lo tanto coloreamos el nodo con el color correspondiente
+                    c.set(orig_node, node_state.color);
+                    // La negacion de esta variable ahora es falsa porque su no negacion es verdadera
+                    if (s_c_c_states[node_scc[node_state.is]] != _TRUE && s_c_c_states[node_scc[node_state.is]] != _NOTSET) {
+                        // Colision!! 
+                        return c;
+                    } else {
+                        s_c_c_states[node_scc[node_state.is]] = _TRUE;
+                    }
+                } else {
+                    // El nodo representa una variable no negada en el grafo de implicaciones
+                    // La variable no negada es verdadera porque su negacion es falsa
+                    if (s_c_c_states[node_scc[node_state.isNot]] != _TRUE && s_c_c_states[node_scc[node_state.isNot]] != _NOTSET) {
+                        // Colision!!
+                        return c;
+                    } else {
+                        s_c_c_states[node_scc[node_state.isNot]] = _TRUE;
+                    }
+                }
+            }
+        }
+    }
+    // TODO checkear que no haya absurdos en el grafo denso!!
+    // Si no hubo colisiones entonces esta todo bien, y esta todo coloreado
 
     return c;
 }
