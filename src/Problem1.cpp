@@ -157,6 +157,13 @@ Coloring Problem::solve1() const {
                     }
                 }
             }
+            // Ahora me dijo si yo no implico ningun falso
+            for (auto neighbour : condensed.neighbours(actual_scc)) {
+                if (s_c_c_states[neighbour] == _FALSE) {
+                    // Si es asi, hay un absurdo, asi que ya no sirve
+                    return c;
+                }
+            }
         } else {
             // Itero por cada nodo de la componente fuertemente conexa
             for (auto node : *it) {
@@ -184,6 +191,13 @@ Coloring Problem::solve1() const {
                     } else {
                         s_c_c_states[node_scc[node_state.isNot]] = _TRUE;
                     }
+                }
+            }
+            // Ahora me dijo si yo no me implica ningun verdadero
+            for (auto neighbour : condensed.parents(actual_scc)) {
+                if (s_c_c_states[neighbour] == _TRUE) {
+                    // Si es asi, hay un absurdo, asi que ya no sirve
+                    return c;
                 }
             }
         }
