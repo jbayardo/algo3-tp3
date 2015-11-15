@@ -131,7 +131,7 @@ Coloring Problem::solve1() const {
         }
         if (s_c_c_states[actual_scc] == _TRUE) {
             // Itero por cada nodo de la componente fuertemente conexa
-            for (auto&& node : it) {
+            for (auto node : *it) {
                 std::size_t orig_node = state_to_vertex[node].first;
                 std::size_t state_number = state_to_vertex[node].second;
                 state node_state = vertex_data[orig_node][state_number];
@@ -159,7 +159,7 @@ Coloring Problem::solve1() const {
             }
         } else {
             // Itero por cada nodo de la componente fuertemente conexa
-            for (auto&& node : it) {
+            for (auto node : *it) {
                 std::size_t orig_node = state_to_vertex[node].first;
                 std::size_t state_number = state_to_vertex[node].second;
                 state node_state = vertex_data[orig_node][state_number];
