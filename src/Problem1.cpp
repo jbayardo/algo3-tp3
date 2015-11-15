@@ -4,9 +4,9 @@
 #include "Problem.h"
 #include "DGraph.h"
 
-#define _TRUE = 1
-#define _FALSE = 0
-#define _NOTSET = 2
+#define _TRUE 1
+#define _FALSE 0
+#define _NOTSET 2
 
 Coloring Problem::solve1() const {
     struct state {
@@ -124,14 +124,14 @@ Coloring Problem::solve1() const {
 
     std::vector<char> s_c_c_states(s_c_c.size(), _NOTSET);
 
-    actual_scc = s_c_c.size() - 1;
+    std::size_t actual_scc = s_c_c.size() - 1;
     for (auto it = s_c_c.rbegin(); it != s_c_c.rend(); it++) {
         if (s_c_c_states[actual_scc] == _NOTSET) {
             s_c_c_states[actual_scc] = _TRUE;
         }
         if (s_c_c_states[actual_scc] == _TRUE) {
             // Itero por cada nodo de la componente fuertemente conexa
-            for (auto node : it) {
+            for (auto node : *it) {
                 std::size_t orig_node = state_to_vertex[node].first;
                 std::size_t state_number = state_to_vertex[node].second;
                 state node_state = vertex_data[orig_node][state_number];
@@ -159,7 +159,7 @@ Coloring Problem::solve1() const {
             }
         } else {
             // Itero por cada nodo de la componente fuertemente conexa
-            for (auto node : it) {
+            for (auto node : *it) {
                 std::size_t orig_node = state_to_vertex[node].first;
                 std::size_t state_number = state_to_vertex[node].second;
                 state node_state = vertex_data[orig_node][state_number];
@@ -187,6 +187,7 @@ Coloring Problem::solve1() const {
                 }
             }
         }
+        actual_scc--;
     }
     // TODO checkear que no haya absurdos en el grafo denso!!
     // Si no hubo colisiones entonces esta todo bien, y esta todo coloreado
