@@ -25,6 +25,8 @@ int main(int argc, char *argv[]) {
     Problem solver(input);
     Coloring result(solver.solve(exercise, runs));
 
+    std::cout << result << std::endl;
+
     std::ofstream handle;
     handle.open(output, std::ofstream::out);
 

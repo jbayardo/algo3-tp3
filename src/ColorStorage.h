@@ -14,6 +14,9 @@ public:
     ColorStorage() : colors(0) { };
     ColorStorage(std::size_t vertices) : colors(vertices), _total_number(0) { };
 
+    /**
+     * TODO: Si le ponemos el const a iColors, podemos hacer que Problem2::transform sea mucho más rápido.
+     */
     void add(std::size_t vertex, std::list<std::size_t> &iColors) {
 #ifdef DEBUG
         if (std::find(colors[vertex].begin(), colors[vertex].end(), colors) != colors[vertex].end()) {
@@ -53,7 +56,7 @@ public:
 
         for (auto& l: colors_by_frequency) {
             l.sort( [&frequencies] (std::size_t i, std::size_t j) {
-                        return frequencies[i] < frequencies[j];
+                        return frequencies[i] >= frequencies[j];
                     }
                 );
         }
