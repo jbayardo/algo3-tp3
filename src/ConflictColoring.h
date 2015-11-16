@@ -10,6 +10,7 @@ public:
     /*! Constructor
      *
      * @param g grafo de referencia
+     * @complexity O(n)
      */
     ConflictColoring(const Graph &g) :
             Coloring(g),
@@ -20,6 +21,7 @@ public:
     /*! Constructor
      *
      * @param c coloreo sin datos de colisiones
+     * @complexity O(n)
      */
     ConflictColoring(const Coloring &c) :
             Coloring(c),
@@ -30,6 +32,7 @@ public:
     /*! Constructor por copia
      *
      * @param c coloreo a copiar
+     * @complexity O(n)
      */
     ConflictColoring(const ConflictColoring &c) :
             Coloring(c),
@@ -37,9 +40,21 @@ public:
             total_collisions(c.total_collisions),
             updated(c.updated) { }
 
+    /*! Constructor por movimiento
+     *
+     * @param c coloreo a mover
+     * O(1)
+     */
+    ConflictColoring(ConflictColoring &&c) :
+            Coloring(c),
+            collisions(std::move(c.collisions)),
+            total_collisions(c.total_collisions),
+            updated(c.updated) { }
+
     /*! Operador de asignación
      *
      * @return referencia a la clase actual
+     * @complexity O(n)
      */
     ConflictColoring &operator=(const ConflictColoring &r) {
         if (this != &r) {
@@ -63,6 +78,7 @@ public:
      * @param index número de nodo
      * @param color nuevo color a asignar
      * @return antiguo color del nodo index, uncolored() si no tenía color
+     * @complexity O(1)
      */
     inline std::size_t set(std::size_t index, std::size_t color) {
         std::size_t output = Coloring::set(index, color);
@@ -70,19 +86,54 @@ public:
         return output;
     }
 
+    /*! Cambia el color de un nodo, actualizando la información de conflictos
+     *
+     * @param index número de nodo
+     * @param color nuevo color a asignar
+     * @return antiguo color del nodo index, uncolored() si no tenía color
+     * @complexity O(m) worst case, O(1) best case, O(m/n) average
+     */
+    std::size_t setu(std::size_t index, std::size_t color) {
+        std::size_t output = Coloring::set(index, color);
+
+        if (updated) {
+            total_collisions -= collisions[index];
+            collisions[index] = 0;
+
+            for (auto &neighbour : graph.neighbours(index)) {
+                if (isset(neighbour)) {
+                    if (get(neighbour) == output) {
+                        --collisions[neighbour];
+                        total_collisions -= 2;
+                    }
+
+                    if (get(neighbour) == color) {
+                        ++collisions[neighbour];
+                        ++collisions[index];
+                        total_collisions += 2;
+                    }
+                }
+            }
+        }
+
+        return output;
+    }
+
     /*! Devuelve la cantidad de conflictos para todos los nodos en total, contados por única vez.
      *
      * @return cantidad de conflictos en total
+     * @complexity O(1) best case, O(n + 1) worst case
      */
     std::size_t conflicts() {
         update_collisions();
-        return total_collisions;
+        return total_collisions/2;
     }
 
     /*! Devuelve la cantidad de conflictos de un nodo
      *
      * @param index número de nodo
      * @return cantidad de conflictos con sus vecinos coloreados
+     * @complexity O(1) best case, O(n + 1) worst case
      */
     std::size_t conflicts(std::size_t index) {
 #ifdef DEBUG
@@ -102,6 +153,7 @@ public:
      * es 0.
      *
      * @return arreglo con la cantidad de conflictos de cada vertice
+     * @complexity O(1) best case, O(n + m) worst case
      */
     const std::vector<std::size_t> &perVertexConflicts() {
         update_collisions();
@@ -113,7 +165,10 @@ public:
     virtual ~ConflictColoring() { }
 
 private:
-    /*! Actualiza la cantidad de colisiones por vertice y demás indicadores */
+    /*! Actualiza la cantidad de colisiones por vertice y demás indicadores
+     *
+     * @complexity O(1) best case, O(n + m) worst case
+     */
     void update_collisions() {
         if (updated) {
             return;
@@ -134,7 +189,6 @@ private:
             }
         }
 
-        total_collisions /= 2;
         updated = true;
     }
 
