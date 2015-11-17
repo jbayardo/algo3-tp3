@@ -220,7 +220,7 @@ inline std::ostream &operator<<(std::ostream &stream, ConflictColoring &coloring
 
     output << std::endl;
 
-    output << "Conflictos Totales: " << coloring.conflicts() << std::endl;
+    output << coloring.conflicts() << std::endl;
 
     for (auto &conflict : coloring.perVertexConflicts()) {
         output << conflict << ' ';

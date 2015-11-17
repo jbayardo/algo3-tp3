@@ -127,4 +127,4 @@ def binary_balanced_tree(n):
 
 
 if __name__ == '__main__':
-    print cycle_graph(10)
+    print random_input(150)

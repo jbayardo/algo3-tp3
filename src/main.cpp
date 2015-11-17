@@ -9,6 +9,13 @@
 int main(int argc, char *argv[]) {
     if (argc < 4) {
         std::cerr << "Formato de entrada: " << argv[0] << " <ejercicio> <entrada> <salida> <corridas>" << std::endl;
+#ifdef DEBUG
+        std::cerr << "BUILD DE DEBUG" << std::endl;
+#endif
+
+#ifdef EXPS
+        std::cerr << "BUILD DE EXPERIMENTACION" << std::endl;
+#endif
         return 1;
     }
 
@@ -39,7 +46,12 @@ int main(int argc, char *argv[]) {
         throw std::runtime_error("Fallo al abrir el archivo de salida");
     }
 
+#if defined(DEBUG) || defined(EXPS)
+    handle << conflicts;
+#else
     handle << result;
+#endif
+
     handle.close();
 
     std::string path = std::string(output);
