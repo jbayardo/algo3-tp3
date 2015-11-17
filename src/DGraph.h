@@ -49,7 +49,6 @@ public:
     }
 
     std::pair<std::list<std::list<std::size_t>>, std::vector<std::size_t>> kosaraju() {
-        std::vector<std::size_t> scc(size(), 0);
         std::vector<bool> is_in_stack(size(), false);
         std::stack<std::size_t> nodes;
 
@@ -63,24 +62,25 @@ public:
 
             // Current es el nodo por el que debo hacer el dfs.
             std::stack<std::size_t> pending;
-            std::vector<bool> discovered(size(), false);
+            std::vector<bool> visited(size(), false);
             pending.push(current);
+            visited[current] = true;
 
             while (!pending.empty()) {
-                bool modified = false;
                 std::size_t expand = pending.top();
                 pending.pop();
 
-                discovered[expand] = true;
+                bool modified = false;
 
                 for (auto &x : neighbours(expand)) {
-                    if (!discovered[x]) {
+                    if (!visited[x] && !is_in_stack[x]) {
+                        visited[x] = true;
                         pending.push(x);
                         modified = true;
                     }
                 }
 
-                if (!modified) {
+                if (!modified && !is_in_stack[expand]) {
                     nodes.push(expand);
                     is_in_stack[expand] = true;
                 }
@@ -91,11 +91,13 @@ public:
         transpose();
 
         int current_scc = 0;
+        std::vector<std::size_t> scc(size(), 0);
         std::list<std::list<std::size_t>> output;
 
         while (!nodes.empty()) {
             // Ignore nodes already processed
-            while (!is_in_stack[nodes.top()]) {
+
+            while (!nodes.empty() && !is_in_stack[nodes.top()]) {
                 nodes.pop();
             }
 

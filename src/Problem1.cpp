@@ -102,9 +102,12 @@ Coloring Problem::solve1() const {
 
     Coloring c(graph);
     // Check if variable and negation are in the same strongly connected component
+
     for (auto node : vertex_data) {
         for (auto state : node) {
-            if (node_scc[state.is] == node_scc[state.isNot]) return c;
+            if (node_scc[state.is] == node_scc[state.isNot]) {
+                return c;
+            }
         }
     }
 
