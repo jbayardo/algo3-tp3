@@ -1,6 +1,7 @@
 #include <list>
 #include <vector>
 #include <stack>
+#include <iostream>
 #include "Problem.h"
 #include "DGraph.h"
 
@@ -14,7 +15,6 @@ Coloring Problem::solve1() const {
         std::size_t isNot;
         std::size_t color;
     };
-
     DGraph implication_graph(colors.total_number()*2);
     // Aca para cada estado posible de cada variable guardo el nodo que representa su afirmacion y negacion
     std::vector<std::vector<state>> vertex_data(graph.size(), std::vector<state>(2));
@@ -22,10 +22,9 @@ Coloring Problem::solve1() const {
     std::vector<std::pair<std::size_t,std::size_t> > state_to_vertex(colors.total_number()*2);
 
     int v = 0;
-    int end = graph.size();
 
     // Assign a vertex for every node's color and its negation, in the new graph
-    for (int i = 0; i < end; ++i) {
+    for (int i = 0; i < graph.size(); ++i) {
         int li = 0;
         for (auto color : colors.get(i)) {
             vertex_data[i][li].color = color;
@@ -43,8 +42,8 @@ Coloring Problem::solve1() const {
 
     // Build the implications
     // For every vertex
-    for (int i = 0; i < end; ++i) {
-        std::list<std::size_t> myColors = colors.get(i);
+    for (int i = 0; i < graph.size(); ++i) {
+        const std::list<std::size_t> &myColors = colors.get(i);
 
         // go through its neighbours
         for (auto &neighbour : graph.neighbours(i)) {

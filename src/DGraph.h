@@ -18,7 +18,6 @@ public:
             throw std::runtime_error("Nodes already connected");
         }
     #endif
-
         _adjacency[a].push_back(b);
         _parents[b].push_back(a);
     }
@@ -50,47 +49,45 @@ public:
     }
 
     std::pair<std::list<std::list<std::size_t>>, std::vector<std::size_t>> kosaraju() {
-        std::vector<std::size_t> node_scc(size(), 0);
+        std::vector<std::size_t> scc(size(), 0);
         std::vector<bool> is_in_stack(size(), false);
         std::stack<std::size_t> nodes;
-        int now = 0;
 
-        while (nodes.size() != size()) {
+        std::size_t current = 0;
+
+        while (nodes.size() < size()) {
             // Obtenemos el proximo nodo que no este en el stack
-            while (is_in_stack[now]) {
-                ++now;
+            while (is_in_stack[current]) {
+                ++current;
             }
 
-            // Hacemos un dfs desde el vertice actual
-            std::stack<std::size_t> dfs;
+            // Current es el nodo por el que debo hacer el dfs.
+            std::stack<std::size_t> pending;
             std::vector<bool> discovered(size(), false);
-            dfs.push(now);
+            pending.push(current);
 
-            while (!dfs.empty()) {
-                std::size_t v = dfs.top();
-                dfs.pop();
+            while (!pending.empty()) {
+                bool modified = false;
+                std::size_t expand = pending.top();
+                pending.pop();
 
-                if (!discovered[v]) {
-                    discovered[v] = true;
-                    std::size_t expansion = 0;
+                discovered[expand] = true;
 
-                    for (auto &neighbour : neighbours(v)) {
-                        if (!discovered[neighbour]) {
-                            expansion++;
-                            dfs.push(neighbour);
-                        }
+                for (auto &x : neighbours(expand)) {
+                    if (!discovered[x]) {
+                        pending.push(x);
+                        modified = true;
                     }
+                }
 
-                    // When we get to a vertex that cant keep expanding we push it into the original stack
-                    if (expansion == 0 && !is_in_stack[v]) {
-                        nodes.push(v);
-                        is_in_stack[v] = true;
-                    }
+                if (!modified) {
+                    nodes.push(expand);
+                    is_in_stack[expand] = true;
                 }
             }
         }
 
-        // Transponer los ejes
+        // Damos vuelta las flechas del grafo
         transpose();
 
         int current_scc = 0;
@@ -106,14 +103,14 @@ public:
                 break;
             }
 
-            now = nodes.top();
+            std::size_t now = nodes.top();
             nodes.pop();
 
             // Start new strongly connected component
             output.push_back(std::list<std::size_t>());
             output.back().push_back(now);
             is_in_stack[now] = false;
-            node_scc[now] = current_scc;
+            scc[now] = current_scc;
 
             // Complete the SCC with nodes found while doing a DFS
             std::stack<std::size_t> dfs;
@@ -126,7 +123,7 @@ public:
                     if (is_in_stack[neighbour]) {
                         output.back().push_back(neighbour);
                         is_in_stack[neighbour] = false;
-                        node_scc[neighbour] = current_scc;
+                        scc[neighbour] = current_scc;
                         dfs.push(neighbour);
                     }
                 }
@@ -138,7 +135,7 @@ public:
         // Volvemos los ejes a la normalidad
         transpose();
 
-        return std::make_pair(output, node_scc);
+        return std::make_pair(output, scc);
     }
 private:
     std::vector<std::list<std::size_t>> _adjacency;

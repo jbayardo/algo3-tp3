@@ -24,8 +24,8 @@ public:
         	return;
         }
 #endif
-        colors[vertex].splice(colors[vertex].begin(), iColors); //Agrego colores nuevos al inicio
         _total_number += iColors.size();
+        colors[vertex].splice(colors[vertex].begin(), iColors); //Agrego colores nuevos al inicio
     }                                                           //No hay orden
 
     const std::list<std::size_t> inline &get(std::size_t vertex) const {

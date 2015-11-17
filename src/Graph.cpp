@@ -40,18 +40,4 @@ std::vector<std::size_t> Graph::descendingByDegree() const {
     return vertex_order;
 }
 
-std::size_t inline Graph::size() const {
-    return adjacency.size();
-}
-
-std::size_t inline Graph::degree(std::size_t a) const {
-#ifdef DEBUG
-    if (a >= size()) {
-            throw std::out_of_range("Indice fuera de rango");
-        }
-#endif
-
-    return adjacency[a].size();
-}
-
 Graph::~Graph() { }

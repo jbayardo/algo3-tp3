@@ -21,8 +21,18 @@ public:
         return adjacency[a];
     }
 
-    std::size_t size() const;
-    std::size_t degree(std::size_t a) const;
+    std::size_t inline size() const {
+        return adjacency.size();
+    }
+
+    std::size_t inline degree(std::size_t a) const {
+#ifdef DEBUG
+        if (a >= size()) {
+            throw std::out_of_range("Indice fuera de rango");
+        }
+#endif
+        return adjacency[a].size();
+    }
     virtual ~Graph();
 private:
     std::vector<std::list<std::size_t>> adjacency;
