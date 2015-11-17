@@ -168,8 +168,19 @@ protected:
 inline std::ostream &operator<<(std::ostream &stream, const Coloring &coloring) {
     std::stringstream output;
 
+#if defined(DEBUG) || defined(EXPS)
+    for (std::size_t i = 0; i < coloring.size(); ++i) {
+        if (coloring.isset(i)) {
+            output << coloring.get(i) << ' ';
+        } else {
+            output << "X ";
+        }
+    }
+
+    output << std::endl;
+#else
     if (coloring.complete()) {
-        for (std::size_t i = 0; i < coloring.graph.size() - 1; ++i) {
+        for (std::size_t i = 0; i < coloring.size() - 1; ++i) {
             output << coloring.get(i) << ' ';
         }
 
@@ -177,6 +188,7 @@ inline std::ostream &operator<<(std::ostream &stream, const Coloring &coloring) 
     } else {
         output << "X" << std::endl;
     }
+#endif
 
     stream << output.str();
     return stream;

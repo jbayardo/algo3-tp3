@@ -17,21 +17,32 @@ public:
     /**
      * TODO: Si le ponemos el const a iColors, podemos hacer que Problem2::transform sea mucho más rápido.
      */
-    void add(std::size_t vertex, std::list<std::size_t> &iColors) {
+    void add(std::size_t index, std::list<std::size_t> &iColors) {
 #ifdef DEBUG
-        if (std::find(colors[vertex].begin(), colors[vertex].end(), colors) != colors[vertex].end()) {
-        	throw std::runtime_error("Color already added for vertex");
-        	return;
+        if (index >= size()) {
+            throw std::out_of_range("Indice fuera de rango");
+        }
+
+        for (auto &color : iColors) {
+            if (std::find(colors[index].begin(), colors[index].end(), color) != colors[index].end()) {
+                throw std::runtime_error("Color already added for vertex");
+            }
         }
 #endif
         _total_number += iColors.size();
-        colors[vertex].splice(colors[vertex].begin(), iColors); //Agrego colores nuevos al inicio
+        colors[index].splice(colors[index].begin(), iColors); //Agrego colores nuevos al inicio
     }                                                           //No hay orden
 
-    const std::list<std::size_t> inline &get(std::size_t vertex) const {
-        return colors[vertex];
+    const std::list<std::size_t> inline &get(std::size_t index) const {
+#ifdef DEBUG
+        if (index >= size()) {
+            throw std::out_of_range("Indice fuera de rango");
+        }
+#endif
+
+        return colors[index];
     }
-    std::size_t total_number() const {
+    std::size_t inline total_number() const {
     	return _total_number;
     }
 

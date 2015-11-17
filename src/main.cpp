@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Statistics.h"
 #include "Problem.h"
+#include "ConflictColoring.h"
 
 /*
  * ./tp <ejercicio> <entrada> <salida> <corridas>
@@ -24,8 +25,9 @@ int main(int argc, char *argv[]) {
 
     Problem solver(input);
     Coloring result(solver.solve(exercise, runs));
+    ConflictColoring conflicts(result);
 
-    std::cout << result << std::endl;
+    std::cout << conflicts;
 
     std::ofstream handle;
     handle.open(output, std::ofstream::out);
@@ -39,7 +41,7 @@ int main(int argc, char *argv[]) {
 
     std::string path = std::string(output);
     std::string basename = path.substr(0, path.find_last_of('.'));
-    Statistics::getInstance().dump(basename + ".sts");
+    Statistics::getInstance().dump(basename + std::string(".sts"));
 
     return 0;
 }

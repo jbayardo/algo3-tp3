@@ -1,6 +1,7 @@
 #ifndef ALGO3_TP3_GRAPH_H
 #define ALGO3_TP3_GRAPH_H
 
+#include <stdexcept>
 #include <vector>
 #include <list>
 

@@ -6,6 +6,7 @@
 /*! Guarda un coloreo parcial o total para un grafo, con información sobre las colisiones entre los nodos
  */
 class ConflictColoring : public Coloring {
+    friend std::ostream &operator<<(std::ostream &, const ConflictColoring &);
 public:
     /*! Constructor
      *
@@ -197,5 +198,49 @@ protected:
     std::size_t total_collisions;
     bool updated;
 };
+
+/*! Imprime un coloreo
+ *
+ * @param stream stream en el que imprimir
+ * @param coloring coloreo a imprimir
+ * @return nuevo stream, con los cambios realizados
+ * @complexity O(n)
+ */
+inline std::ostream &operator<<(std::ostream &stream, ConflictColoring &coloring) {
+    std::stringstream output;
+
+#if defined(DEBUG) || defined(EXPS)
+    for (std::size_t i = 0; i < coloring.size(); ++i) {
+        if (coloring.isset(i)) {
+            output << coloring.get(i) << ' ';
+        } else {
+            output << "X ";
+        }
+    }
+
+    output << std::endl;
+
+    output << "Conflictos Totales: " << coloring.conflicts() << std::endl;
+
+    for (auto &conflict : coloring.perVertexConflicts()) {
+        output << conflict << ' ';
+    }
+
+    output << std::endl;
+#else
+    if (coloring.complete()) {
+        for (std::size_t i = 0; i < coloring.size() - 1; ++i) {
+            output << coloring.get(i) << ' ';
+        }
+
+        output << coloring.get(coloring.graph.size() - 1) << std::endl;
+    } else {
+        output << "X" << std::endl;
+    }
+#endif
+
+    stream << output.str();
+    return stream;
+}
 
 #endif //ALGO3_TP3_CONFLICTCOLORING_H
