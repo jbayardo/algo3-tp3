@@ -4,7 +4,7 @@
 #include "ConflictColoring.h"
 
 /*
- * ./tp <ejercicio> <entrada> <salida> <corridas>
+ * ./tp <ejercicio> <entrada> <salida> [corridas=1]
  */
 int main(int argc, char *argv[]) {
     if (argc < 4) {
@@ -25,9 +25,12 @@ int main(int argc, char *argv[]) {
 
     Problem solver(input);
     Coloring result(solver.solve(exercise, runs));
+
+#if defined(DEBUG) || defined(EXPS)
     ConflictColoring conflicts(result);
 
     std::cout << conflicts;
+#endif
 
     std::ofstream handle;
     handle.open(output, std::ofstream::out);

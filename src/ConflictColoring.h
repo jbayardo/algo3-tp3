@@ -233,7 +233,7 @@ inline std::ostream &operator<<(std::ostream &stream, ConflictColoring &coloring
             output << coloring.get(i) << ' ';
         }
 
-        output << coloring.get(coloring.graph.size() - 1) << std::endl;
+        output << coloring.get(coloring.size() - 1) << std::endl;
     } else {
         output << "X" << std::endl;
     }
