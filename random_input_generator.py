@@ -19,8 +19,8 @@ def header(n, m, c):
 
 
 def get_colors(n, prefix=[]):
-    return {k: set(prefix + [randint(1, n-1)
-            for _ in xrange(randint(1, n-1))])
+    return {k: set(prefix + [randint(0, n-1)
+            for _ in xrange(randint(0, n-1))])
             for k in xrange(n)}
 
 
