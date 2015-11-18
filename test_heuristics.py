@@ -79,7 +79,7 @@ def run_test(family, size, input, expected):
         expected=expected)
 
     if not os.path.exists("tests"):
-      os.makedirs("tests")
+        os.makedirs("tests")
 
     if not os.path.isfile(input_filename):
         with open(input_filename, "w") as t:
