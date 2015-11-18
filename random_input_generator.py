@@ -6,12 +6,10 @@ from itertools import combinations
 def print_graph(head, edges, colors):
     color_out = []
 
-    for _, vals in colors.iteritems():
-        s_len = "%d " % len(vals)
-        s_vals = " ".join(["%d" % x for x in vals])
-        color_out.append(s_len + s_vals + "\n")
+    color_out = [" ".join(["%d" % len(vals)] + ["%d" % x for x in vals])
+                 for vals in colors.values()]
 
-    return head + "".join(color_out) + edges
+    return head + "\n".join(color_out) + "\n" + edges
 
 
 def header(n, m, c):
@@ -44,7 +42,7 @@ def random_input(n=None, m=None, c=None):
 
     shuffle(all_edges)
 
-    edges = "\n".join(["%d %d" % (u, v) for (u, v) in all_edges[:m]])
+    edges = "\n".join(["%d %d" % e for e in all_edges[:m]])
 
     return print_graph(header(n, m, c), edges, colors)
 
