@@ -69,8 +69,7 @@ public:
         for(std::size_t i = 0; i < colors.size(); i++) {
             colors_by_frequency[i] = std::list<std::size_t>(colors[i].begin(),
                                                             colors[i].end());
-            auto& l = colors_by_frequency[i];
-            for (auto& c: l) {
+            for (auto& c: colors_by_frequency[i]) {
                 if (frequencies.find(c) == frequencies.end()) {
                     frequencies[c] = 1;
                 }
