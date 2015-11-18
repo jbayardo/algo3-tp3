@@ -24,7 +24,7 @@ def get_colors(n, prefix=[]):
             for k in xrange(n)}
 
 
-def random_input(n=None, m=None. c=None):
+def random_input(n=None, m=None, c=None):
     if n is None:
         n = randint(10, 100)
 
@@ -131,6 +131,15 @@ def binary_balanced_tree(n):
     m = len(edges)
 
     edges = "\n".join(edges)
+
+    return print_graph(header(n, m, n), edges, colors)
+
+def no_edges_graph(n):
+    colors = get_colors(n, [])
+
+    edges = ''
+
+    m = 0
 
     return print_graph(header(n, m, n), edges, colors)
 
