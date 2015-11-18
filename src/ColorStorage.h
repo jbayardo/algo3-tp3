@@ -6,7 +6,8 @@
 #include <algorithm>
 #include <map>
 
-typedef std::vector<std::set<std::size_t>> ColorLists;
+typedef std::vector<std::set<std::size_t>> ColorSets;
+typedef std::vector<std::list<std::size_t>> ColorLists;
 
 
 class ColorStorage {
@@ -63,9 +64,12 @@ public:
 
     ColorLists sortByFrequency() const {
         std::map<std::size_t, std::size_t> frequencies;
-        ColorLists colors_by_frequency(colors);
+        ColorLists colors_by_frequency(colors.size());
 
-        for (auto& l: colors_by_frequency) {
+        for(std::size_t i = 0; i < colors.size(); i++) {
+            colors_by_frequency[i] = std::list<std::size_t>(colors[i].begin(),
+                                                            colors[i].end());
+            auto& l = colors_by_frequency[i];
             for (auto& c: l) {
                 if (frequencies.find(c) == frequencies.end()) {
                     frequencies[c] = 1;
@@ -74,22 +78,22 @@ public:
                     frequencies[c] += 1;
                 }
             }
+
         }
 
-        // TODO:!!!! FIX
-        /*for (auto& l: colors_by_frequency) {
+        for (auto& l: colors_by_frequency) {
             l.sort( [&frequencies] (std::size_t i, std::size_t j) {
                         return frequencies[i] >= frequencies[j];
                     }
                 );
-        }*/
+        }
 
         return colors_by_frequency;
     }
 
 
 private:
-    ColorLists colors;
+    ColorSets colors;
     std::size_t _total_number;
 };
 
