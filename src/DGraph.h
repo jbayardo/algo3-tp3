@@ -11,23 +11,62 @@
 class DGraph {
     friend std::ostream &operator<<(std::ostream &, const DGraph &);
 public:
-    DGraph() : _adjacency(0) { }
+    DGraph() : adjacency(0) { }
 
-    DGraph(std::size_t vertices) : _adjacency(vertices), _parents(vertices) { }
+    /*! Constructor
+     *
+     * @param vertices cantidad de vertices en el grafo
+     * @complexity O(n)
+     */
+    DGraph(std::size_t vertices) :
+        adjacency(vertices),
+        _parents(vertices) { }
+
+    /*! Constructor por copia
+     *
+     * @param g objeto a copiar
+     * @complexity O(n + m)
+     */
+    DGraph(const DGraph &g) :
+        adjacency(g.adjacency),
+        _parents(g._parents) { }
+
+    /*! Constructor por movimiento
+     *
+     * @param g objeto a mover
+     * O(1)
+     */
+    DGraph(DGraph &&g) :
+        adjacency(std::move(g.adjacency)),
+        _parents(std::move(g._parents)) { }
+
+    /*! Operador de asignación
+     *
+     * @return referencia a la clase actual
+     * @complexity O(n)
+     */
+    DGraph &operator=(const DGraph &r) {
+        if (this != &r) {
+            adjacency = r.adjacency;
+            _parents = r._parents;
+        }
+
+        return *this;
+    }
 
     void connect(std::size_t a, std::size_t b) {
     #ifdef DEBUG
-        if (std::find(_adjacency[a].begin(), _adjacency[a].end(), b) != _adjacency[a].end()) {
+        if (std::find(adjacency[a].begin(), adjacency[a].end(), b) != adjacency[a].end()) {
             throw std::runtime_error("Nodos ya conectados");
         }
     #endif
 
-        _adjacency[a].push_back(b);
+        adjacency[a].push_back(b);
         _parents[b].push_back(a);
     }
 
     inline std::size_t size() const {
-        return _adjacency.size();
+        return adjacency.size();
     }
 
     inline std::size_t inDegree(std::size_t a) const {
@@ -35,11 +74,11 @@ public:
     }
 
     inline std::size_t outDegree(std::size_t a) const {
-        return _adjacency[a].size();
+        return adjacency[a].size();
     }
 
     inline const std::list<std::size_t> &neighbours(std::size_t a) const {
-        return _adjacency[a];
+        return adjacency[a];
     }
 
     inline const std::list<std::size_t> &parents(std::size_t a) const {
@@ -47,8 +86,8 @@ public:
     }
 
     void transpose() {
-        for (std::size_t i = 0; i < _adjacency.size(); ++i) {
-            _adjacency[i].swap(_parents[i]);
+        for (std::size_t i = 0; i < adjacency.size(); ++i) {
+            adjacency[i].swap(_parents[i]);
         }
     }
 
@@ -144,7 +183,7 @@ public:
         return std::make_pair(output, scc);
     }
 private:
-    std::vector<std::list<std::size_t>> _adjacency;
+    std::vector<std::list<std::size_t>> adjacency;
     std::vector<std::list<std::size_t>> _parents;
 };
 
