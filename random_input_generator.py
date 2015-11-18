@@ -24,7 +24,7 @@ def get_colors(n, prefix=[]):
             for k in xrange(n)}
 
 
-def random_input(n=None, m=None. c=None):
+def random_input(n=None, m=None, c=None):
     if n is None:
         n = randint(10, 100)
 
