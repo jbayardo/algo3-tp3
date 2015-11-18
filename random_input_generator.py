@@ -24,7 +24,7 @@ def get_colors(n, prefix=[]):
             for k in xrange(n)}
 
 
-def random_input(n=None, m=None):
+def random_input(n=None, m=None. c=None):
     if n is None:
         n = randint(10, 100)
 
@@ -35,7 +35,10 @@ def random_input(n=None, m=None):
 
     m = min(m, top)
 
-    colors = get_colors(n)
+    if c is None:
+        c = n
+
+    colors = get_colors(c)
 
     all_edges = list(combinations(xrange(n), 2))
 
@@ -43,7 +46,7 @@ def random_input(n=None, m=None):
 
     edges = "\n".join(["%d %d" % (u, v) for (u, v) in all_edges[:m]])
 
-    return print_graph(header(n, m, n), edges, colors)
+    return print_graph(header(n, m, c), edges, colors)
 
 
 def complete_graph(n):
