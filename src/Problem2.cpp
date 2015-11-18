@@ -1,8 +1,9 @@
-#include <stack>
-#include <iostream>
-#include <list>
+#include <set>
 #include "Problem.h"
+#include "Problem1.h"
 #include "Statistics.h"
+
+#include <iostream>
 
 bool is2ListColoring (const Graph &graph, const ColorStorage &colors, const Coloring &current) {
     for (std::size_t i = 0; i < graph.size(); ++i) {
@@ -17,16 +18,16 @@ bool is2ListColoring (const Graph &graph, const ColorStorage &colors, const Colo
 ColorStorage transform(const Graph &graph, const ColorStorage &colors, const Coloring &current) {
     ColorStorage output(graph.size());
 
-    for (std::size_t i = 0; i < graph.size(); ++i) {
-        if (colors.get(i).size() <= 2) {
-            output.add(i, colors.get(i));
+    for (std::size_t vertex = 0; vertex < graph.size(); ++vertex) {
+        if (colors.get(vertex).size() <= 2) {
+            output.add(vertex, colors.get(vertex));
         } else {
-            if (current.isset(i)) {
+            if (current.isset(vertex)) {
                 std::set<std::size_t> replacement;
-                replacement.insert(current.get(i));
-                output.add(i, replacement);
+                replacement.insert(current.get(vertex));
+                output.add(vertex, replacement);
             } else {
-                output.add(i, colors.get(i));
+                output.add(vertex, colors.get(vertex));
             }
         }
     }
@@ -45,14 +46,13 @@ bool isAdmissible(const Graph &graph, const Coloring &current, std::size_t node,
 }
 
 Coloring coloringExists(const Graph &graph, const ColorStorage &colors, Coloring current, std::size_t node) {
-    // TODO: si descomentas lo de abajo, borra estas 2 lineas.
-    return current;
-/*    if (current.complete()) {
+    if (current.complete()) {
         return current;
     } else {
         // Chequear si es 2 list coloring
         if (is2ListColoring(graph, colors, current)) {
-            return 2ListColoring(graph, transform(graph, colors, current));
+            Problem1 instance(graph, transform(graph, colors, current));
+            return instance.solve();
         }
 
         // Probamos con todos los colores
@@ -69,7 +69,7 @@ Coloring coloringExists(const Graph &graph, const ColorStorage &colors, Coloring
         }
 
         throw std::runtime_error("Se fue todo a la chota");
-    }*/
+    }
 }
 
 Coloring Problem::solve2() const {

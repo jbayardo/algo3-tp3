@@ -25,7 +25,8 @@ public:
             throw std::runtime_error("El color ya está en el vértice");
         }
 #endif
-        _total_number += 1;
+
+        ++_total_number;
         colors[index].insert(color);
     }
 

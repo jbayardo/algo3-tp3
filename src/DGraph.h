@@ -1,13 +1,15 @@
 #ifndef ALGO3_TP3_DGRAPH_H
 #define ALGO3_TP3_DGRAPH_H
 
+#include <stack>
 #include <vector>
 #include <list>
 #include <tuple>
 #include <algorithm>
+#include <sstream>
 
 class DGraph {
-    friend std::ostream &operator<<(std::ostream &, const Coloring &);
+    friend std::ostream &operator<<(std::ostream &, const DGraph &);
 public:
     DGraph() : _adjacency(0) { }
 
@@ -16,7 +18,6 @@ public:
     void connect(std::size_t a, std::size_t b) {
     #ifdef DEBUG
         if (std::find(_adjacency[a].begin(), _adjacency[a].end(), b) != _adjacency[a].end()) {
-            std::cout << a << " " << b << std::endl;
             throw std::runtime_error("Nodos ya conectados");
         }
     #endif
