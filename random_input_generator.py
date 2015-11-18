@@ -134,6 +134,15 @@ def binary_balanced_tree(n):
 
     return print_graph(header(n, m, n), edges, colors)
 
+def no_edges_graph(n):
+    colors = get_colors(n, [])
+
+    edges = ''
+
+    m = 0
+
+    return print_graph(header(n, m, n), edges, colors)
+
 
 if __name__ == '__main__':
     print random_input(150)
