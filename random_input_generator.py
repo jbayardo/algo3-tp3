@@ -127,4 +127,4 @@ def binary_balanced_tree(n):
 
 
 if __name__ == '__main__':
-    print random_input()
+    print random_input(150)

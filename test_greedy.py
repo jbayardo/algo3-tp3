@@ -1,70 +1,130 @@
-#!/usr/bin/python
+#!/usr/bin/pypy
 
 from random_input_generator import *
 import subprocess as s
 from multiprocessing import Process
+import random
+import os.path
 
 def test_complete():
     test_template(complete_graph,
                   lambda x: x,
-                  "Testing complete")
+                  "complete")
 
 
 def test_star():
     test_template(star_graph,
                   lambda x: 2,
-                  "Testing star")
+                  "star")
 
 
 def test_bipartite():
     test_template(complete_bipartite,
                   lambda x: 2,
-                  "Testing bipartite")
+                  "bipartite")
 
 
 def test_cycle():
     test_template(cycle_graph,
                   lambda x: 2 + (x & 1),
-                  "Testing cycle")
+                  "cycle")
 
 
 def test_wheel():
     test_template(wheel_graph,
                   lambda x: 4 - (x & 1),
-                  "Testing wheel")
+                  "wheel")
 
 
 def test_tree():
     test_template(binary_balanced_tree,
                   lambda x: 2 if x > 1 else 1,
-                  "Testing tree")
+                  "bbtree")
+
+def test_random():
+    test_template(random_input,
+                  lambda x: x,
+                  "random")
 
 
-def test_template(input, expected, msg):
-    results = []
+exercises = [3, 4, 5]
+runs = 1
+
+def test_template(input, expected, family):
+    results = { }
+
     for n in xrange(5, 206):
-        e = expected(n)
-        results.append(run_test(input(n), e))
-    print msg
-    print "Optimal cases: %d" % len(filter(lambda x: x <= 0, results))
-    print "Not optimal: %d" % len(filter(lambda x: x > 0, results))
-    print "Max distance from optimum: %d\n" % max(results)
+        output = run_test(family, n, input(n), expected(n))
+
+        for key in output:
+            try:
+                results[key]
+            except:
+                results[key] = []
+
+            results[key].append(output[key])
+
+    for exercise in exercises:
+        print "------ Statistics for exercise {exercise}, {family}:".format(exercise=exercise, family=family)
+        print "Optimal cases: %d" % len(filter(lambda x: x['conflicts'] == 0, results[exercise]))
+        print "Not optimal: %d" % len(filter(lambda x: x['conflicts'] != 0, results[exercise]))
+        print "Max distance from optimum: %d\n" % max(map(lambda x: x['unique_colors'] - x['expected'], results[exercise]))
 
 
-def run_test(input, expected):
-    command = "algo3_tp3 3 test_greedy.in test_greedy.out 1"
-    with open("test_greedy.in", "w") as t:
-        t.write(input)
-    output = s.check_output(command.split())
-    colors = len(set(map(int, output.split())))
-    return colors - expected
+def run_test(family, size, input, expected):
+    dic = {}
 
+    input_filename = "tests/test_{family}_{size}_{expected}.in".format(
+        family=family,
+        size=size,
+        expected=expected)
+
+    if not os.path.isfile(input_filename)
+        with open(input_filename, "w") as t:
+            t.write(input)
+
+    for exercise in exercises:
+        output_filename = "tests/test_{exercise}_{family}_{size}_{expected}.out".format(
+            exercise=exercise,
+            family=family,
+            size=size,
+            expected=expected)
+
+        command = "./algo3_tp3 {exercise} {input_filename} {output_filename} {runs}".format(
+            exercise=exercise,
+            input_filename=input_filename,
+            output_filename=output_filename,
+            runs=runs)
+
+        output = map(str.strip, s.check_output(command.split()).strip().split('\n'))
+        # output[0] son los colores
+        # output[1] son los conflictos totales
+        # output[2] son los conflictos en casos particulares
+
+        dic[exercise] = {
+            # Tamano de la instancia
+            'size': size,
+            # X(G) para el grafo
+            'expected': expected,
+            # Colores utilizados
+            'colors': map(int, output[0].split()),
+            # Cantidad de conflictos
+            'conflicts': int(output[1]),
+            # Cantidad de conflictos por nodo
+            'specific': map(int, output[2].split())
+        }
+
+        # Cantidad de colores unicos utilizados
+        dic[exercise]['unique_colors'] = len(set(dic[exercise]['colors']))
+
+    return dic
 
 all_tests = [test_tree,
              test_star,
              test_bipartite,
              test_cycle,
              test_wheel,
+             test_random,
              test_complete]
 
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 #include <list>
 #include <vector>
 #include <stack>
+#include <iostream>
 #include "Problem.h"
 #include "DGraph.h"
 
@@ -14,7 +15,6 @@ Coloring Problem::solve1() const {
         std::size_t isNot;
         std::size_t color;
     };
-
     DGraph implication_graph(colors.total_number()*2);
     // Aca para cada estado posible de cada variable guardo el nodo que representa su afirmacion y negacion
     std::vector<std::vector<state>> vertex_data(graph.size(), std::vector<state>(2));
@@ -22,10 +22,9 @@ Coloring Problem::solve1() const {
     std::vector<std::pair<std::size_t,std::size_t> > state_to_vertex(colors.total_number()*2);
 
     int v = 0;
-    int end = graph.size();
 
     // Assign a vertex for every node's color and its negation, in the new graph
-    for (int i = 0; i < end; ++i) {
+    for (int i = 0; i < graph.size(); ++i) {
         int li = 0;
         for (auto color : colors.get(i)) {
             vertex_data[i][li].color = color;
@@ -43,8 +42,8 @@ Coloring Problem::solve1() const {
 
     // Build the implications
     // For every vertex
-    for (int i = 0; i < end; ++i) {
-        std::list<std::size_t> myColors = colors.get(i);
+    for (int i = 0; i < graph.size(); ++i) {
+        const std::list<std::size_t> &myColors = colors.get(i);
 
         // go through its neighbours
         for (auto &neighbour : graph.neighbours(i)) {
@@ -103,9 +102,12 @@ Coloring Problem::solve1() const {
 
     Coloring c(graph);
     // Check if variable and negation are in the same strongly connected component
+
     for (auto node : vertex_data) {
         for (auto state : node) {
-            if (node_scc[state.is] == node_scc[state.isNot]) return c;
+            if (node_scc[state.is] == node_scc[state.isNot]) {
+                return c;
+            }
         }
     }
 
@@ -157,6 +159,13 @@ Coloring Problem::solve1() const {
                     }
                 }
             }
+            // Ahora me dijo si yo no implico ningun falso
+            for (auto neighbour : condensed.neighbours(actual_scc)) {
+                if (s_c_c_states[neighbour] == _FALSE) {
+                    // Si es asi, hay un absurdo, asi que ya no sirve
+                    return c;
+                }
+            }
         } else {
             // Itero por cada nodo de la componente fuertemente conexa
             for (auto node : *it) {
@@ -184,6 +193,13 @@ Coloring Problem::solve1() const {
                     } else {
                         s_c_c_states[node_scc[node_state.isNot]] = _TRUE;
                     }
+                }
+            }
+            // Ahora me dijo si yo no me implica ningun verdadero
+            for (auto neighbour : condensed.parents(actual_scc)) {
+                if (s_c_c_states[neighbour] == _TRUE) {
+                    // Si es asi, hay un absurdo, asi que ya no sirve
+                    return c;
                 }
             }
         }

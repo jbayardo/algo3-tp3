@@ -66,11 +66,10 @@ Coloring Problem::solve(int exercise, int runs) const {
     switch (exercise) {
         case 1:
             for (auto i = 0; i < runs - 1; ++i) {
-                // solve1();
+                solve1();
             }
 
-            // return solve1();
-            return Coloring(graph);
+            return solve1();
         case 2:
             for (auto i = 0; i < runs - 1; ++i) {
                 // solve2();
