@@ -9,6 +9,7 @@
 int main(int argc, char *argv[]) {
     if (argc < 4) {
         std::cerr << "Formato de entrada: " << argv[0] << " <ejercicio> <entrada> <salida> <corridas>" << std::endl;
+
 #ifdef DEBUG
         std::cerr << "BUILD DE DEBUG" << std::endl;
 #endif

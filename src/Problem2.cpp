@@ -23,9 +23,7 @@ ColorStorage transform(const Graph &graph, const ColorStorage &colors, const Col
             output.add(vertex, colors.get(vertex));
         } else {
             if (current.isset(vertex)) {
-                std::set<std::size_t> replacement;
-                replacement.insert(current.get(vertex));
-                output.add(vertex, replacement);
+                output.add(vertex, current.get(vertex));
             } else {
                 output.add(vertex, colors.get(vertex));
             }
@@ -51,7 +49,8 @@ Coloring coloringExists(const Graph &graph, const ColorStorage &colors, Coloring
     } else {
         // Chequear si es 2 list coloring
         if (is2ListColoring(graph, colors, current)) {
-            Problem1 instance(graph, transform(graph, colors, current));
+            ColorStorage storage = transform(graph, colors, current);
+            Problem1 instance(graph, storage);
             return instance.solve();
         }
 

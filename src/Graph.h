@@ -9,7 +9,43 @@
 class Graph {
 public:
     Graph() : adjacency(0) { }
-    Graph(std::size_t vertices) : adjacency(vertices) { }
+
+    /*! Constructor
+     *
+     * @param vertices cantidad de vertices en el grafo
+     * @complexity O(n)
+     */
+    Graph(std::size_t vertices) :
+        adjacency(vertices) { }
+
+    /*! Constructor por copia
+     *
+     * @param g objeto a copiar
+     * @complexity O(n + m)
+     */
+    Graph(const Graph &g) :
+        adjacency(g.adjacency) { }
+
+    /*! Constructor por movimiento
+     *
+     * @param g objeto a mover
+     * O(1)
+     */
+    Graph(Graph &&g) :
+        adjacency(std::move(g.adjacency)) { }
+
+    /*! Operador de asignación
+     *
+     * @return referencia a la clase actual
+     * @complexity O(n)
+     */
+    Graph &operator=(const Graph &r) {
+        if (this != &r) {
+            adjacency = r.adjacency;
+        }
+
+        return *this;
+    }
 
     void inline connect(std::size_t a, std::size_t b) {
 #ifdef DEBUG

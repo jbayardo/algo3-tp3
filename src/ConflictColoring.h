@@ -92,7 +92,7 @@ public:
      * @param index número de nodo
      * @param color nuevo color a asignar
      * @return antiguo color del nodo index, uncolored() si no tenía color
-     * @complexity O(N) worst case, O(1) best case
+     * @complexity O(n) worst case, O(1) best case
      */
     std::size_t setu(std::size_t index, std::size_t color) {
         std::size_t output = Coloring::set(index, color);
@@ -123,7 +123,7 @@ public:
     /*! Devuelve la cantidad de conflictos para todos los nodos en total, contados por única vez.
      *
      * @return cantidad de conflictos en total
-     * @complexity O(1) best case, O(n + 1) worst case
+     * @complexity O(1) best case, O(n + m) worst case
      */
     std::size_t conflicts() {
         update_collisions();
@@ -134,7 +134,7 @@ public:
      *
      * @param index número de nodo
      * @return cantidad de conflictos con sus vecinos coloreados
-     * @complexity O(1) best case, O(n + 1) worst case
+     * @complexity O(1) best case, O(n + m) worst case
      */
     std::size_t conflicts(std::size_t index) {
 #ifdef DEBUG

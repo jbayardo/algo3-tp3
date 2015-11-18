@@ -13,9 +13,49 @@ typedef std::vector<std::list<std::size_t>> ColorLists;
 class ColorStorage {
 public:
     ColorStorage() : colors(0) { };
-    ColorStorage(std::size_t vertices) : colors(vertices), _total_number(0) { };
 
-    void add(std::size_t index, std::size_t color) {
+    /*! Constructor
+     *
+     * @param vertices cantidad de vertices en el grafo
+     * @complexity O(n)
+     */
+    ColorStorage(std::size_t vertices) :
+        colors(vertices),
+        _total_number(0) { };
+
+    /*! Constructor por copia
+     *
+     * @param s storage a copiar
+     * @complexity O(n)
+     */
+    ColorStorage(const ColorStorage &s) :
+        colors(s.colors),
+        _total_number(s._total_number) { }
+
+    /*! Constructor por movimiento
+     *
+     * @param s storage a mover
+     * O(1)
+     */
+    ColorStorage(ColorStorage &&s) :
+        colors(std::move(s.colors)),
+        _total_number(s._total_number) { }
+
+    /*! Operador de asignación
+     *
+     * @return referencia a la clase actual
+     * @complexity O(n)
+     */
+    ColorStorage &operator=(const ColorStorage &r) {
+        if (this != &r) {
+            this->colors = r.colors;
+            this->_total_number = r._total_number;
+        }
+
+        return *this;
+    }
+
+    void inline add(std::size_t index, std::size_t color) {
 #ifdef DEBUG
         if (index >= size()) {
             throw std::out_of_range("Indice fuera de rango");
@@ -30,7 +70,7 @@ public:
         colors[index].insert(color);
     }
 
-    void add(std::size_t index, const std::set<std::size_t> &iColors) {
+    void inline add(std::size_t index, const std::set<std::size_t> &iColors) {
 #ifdef DEBUG
         if (index >= size()) {
             throw std::out_of_range("Indice fuera de rango");
@@ -42,6 +82,7 @@ public:
             }
         }
 #endif
+
         _total_number += iColors.size();
         colors[index].insert(iColors.begin(), iColors.end());
     }
@@ -55,7 +96,7 @@ public:
 
         return colors[index];
     }
-    std::size_t total_number() const {
+    std::size_t inline total_number() const {
     	return _total_number;
     }
 
