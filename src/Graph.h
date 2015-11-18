@@ -58,7 +58,7 @@ public:
         }
 
         auto comp = [this](std::size_t i, std::size_t j) {
-            return this->degree(i) > this->degree(j);
+            return this->degree(i) >= this->degree(j);
         };
 
         std::stable_sort(vertex_order.begin(), vertex_order.end(), comp);
