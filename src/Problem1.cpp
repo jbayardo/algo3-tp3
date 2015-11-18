@@ -12,7 +12,7 @@
 #define GET_NEG(vertex) (((vertex % 4) % 2) == 0)
 
 class Problem1 {
-    enum ComponentState {
+    enum TruthValue {
         False,
         True,
         Unset
@@ -31,19 +31,6 @@ public:
         // Obtenemos la información que devuelve Kosaraju
         std::list<std::list<std::size_t>> &components = kosaraju.first;
         std::vector<std::size_t> &belongs = kosaraju.second;
-
-        std::size_t k = 0;
-        for (auto it = components.begin(); it != components.end(); ++it) {
-            std::cout << "Componente " << k << ": ";
-
-            for (auto &f : *it) {
-                std::cout << f << " ";
-            }
-
-            std::cout << std::endl;
-
-            ++k;
-        }
 
         // Creamos la salida de la función
         Coloring output(graph);
@@ -69,109 +56,38 @@ public:
             }
         }
 
-        //std::cerr << implications;
-        //std::cerr << induced;
-
         // Coloreamos!
-        std::vector<ComponentState> induced_states(components.size(), ComponentState::Unset);
-
         std::size_t current = components.size() - 1;
 
+        std::vector<TruthValue> terms(implications.size(), TruthValue::Unset);
+
         for (auto it = components.rbegin(); it != components.rend(); ++it) {
-            // Tengo tamaño 1, tenemos que manejar las componentes conexas de los nodos fantasmas
-            if ((*it).size() == 1) {
-                // Obtengo un vértice en el grafo original
-                std::size_t vertex = *((*it).begin());
+            bool hasAssignment = false;
 
-                if (implications.neighbours(vertex).size() == 0) {
-                    --current;
-                    continue;
+            for (auto &vertex : *it) {
+                if (terms[vertex] != TruthValue::Unset) {
+                    hasAssignment = true;
                 }
             }
 
-            if (induced_states[current] == ComponentState::Unset) {
-                induced_states[current] = ComponentState::True;
-            }
-
-            if (induced_states[current] == ComponentState::True) {
-                // Estamos en una componente verdadera
+            if (!hasAssignment) {
+                // No tienen valores de verdad, seteamos todos como verdad y sus complementos como falsos
                 for (auto &vertex : *it) {
                     std::size_t complement = TO_IMPLICATION_INDEX(GET_VERTEX(vertex), GET_COLOR(vertex), !GET_NEG(vertex));
-
-                    switch (induced_states[belongs[complement]]) {
-                        case ComponentState::Unset:
-                            // Como la negación no tiene un valor de verdad, queda claro que debe ser falso.
-                            induced_states[belongs[complement]] = ComponentState::False;
-                            break;
-                        case ComponentState::True:
-                            // Encontramos una variable verdadera que tiene a su negación como verdadera.
-                            // Es una contradicción
-                            output.unset(0);
-                            return output;
-                        default:
-                            break;
-                    }
-
-                    if (GET_NEG(vertex)) {
-                        output.set(GET_VERTEX(vertex), getColorFromIndex(GET_VERTEX(complement), GET_COLOR(complement)));
-                    } else {
-                        output.set(GET_VERTEX(vertex), getColorFromIndex(GET_VERTEX(vertex), GET_COLOR(vertex)));
-                    }
-                }
-
-                for (auto &neighbour : induced.neighbours(current)) {
-                    if (induced_states[neighbour] == ComponentState::False) {
-                        // Esta componente conexa está como verdadera, pero implica un falso. Esto es una contradicción
-                        // Le saco un color, esto es por el caso borde en el que estamos en la topológicamente menor
-                        output.unset(0);
-                        return output;
-                    }
-                }
-            } else {
-                // Estamos en una componente falsa
-                for (auto &vertex : *it) {
-                    std::size_t complement = TO_IMPLICATION_INDEX(GET_VERTEX(vertex), GET_COLOR(vertex), !GET_NEG(vertex));
-
-                    switch (induced_states[belongs[complement]]) {
-                        case ComponentState::Unset:
-                            // Como la negación no tiene un valor de verdad, queda claro que debe ser true.
-                            induced_states[belongs[complement]] = ComponentState::True;
-                            break;
-                        case ComponentState::False:
-                            // Encontramos una variable verdadera que tiene a su negación como falsa.
-                            // Es una contradicción
-                            output.unset(0);
-                            return output;
-                        default:
-                            break;
-                    }
-
-                    if (GET_NEG(vertex)) {
-                        output.set(GET_VERTEX(vertex), getColorFromIndex(GET_VERTEX(vertex), GET_COLOR(vertex)));
-                    } else {
-                        output.set(GET_VERTEX(vertex), getColorFromIndex(GET_VERTEX(complement), GET_COLOR(complement)));
-                    }
-                }
-
-                for (auto &parent : induced.parents(current)) {
-                    if (induced_states[parent] == ComponentState::True) {
-                        // Esta componente conexa está como falsa, pero es implicada por un verdadero. Es contradicción
-                        // Le saco un color, esto es por el caso borde en el que estamos en la topológicamente menor
-                        output.unset(0);
-                        return output;
-                    }
+                    terms[vertex] = TruthValue::True;
+                    terms[complement] = TruthValue::False;
                 }
             }
 
             --current;
+        }
 
-            std::cout << "Coloring: " << output;
-
-            std::cout << "Induced states: ";
-            for (std::size_t k = 0; k < induced_states.size(); ++k) {
-                std::cout << induced_states[k] << " ";
+        for (std::size_t vertex = 0; vertex < graph.size(); ++vertex) {
+            if (terms[TO_IMPLICATION_INDEX(vertex, 0, true)] == TruthValue::True) {
+                output.set(vertex, getColorFromIndex(vertex, 0));
+            } else {
+                output.set(vertex, getColorFromIndex(vertex, 1));
             }
-            std::cout << std::endl;
         }
 
         return output;
