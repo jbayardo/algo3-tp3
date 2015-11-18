@@ -3,8 +3,10 @@
 from random_input_generator import *
 import subprocess as s
 from multiprocessing import Process
+from collections import defaultdict
 import random
 import os.path
+
 
 def test_complete():
     test_template(complete_graph,
@@ -41,6 +43,7 @@ def test_tree():
                   lambda x: 2 if x > 1 else 1,
                   "bbtree")
 
+
 def test_random():
     test_template(random_input,
                   lambda x: x,
@@ -50,18 +53,14 @@ def test_random():
 exercises = [3, 4, 5]
 runs = 25
 
+
 def test_template(input, expected, family):
-    results = { }
+    results = defaultdict(list)
 
     for n in xrange(5, 206):
         output = run_test(family, n, input(n), expected(n))
 
         for key in output:
-            try:
-                results[key]
-            except:
-                results[key] = []
-
             results[key].append(output[key])
 
     for exercise in exercises:
@@ -78,6 +77,9 @@ def run_test(family, size, input, expected):
         family=family,
         size=size,
         expected=expected)
+
+    if not os.exists("tests"):
+      os.makedirs("tests")
 
     if not os.path.isfile(input_filename):
         with open(input_filename, "w") as t:
