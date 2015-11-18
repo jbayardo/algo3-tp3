@@ -78,7 +78,7 @@ def run_test(family, size, input, expected):
         size=size,
         expected=expected)
 
-    if not os.exists("tests"):
+    if not os.path.exists("tests"):
       os.makedirs("tests")
 
     if not os.path.isfile(input_filename):
