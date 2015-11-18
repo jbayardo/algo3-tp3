@@ -117,8 +117,6 @@ public:
         if (index >= size()) {
             throw std::out_of_range("Indice fuera de rango");
         }
-
-        // TODO: verificar que el color esté en rango para el índice
 #endif
 
         if (colors[index] == uncolored() && color != uncolored()) {

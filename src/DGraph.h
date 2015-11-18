@@ -15,9 +15,11 @@ public:
     void connect(std::size_t a, std::size_t b) {
     #ifdef DEBUG
         if (std::find(_adjacency[a].begin(), _adjacency[a].end(), b) != _adjacency[a].end()) {
-            throw std::runtime_error("Nodes already connected");
+            std::cout << a << " " << b << std::endl;
+            throw std::runtime_error("Nodos ya conectados");
         }
     #endif
+
         _adjacency[a].push_back(b);
         _parents[b].push_back(a);
     }

@@ -26,8 +26,6 @@ Problem::Problem(std::string input) {
             throw std::runtime_error("Error reading file: number of current colors must be higher than 0");
         }
 
-        std::list<std::size_t> current;
-
         for (std::size_t c = 0; c < readColors; ++c) {
             std::size_t color;
             handle >> color;
@@ -36,10 +34,8 @@ Problem::Problem(std::string input) {
                 throw std::runtime_error("Invalid color number");
             }
 
-            current.push_back(color);
+            colors.add(vertex, color);
         }
-
-        colors.add(vertex, current);
     }
 
     graph = Graph(vertices);

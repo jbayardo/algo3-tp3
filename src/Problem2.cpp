@@ -18,18 +18,15 @@ ColorStorage transform(const Graph &graph, const ColorStorage &colors, const Col
     ColorStorage output(graph.size());
 
     for (std::size_t i = 0; i < graph.size(); ++i) {
-        std::list<std::size_t> replacement;
-
         if (colors.get(i).size() <= 2) {
-            replacement = colors.get(i);
-            output.add(i, replacement);
+            output.add(i, colors.get(i));
         } else {
             if (current.isset(i)) {
-                replacement.push_back(current.get(i));
+                std::set<std::size_t> replacement;
+                replacement.insert(current.get(i));
                 output.add(i, replacement);
             } else {
-                replacement = colors.get(i);
-                output.add(i, replacement);
+                output.add(i, colors.get(i));
             }
         }
     }

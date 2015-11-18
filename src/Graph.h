@@ -61,7 +61,7 @@ public:
             return this->degree(i) > this->degree(j);
         };
 
-        std::sort(vertex_order.begin(), vertex_order.end(), comp);
+        std::stable_sort(vertex_order.begin(), vertex_order.end(), comp);
 
         return vertex_order;
     }

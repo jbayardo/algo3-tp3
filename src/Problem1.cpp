@@ -3,210 +3,268 @@
 #include <stack>
 #include <iostream>
 #include "Problem.h"
+#include "Statistics.h"
 #include "DGraph.h"
 
-#define _TRUE 1
-#define _FALSE 0
-#define _NOTSET 2
+#define TO_IMPLICATION_INDEX(vertex, color, neg) (4*vertex + 2*color + ((neg == true)? 0:1))
+#define GET_VERTEX(vertex) (vertex/4)
+#define GET_COLOR(vertex) ((vertex % 4)/2)
+#define GET_NEG(vertex) (((vertex % 4) % 2) == 0)
+
+class Problem1 {
+    enum ComponentState {
+        True,
+        False,
+        Unset
+    };
+public:
+    Problem1(const Graph &graph_, const ColorStorage &colors_) : graph(graph_), colors(colors_) { }
+
+    Coloring solve() const {
+        Timer timer("Exercise 1 Timer");
+
+        // Armamos el grafo de implicaciones
+        DGraph implications = buildImplicationGraph();
+        // Corremos Kosaraju
+        std::pair<std::list<std::list<std::size_t>>, std::vector<std::size_t>> kosaraju = implications.kosaraju();
+
+        // Obtenemos la información que devuelve Kosaraju
+        std::list<std::list<std::size_t>> &components = kosaraju.first;
+        std::vector<std::size_t> &belongs = kosaraju.second;
+
+        // Creamos la salida de la función
+        Coloring output(graph);
+
+        // Verificamos que no haya contradicciones
+        for (std::size_t i = 0; i < implications.size(); ++i) {
+            std::size_t complement = TO_IMPLICATION_INDEX(GET_VERTEX(i), GET_COLOR(i), !GET_NEG(i));
+
+            if (belongs[i] == belongs[complement]) {
+                // Tenemos un nodo y su negación en la misma componente conexa. Salir.
+                return output;
+            }
+        }
+
+        // Armamos el grafo de las componentes conexas
+        DGraph induced(components.size());
+
+        for (std::size_t i = 0; i < implications.size(); ++i) {
+            for (auto &neighbour : implications.neighbours(i)) {
+                if (belongs[i] != belongs[neighbour]) {
+                    induced.connect(belongs[i], belongs[neighbour]);
+                }
+            }
+        }
+
+        // Coloreamos!
+        std::vector<ComponentState> induced_states(components.size(), ComponentState::Unset);
+
+        std::size_t current = components.size() - 1;
+
+        for (auto it = components.rbegin(); it != components.rend(); ++it) {
+            if (induced_states[current] == ComponentState::Unset) {
+                induced_states[current] = ComponentState::True;
+            }
+
+            if (induced_states[current] == ComponentState::True) {
+                // Estamos en una componente verdadera
+                for (auto &vertex : *it) {
+                    std::size_t complement = TO_IMPLICATION_INDEX(GET_VERTEX(vertex), GET_COLOR(vertex), !GET_NEG(vertex));
+
+                    switch (induced_states[belongs[complement]]) {
+                        case ComponentState::Unset:
+                            // Como la negación no tiene un valor de verdad, queda claro que debe ser falso.
+                            induced_states[belongs[complement]] = ComponentState::False;
+                            break;
+                        case ComponentState::True:
+                            // Encontramos una variable verdadera que tiene a su negación como verdadera.
+                            // Es una contradicción
+                            return output;
+                        default:
+                            break;
+                    }
+
+                    if (GET_NEG(vertex)) {
+                        output.set(GET_VERTEX(vertex), getColorFromIndex(GET_VERTEX(complement), GET_COLOR(complement)));
+                    } else {
+                        output.set(GET_VERTEX(vertex), getColorFromIndex(GET_VERTEX(vertex), GET_COLOR(vertex)));
+                    }
+                }
+
+                for (auto &neighbour : induced.neighbours(current)) {
+                    if (induced_states[neighbour] == ComponentState::False) {
+                        // Esta componente conexa está como verdadera, pero implica un falso. Esto es una contradicción
+                        // Le saco un color, esto es por el caso borde en el que estamos en la topológicamente menor
+                        output.unset(0);
+                        return output;
+                    }
+                }
+            } else {
+                // Estamos en una componente falsa
+                for (auto &vertex : *it) {
+                    std::size_t complement = TO_IMPLICATION_INDEX(GET_VERTEX(vertex), GET_COLOR(vertex), !GET_NEG(vertex));
+
+                    switch (induced_states[belongs[complement]]) {
+                        case ComponentState::Unset:
+                            // Como la negación no tiene un valor de verdad, queda claro que debe ser true.
+                            induced_states[belongs[complement]] = ComponentState::True;
+                            break;
+                        case ComponentState::False:
+                            // Encontramos una variable verdadera que tiene a su negación como falsa.
+                            // Es una contradicción
+                            return output;
+                        default:
+                            break;
+                    }
+
+                    if (GET_NEG(vertex)) {
+                        output.set(GET_VERTEX(vertex), getColorFromIndex(GET_VERTEX(vertex), GET_COLOR(vertex)));
+                    } else {
+                        output.set(GET_VERTEX(vertex), getColorFromIndex(GET_VERTEX(complement), GET_COLOR(complement)));
+                    }
+                }
+
+                for (auto &parent : induced.parents(current)) {
+                    if (induced_states[parent] == ComponentState::True) {
+                        // Esta componente conexa está como falsa, pero es implicada por un verdadero. Es contradicción
+                        // Le saco un color, esto es por el caso borde en el que estamos en la topológicamente menor
+                        output.unset(0);
+                        return output;
+                    }
+                }
+            }
+
+            --current;
+        }
+
+        return output;
+    }
+private:
+    DGraph buildImplicationGraph() const {
+        // Vamos a utilizar nodos fantasma
+        DGraph implications(4*graph.size());
+
+        for (std::size_t vertex = 0; vertex < graph.size(); ++vertex) {
+            // Primero conectamos a los colores del vertice con sí mismo
+            if (colors.get(vertex).size() == 1) {
+                // Tenemos exactamente 1 color
+                implications.connect(TO_IMPLICATION_INDEX(vertex, 0, false), TO_IMPLICATION_INDEX(vertex, 0, true));
+            } else {
+                // Tenemos exactamente 2 colores
+                implications.connect(
+                        TO_IMPLICATION_INDEX(vertex, 0, true),
+                        TO_IMPLICATION_INDEX(vertex, 1, false));
+
+                implications.connect(
+                        TO_IMPLICATION_INDEX(vertex, 1, false),
+                        TO_IMPLICATION_INDEX(vertex, 0, true));
+
+                implications.connect(
+                        TO_IMPLICATION_INDEX(vertex, 0, false),
+                        TO_IMPLICATION_INDEX(vertex, 1, true));
+
+                implications.connect(
+                        TO_IMPLICATION_INDEX(vertex, 1, true),
+                        TO_IMPLICATION_INDEX(vertex, 0, false));
+            }
+
+            // Luego conectamos al vertice con los vecinos
+            for (auto &neighbour : graph.neighbours(vertex)) {
+                // Nos salteamos a los que ya hayamos insertado en el grafo de implicaciones
+                if (neighbour < vertex) {
+                    continue;
+                }
+
+                std::set<std::size_t> intersection;
+
+                // Calculamos la intersección con el vecino
+                std::set_intersection(
+                        colors.get(vertex).begin(), colors.get(vertex).end(),
+                        colors.get(neighbour).begin(), colors.get(neighbour).end(),
+                        std::inserter(intersection, intersection.begin()));
+
+                if (intersection.size() == 1) {
+                    // Tenemos 1 solo color en común
+                    std::size_t color = *(intersection.begin());
+                    std::size_t indexVertex = getColorIndex(vertex, color);
+                    std::size_t indexNeighbour = getColorIndex(neighbour, color);
+
+                    implications.connect(
+                            TO_IMPLICATION_INDEX(vertex, indexVertex, true),
+                            TO_IMPLICATION_INDEX(neighbour, indexNeighbour, false));
+
+                    implications.connect(
+                            TO_IMPLICATION_INDEX(neighbour, indexNeighbour, true),
+                            TO_IMPLICATION_INDEX(vertex, indexVertex, false));
+                } else if (intersection.size() == 2) {
+                    std::size_t color0 = *(intersection.begin());
+                    std::size_t indexVertex0 = getColorIndex(vertex, color0);
+                    std::size_t indexNeighbour0 = getColorIndex(neighbour, color0);
+
+                    std::size_t color1 = *(++intersection.begin());
+                    std::size_t indexVertex1 = getColorIndex(vertex, color1);
+                    std::size_t indexNeighbour1 = getColorIndex(neighbour, color1);
+
+                    implications.connect(
+                            TO_IMPLICATION_INDEX(vertex, indexVertex0, true),
+                            TO_IMPLICATION_INDEX(neighbour, indexNeighbour0, false));
+
+                    implications.connect(
+                            TO_IMPLICATION_INDEX(neighbour, indexNeighbour0, true),
+                            TO_IMPLICATION_INDEX(vertex, indexVertex0, false));
+
+                    implications.connect(
+                            TO_IMPLICATION_INDEX(vertex, indexVertex1, true),
+                            TO_IMPLICATION_INDEX(neighbour, indexNeighbour1, false));
+
+                    implications.connect(
+                            TO_IMPLICATION_INDEX(neighbour, indexNeighbour1, true),
+                            TO_IMPLICATION_INDEX(vertex, indexVertex1, false));
+                }
+            }
+        }
+
+        return implications;
+    }
+
+    std::size_t getColorIndex(std::size_t vertex, std::size_t colour) const {
+#ifdef DEBUG
+        if (colors.get(vertex).find(colour) == colors.get(vertex).end()) {
+            throw std::out_of_range("Color not found");
+        }
+#endif
+
+        std::size_t index = 0;
+
+        if (*(colors.get(vertex).begin()) != colour) {
+            ++index;
+        }
+
+        return index;
+    }
+
+    std::size_t getColorFromIndex(std::size_t vertex, std::size_t index) const {
+#ifdef DEBUG
+        if (index >= 2) {
+            throw std::out_of_range("Color index out of range");
+        }
+#endif
+
+        auto it = colors.get(vertex).begin();
+
+        while (index > 0) {
+            ++it;
+            --index;
+        }
+
+        return *it;
+    }
+
+    const Graph &graph;
+    const ColorStorage &colors;
+};
 
 Coloring Problem::solve1() const {
-    struct state {
-        std::size_t is;
-        std::size_t isNot;
-        std::size_t color;
-    };
-    DGraph implication_graph(colors.total_number()*2);
-    // Aca para cada estado posible de cada variable guardo el nodo que representa su afirmacion y negacion
-    std::vector<std::vector<state>> vertex_data(graph.size(), std::vector<state>(2));
-    // Aca guardo la vuelta, dado un nodo del grafo de implicacion me da el estado al que pertenece
-    std::vector<std::pair<std::size_t,std::size_t> > state_to_vertex(colors.total_number()*2);
-
-    int v = 0;
-
-    // Assign a vertex for every node's color and its negation, in the new graph
-    for (int i = 0; i < graph.size(); ++i) {
-        int li = 0;
-        for (auto color : colors.get(i)) {
-            vertex_data[i][li].color = color;
-
-            vertex_data[i][li].is = v;
-            state_to_vertex[v] = std::make_pair(i,li);
-
-            ++v;
-            vertex_data[i][li++].isNot = v;
-            state_to_vertex[v] = std::make_pair(i,li);
-
-            ++v;
-        }
-    }
-
-    // Build the implications
-    // For every vertex
-    for (int i = 0; i < graph.size(); ++i) {
-        const std::list<std::size_t> &myColors = colors.get(i);
-
-        // go through its neighbours
-        for (auto &neighbour : graph.neighbours(i)) {
-            int ic = 0;
-
-            // Check if there is an intersection in its colors
-            for (auto myColor : myColors) {
-                int icn = 0;
-
-                // Go through every neighbour possible color
-                for (auto neighbourColor : colors.get(neighbour)) {
-                    if (myColor == neighbourColor) {
-                        // if its the same color I can color just one node at the same time
-                        implication_graph.connect(vertex_data[i][ic].is, vertex_data[neighbour][icn].isNot);
-                        implication_graph.connect(vertex_data[i][ic].isNot, vertex_data[neighbour][icn].is);
-                    } else {
-                        // if its a different color, I can color both nodes in freely
-                        // TODO: Check
-                        implication_graph.connect(vertex_data[i][ic].is, vertex_data[neighbour][icn].is);
-                        implication_graph.connect(vertex_data[i][ic].is, vertex_data[neighbour][icn].isNot);
-                        implication_graph.connect(vertex_data[i][ic].isNot, vertex_data[neighbour][icn].is);
-                        implication_graph.connect(vertex_data[i][ic].isNot, vertex_data[neighbour][icn].isNot);
-                    }
-
-                    icn++;
-                }
-
-                ic++;
-            }
-        }
-
-        if (myColors.size() == 1) {
-            // if a vertex has only one color I have to build a truth statement somehow
-            implication_graph.connect(vertex_data[i][0].isNot, vertex_data[i][0].is);
-        } else {
-            int c = 0;
-            for (auto color : myColors) {
-                int oc = 0;
-                for (auto otherColor : myColors) {
-                    if (color != otherColor) {
-                        implication_graph.connect(vertex_data[i][c].is, vertex_data[i][oc].isNot);
-                        implication_graph.connect(vertex_data[i][c].isNot, vertex_data[i][oc].is);
-                    }
-                    oc++;
-                }
-                c++;
-            }
-        }
-    }
-
-    // Hacemos Kosaraju para el grafo de implicaciones
-    std::pair<std::list<std::list<std::size_t>>, std::vector<std::size_t>> kosaraju = implication_graph.kosaraju();
-
-    std::list<std::list<std::size_t>> &s_c_c = kosaraju.first;
-    std::vector<std::size_t> &node_scc = kosaraju.second;
-
-    Coloring c(graph);
-    // Check if variable and negation are in the same strongly connected component
-
-    for (auto node : vertex_data) {
-        for (auto state : node) {
-            if (node_scc[state.is] == node_scc[state.isNot]) {
-                return c;
-            }
-        }
-    }
-
-    DGraph condensed(s_c_c.size());
-
-    // Build the condesed graph
-    for (int i = 0; i < node_scc.size(); ++i) {
-        for (auto &neighbour : implication_graph.neighbours(i)) {
-            // TODO: Ver de no conectar dos veces el mismo nodo
-            // TODO: tener cuidado con los judios, estan siempre observando
-            if (node_scc[i] != node_scc[neighbour]) {
-                condensed.connect(node_scc[i], node_scc[neighbour]);
-            }
-        }
-    }
-
-    std::vector<char> s_c_c_states(s_c_c.size(), _NOTSET);
-
-    std::size_t actual_scc = s_c_c.size() - 1;
-    for (auto it = s_c_c.rbegin(); it != s_c_c.rend(); it++) {
-        if (s_c_c_states[actual_scc] == _NOTSET) {
-            s_c_c_states[actual_scc] = _TRUE;
-        }
-        if (s_c_c_states[actual_scc] == _TRUE) {
-            // Itero por cada nodo de la componente fuertemente conexa
-            for (auto node : *it) {
-                std::size_t orig_node = state_to_vertex[node].first;
-                std::size_t state_number = state_to_vertex[node].second;
-                state node_state = vertex_data[orig_node][state_number];
-                if (node_state.is == node) {
-                    // El nodo representa una variable no negada en el grafo de implicaciones
-                    // Por lo tanto el estado vale, entonces coloreamos el nodo del color de este estado
-                    c.set(orig_node, node_state.color);
-                    // La negacion de esta variable ahora es falsa porque su no negacion es verdadera
-                    if (s_c_c_states[node_scc[node_state.isNot]] != _FALSE && s_c_c_states[node_scc[node_state.isNot]] != _NOTSET) {
-                        // Colision!! 
-                        return c;
-                    } else {
-                        s_c_c_states[node_scc[node_state.isNot]] = _FALSE;
-                    }
-                } else {
-                    // El nodo representa una variable negada en el grafo de implicaciones
-                    // La variable no negada es falsa porque su negacion es verdadera
-                    if (s_c_c_states[node_scc[node_state.is]] != _FALSE && s_c_c_states[node_scc[node_state.is]] != _NOTSET) {
-                        // Colision!!
-                        return c;
-                    } else {
-                        s_c_c_states[node_scc[node_state.is]] = _FALSE;
-                    }
-                }
-            }
-            // Ahora me dijo si yo no implico ningun falso
-            for (auto neighbour : condensed.neighbours(actual_scc)) {
-                if (s_c_c_states[neighbour] == _FALSE) {
-                    // Si es asi, hay un absurdo, asi que ya no sirve
-                    return c;
-                }
-            }
-        } else {
-            // Itero por cada nodo de la componente fuertemente conexa
-            for (auto node : *it) {
-                std::size_t orig_node = state_to_vertex[node].first;
-                std::size_t state_number = state_to_vertex[node].second;
-                state node_state = vertex_data[orig_node][state_number];
-                if (node_state.isNot == node) {
-                    // El nodo representa una variable negada en el grafo de implicaciones
-                    // Como la negacion es falsa, entonces la afirmacion es verdadera
-                    // Por lo tanto coloreamos el nodo con el color correspondiente
-                    c.set(orig_node, node_state.color);
-                    // La negacion de esta variable ahora es falsa porque su no negacion es verdadera
-                    if (s_c_c_states[node_scc[node_state.is]] != _TRUE && s_c_c_states[node_scc[node_state.is]] != _NOTSET) {
-                        // Colision!! 
-                        return c;
-                    } else {
-                        s_c_c_states[node_scc[node_state.is]] = _TRUE;
-                    }
-                } else {
-                    // El nodo representa una variable no negada en el grafo de implicaciones
-                    // La variable no negada es verdadera porque su negacion es falsa
-                    if (s_c_c_states[node_scc[node_state.isNot]] != _TRUE && s_c_c_states[node_scc[node_state.isNot]] != _NOTSET) {
-                        // Colision!!
-                        return c;
-                    } else {
-                        s_c_c_states[node_scc[node_state.isNot]] = _TRUE;
-                    }
-                }
-            }
-            // Ahora me dijo si yo no me implica ningun verdadero
-            for (auto neighbour : condensed.parents(actual_scc)) {
-                if (s_c_c_states[neighbour] == _TRUE) {
-                    // Si es asi, hay un absurdo, asi que ya no sirve
-                    return c;
-                }
-            }
-        }
-        actual_scc--;
-    }
-    // TODO checkear que no haya absurdos en el grafo denso!!
-    // Si no hubo colisiones entonces esta todo bien, y esta todo coloreado
-
-    return c;
+    Problem1 instance(graph, colors);
+    return instance.solve();
 }
