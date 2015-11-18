@@ -91,7 +91,7 @@ def cycle_graph(n):
 def wheel_graph(n):
     n = max(n, 4)
 
-    colors = get_colors(n, [1, 2, 3])
+    colors = get_colors(n, [1, 2, 3, 4])
 
     edges = ["%d %d" % (x, x+1) for x in xrange(n-2)] + \
             ["%d %d" % (n-2, 0)] + ["%d %d" % (n-1, x) for x in xrange(n-1)]
