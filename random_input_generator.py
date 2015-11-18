@@ -28,8 +28,12 @@ def random_input(n=None, m=None):
     if n is None:
         n = randint(10, 100)
 
+    top = ((n-1)*n)/2
+
     if m is None:
-        m = randint(1, ((n-1)*n)/2)
+        m = randint(1, top)
+
+    m = min(m, top)
 
     colors = get_colors(n)
 
