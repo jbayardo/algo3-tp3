@@ -7,6 +7,7 @@
 #include <algorithm>
 
 class DGraph {
+    friend std::ostream &operator<<(std::ostream &, const Coloring &);
 public:
     DGraph() : _adjacency(0) { }
 
@@ -145,5 +146,26 @@ private:
     std::vector<std::list<std::size_t>> _adjacency;
     std::vector<std::list<std::size_t>> _parents;
 };
+
+inline std::ostream &operator<<(std::ostream &stream, const DGraph &graph) {
+    std::stringstream output;
+
+    output << "digraph {" << std::endl;
+
+    for (std::size_t i = 0; i < graph.size(); ++i) {
+        output << i << ";" << std::endl;
+    }
+
+    for (std::size_t i = 0; i < graph.size(); ++i) {
+        for (auto &neighbour : graph.neighbours(i)) {
+            output << i << " -> " << neighbour << ";" << std::endl;
+        }
+    }
+
+    output << "}" << std::endl;
+    stream << output.str();
+
+    return stream;
+}
 
 #endif //ALGO3_TP3_DGRAPH_H

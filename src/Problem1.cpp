@@ -13,8 +13,8 @@
 
 class Problem1 {
     enum ComponentState {
-        True,
         False,
+        True,
         Unset
     };
 public:
@@ -31,6 +31,19 @@ public:
         // Obtenemos la información que devuelve Kosaraju
         std::list<std::list<std::size_t>> &components = kosaraju.first;
         std::vector<std::size_t> &belongs = kosaraju.second;
+
+        std::size_t k = 0;
+        for (auto it = components.begin(); it != components.end(); ++it) {
+            std::cout << "Componente " << k << ": ";
+
+            for (auto &f : *it) {
+                std::cout << f << " ";
+            }
+
+            std::cout << std::endl;
+
+            ++k;
+        }
 
         // Creamos la salida de la función
         Coloring output(graph);
@@ -56,12 +69,26 @@ public:
             }
         }
 
+        //std::cerr << implications;
+        //std::cerr << induced;
+
         // Coloreamos!
         std::vector<ComponentState> induced_states(components.size(), ComponentState::Unset);
 
         std::size_t current = components.size() - 1;
 
         for (auto it = components.rbegin(); it != components.rend(); ++it) {
+            // Tengo tamaño 1, tenemos que manejar las componentes conexas de los nodos fantasmas
+            if ((*it).size() == 1) {
+                // Obtengo un vértice en el grafo original
+                std::size_t vertex = *((*it).begin());
+
+                if (implications.neighbours(vertex).size() == 0) {
+                    --current;
+                    continue;
+                }
+            }
+
             if (induced_states[current] == ComponentState::Unset) {
                 induced_states[current] = ComponentState::True;
             }
@@ -79,6 +106,7 @@ public:
                         case ComponentState::True:
                             // Encontramos una variable verdadera que tiene a su negación como verdadera.
                             // Es una contradicción
+                            output.unset(0);
                             return output;
                         default:
                             break;
@@ -112,6 +140,7 @@ public:
                         case ComponentState::False:
                             // Encontramos una variable verdadera que tiene a su negación como falsa.
                             // Es una contradicción
+                            output.unset(0);
                             return output;
                         default:
                             break;
@@ -135,6 +164,14 @@ public:
             }
 
             --current;
+
+            std::cout << "Coloring: " << output;
+
+            std::cout << "Induced states: ";
+            for (std::size_t k = 0; k < induced_states.size(); ++k) {
+                std::cout << induced_states[k] << " ";
+            }
+            std::cout << std::endl;
         }
 
         return output;
