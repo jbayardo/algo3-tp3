@@ -85,6 +85,21 @@ En el caso que un nodo (llamémoslo A) tenga dos colores (digamos azul y rojo), 
 \end{enumerate}
 Naturalmente se deduce que $Ar \implies A\neg a$ y también $A\neg a \implies Ar$ ya que $A$ no puede estar coloreado con dos colores diferentes. Al mismo tiempo se tiene que $Aa \implies A\neg r$ y $A\neg r \implies Aa$ por lo mismo.
 
+\begin{figure}
+\centering
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[width=3.5cm]{graphs/ej1/ej1_intro_2c.png}
+\caption{first figure}
+\end{minipage}\hfill
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[width=3.5cm]{graphs/ej1/ej1_intro_2c_impl.png}
+\caption{second figure}
+\end{minipage}
+\end{figure}
+
+
 En el caso en que tenga solo un color (digamos azul) tenemos las siguientes posibilidades:
 \begin{enumerate}
 \item A es azul
@@ -92,9 +107,54 @@ En el caso en que tenga solo un color (digamos azul) tenemos las siguientes posi
 \end{enumerate}
 En este caso como es un único color necesitamos que este nodo este coloreado de este único color, por lo tanto la única implicación que siempre resulta en verdad es: $A\neg a \implies Aa$
 
+\begin{figure}
+\centering
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[width=2.5cm]{graphs/ej1/ej1_intro_1c.png}
+\caption{first figure}
+\end{minipage}\hfill
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[width=3.5cm]{graphs/ej1/ej1_intro_1c_impl.png}
+\caption{second figure}
+\end{minipage}
+\end{figure}
+
 Luego, supongamos que hay dos nodos: $A$ que puede colorearse con azul y rojo, y $B$ que puede colorearse con azul. $A$ y $B$ son adyacentes.
 
 Las implicaciones que vimos anteriormente siguen formando parte de la formula general, pero ahora los nodos son adyacentes y comparten un color en la lista de colores azul, por lo tanto tenemos que tener en cuenta que no pueden estar ambos nodos coloreados de este color al mismo tiempo. De esto ultimo generamos unas nuevas implicaciones: $Aa \implies B\neg a$ y $Ba \implies A\neg a$.
+
+\begin{figure}
+\centering
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[width=5cm]{graphs/ej1/ej1_intro_2na.png}
+\caption{first figure}
+\end{minipage}\hfill
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[width=6cm]{graphs/ej1/ej1_intro_2na_impl.png}
+\caption{second figure}
+\end{minipage}
+\end{figure}
+
+Si en cambio tenemos dos nodos: $A$ que puede colorearse con azul y verde, y $B$ que puede colorearse con rojo, y estos son adyacentes, no habría ninguna implicación mas que tener en cuenta
+
+\begin{figure}
+\centering
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[width=5cm]{graphs/ej1/ej1_intro_2n.png}
+\caption{first figure}
+\end{minipage}\hfill
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[width=6cm]{graphs/ej1/ej1_intro_2n_impl.png}
+\caption{second figure}
+\end{minipage}
+\end{figure}
+
 
 \section{Problema 2}
 
