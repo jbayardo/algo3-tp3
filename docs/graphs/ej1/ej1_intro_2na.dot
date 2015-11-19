@@ -1,7 +1,7 @@
 graph graphname {
 	node [shape=circle fontname=monokai color=blue4];
 	rankdir="LR";
-	A [label = "A \n [azul, verde]"];
-	B [label = "B \n [rojo]"];
+	A [label = "A \n [azul, rojo]"];
+	B [label = "B \n [azul]"];
 	A -- B;
 }
