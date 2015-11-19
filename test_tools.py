@@ -94,7 +94,7 @@ class GreedyTest(TestRunner):
         for n in xrange(50, 1000, 50):
             for m in xrange((n-1)*(n-2)/2 + 1, n*(n-1)/2):
                 for c in xrange(self.expected(n), n):
-                    output = self.__run_instance(n, m, c)
+                    output = super(GreedyTest, self).__run_instance(n, m, c)
 
                     for key in output:
                         self.results[key].append(output[key])
@@ -108,10 +108,34 @@ class GreedyTest(TestRunner):
             print "Invalid Colorings: %d" % len(filter(lambda x: x['conflicts'] != 0, self.results[exercise]))
             #print "Maximum Distance from Expected Number of Colors: %d\n" % max(map(lambda x: x['unique_colors'] - x['expected'], self.results[exercise]))
 
-class DecisionTest(object):
-    """docstring for DecisionTest"""
+
+class TwoListTest(TestRunner):
     def __init__(self, input, expected, family):
-        super(DecisionTest, self).__init__(input, expected, family)
+        super(TwoListTest, self).__init__(input, expected, family)
+        self.exercises = [1]
+        self.runs = 25
+
+    def execute(self):
+        for n in xrange(50, 1000, 50):
+            for m in xrange((n-1)*(n-2)/2 + 1, n*(n-1)/2):
+                for c in xrange(1, 2):
+                    output = super(TwoListTest, self).__run_instance(n, m, c)
+
+                    for key in output:
+                        self.results[key].append(output[key])
+
+        self.__print_results()
+
+    def __print_results(self):
+        for exercise in self.exercises:
+            for result in self.results[exercise]:
+                if result['conflicts'] != 0:
+                    print "Error occurred. Relevant information: ", result
+
+
+class BacktrackingTest(object):
+    def __init__(self, input, expected, family):
+        super(BacktrackingTest, self).__init__(input, expected, family)
         self.original_input = input
 
     def execute(self):
@@ -131,5 +155,4 @@ class DecisionTest(object):
             print "Valid Colorings: %d" % len(filter(lambda x: x['conflicts'] == 0, self.results[exercise]))
             print "Invalid Colorings: %d" % len(filter(lambda x: x['conflicts'] != 0, self.results[exercise]))
             print "Maximum Distance from Expected Number of Colors: %d\n" % max(map(lambda x: x['unique_colors'] - x['expected'], self.results[exercise]))
-
 
