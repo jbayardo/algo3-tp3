@@ -47,7 +47,13 @@ Coloring coloringExists(const Graph &graph, const ColorStorage &colors, Coloring
         if (is2ListColoring(graph, colors, current)) {
             ColorStorage storage = transform(graph, colors, current);
             Problem1 instance(graph, storage);
-            return instance.solve();
+            Coloring output = instance.solve();
+
+            if (!output.complete()) {
+                throw std::runtime_error("No encontramos coloreo");
+            } else {
+                return output;
+            }
         }
 
         // Probamos con todos los colores
@@ -63,7 +69,7 @@ Coloring coloringExists(const Graph &graph, const ColorStorage &colors, Coloring
             }
         }
 
-        throw std::runtime_error("Se fue todo a la chota");
+        throw std::runtime_error("No encontramos coloreo");
     }
 }
 
