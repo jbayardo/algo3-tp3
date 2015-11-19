@@ -22,11 +22,7 @@ ColorStorage transform(const Graph &graph, const ColorStorage &colors, const Col
         if (colors.get(vertex).size() <= 2) {
             output.add(vertex, colors.get(vertex));
         } else {
-            if (current.isset(vertex)) {
-                output.add(vertex, current.get(vertex));
-            } else {
-                output.add(vertex, colors.get(vertex));
-            }
+            output.add(vertex, current.get(vertex));
         }
     }
 
