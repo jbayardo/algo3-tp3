@@ -126,7 +126,7 @@ class TwoListTest(TestRunner):
             for m in xrange(0, 1 + (n*(n-1))/2):
                 for c in xrange(4, n+1):
                     try:
-                        output = super(TwoListTest, self).run_instance(n, m, c, 2)
+                        output = self.run_instance(n, m, c, 2)
                     except ValueError:
                         continue
 

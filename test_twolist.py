@@ -45,12 +45,14 @@ def test_random():
                       lambda x: x,
                       "random")
 
-all_tests = [test_complete,
-             test_bipartite,
-             test_cycle,
-             test_wheel,
-             test_tree,
-             test_star]
+all_tests = [
+            test_cycle,
+            test_complete,
+            test_bipartite,
+            test_wheel,
+            test_tree,
+            test_star
+]
 
 if __name__ == '__main__':
     procs = [Process(target=t().execute) for t in all_tests]
