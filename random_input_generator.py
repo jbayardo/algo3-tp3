@@ -67,7 +67,7 @@ def star_graph(n, m=None, c=None, top=None):
     if c is None:
         c = n
 
-    colors = get_colors(n, c, [1, 2], top)
+    colors = get_colors(n, c, [0, 1], top)
 
     edges = ["%d %d" % (x, n-1) for x in xrange(n-1)]
     if m is None:
@@ -85,7 +85,7 @@ def complete_bipartite(n, m=None, c=None, top=None):
     if c is None:
         c = n
 
-    colors = get_colors(n, c, [1, 2], top)
+    colors = get_colors(n, c, [0, 1], top)
 
     A = [x for x in xrange(n) if x & 1]
     B = [x for x in xrange(n) if not(x & 1)]
@@ -104,7 +104,7 @@ def complete_bipartite(n, m=None, c=None, top=None):
 def cycle_graph(n, m=None, c=None, top=None):
     if c is None:
         c = n
-    colors = get_colors(n, c, [1, 2, 3], top)
+    colors = get_colors(n, c, [0, 1, 2], top)
 
     edges = ["%d %d" % (x, x+1) for x in xrange(n-1)] + ["%d %d" % (n-1, 0)]
     if m is None:
@@ -123,7 +123,7 @@ def wheel_graph(n, m=None, c=None, top=None):
     if c is None:
         c = n
 
-    colors = get_colors(n, c, [1, 2, 3, 4], top)
+    colors = get_colors(n, c, [0, 1, 2, 3], top)
 
     edges = ["%d %d" % (x, x+1) for x in xrange(n-2)] + \
             ["%d %d" % (n-2, 0)] + ["%d %d" % (n-1, x) for x in xrange(n-1)]
@@ -154,7 +154,7 @@ def binary_balanced_tree(n, m=None, c=None, top=None):
     if c is None:
         c = n
 
-    colors = get_colors(n, c, [1, 2], top)
+    colors = get_colors(n, c, [0, 1], top)
 
     edges = ["%d %d" % (min(e), max(e)) for e in _tree_edges(n)]
 
