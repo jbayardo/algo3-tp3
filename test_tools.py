@@ -91,9 +91,8 @@ class GreedyTest(TestRunner):
 
     def execute(self):
         for n in xrange(5, 100):
-            a = (n-1)*(n-2)
             b = n*(n-1)
-            for m in xrange(a/2 + 1, b/2):
+            for m in xrange(0, 1 + b/2):
                 for c in xrange(4, n):
                     try:
                         output = self.run_instance(n, m, c)
@@ -162,16 +161,13 @@ class BacktrackingTest(TestRunner):
 
     def execute(self):
         for n in xrange(5, 30):
-            lower = (n-1)*(n-2)/2 + 1
-            higher = n*(n-1)/2 + 1
+            lower = 0
+            higher = 1 + n*(n-1)/2
 
             for m in xrange(lower, higher):
-                lower = max(4, n/2)
-                higher = n + 1
-
-                for c in xrange(lower, higher):
+                for c in xrange(4, n):
                     try:
-                        output = super(BacktrackingTest, self).run_instance(n, m, c)
+                        output = self.run_instance(n, m, c)
                     except ValueError:
                         continue
 
