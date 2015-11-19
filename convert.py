@@ -15,12 +15,14 @@ for fname in files:
     if fname[-3:] != 'sts':
         continue
 
-    matches = re.match(r"^(experiments|tests)\/test_([1-5])_(.*)_([0-9]+)_([0-9]+)?\.sts$", fname)
+    matches = re.match(r"^(experiments|tests)\/test_([1-5]+)_(.*)_([0-9]+)_([0-9]+)_([0-9]+)_([0-9]+)?\.sts$", fname)
 
     method = int(matches.group(2).strip())
     family = matches.group(3).strip()
-    size = int(matches.group(4).strip())
-    expected = int(matches.group(5).strip())
+    n = int(matches.group(4).strip())
+    m = int(matches.group(5).strip())
+    c = int(matches.group(6).strip())
+    expected = int(matches.group(7).strip())
 
     # Read output file for the test, this has information about conflicts
     with open(fname[:-3]+'out', 'r') as handle:
@@ -55,7 +57,9 @@ for fname in files:
             output = {
                 'family': family,
                 'method': method,
-                'size': size,
+                'n': n,
+                'm': m,
+                'c': c,
                 'expected': expected,
                 'run': run + 1,
                 'timer': line[0],
