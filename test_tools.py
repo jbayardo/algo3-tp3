@@ -21,8 +21,12 @@ class TestRunner(object):
     #     return
 
     def run_instance(self, n, m, c, top = None):
+        try:
+            input = self.input(n, m, c, top)
+        except:
+            return
+
         expected = self.expected(n)
-        input = self.input(n, m, c, top)
         family = self.family
 
         dic = {}
@@ -98,7 +102,7 @@ class GreedyTest(TestRunner):
             a = (n-1)*(n-2)
             b = n*(n-1)
             for m in xrange(a/2 + 1, b/2):
-                for c in xrange(2, n):
+                for c in xrange(4, n):
                     output = self.run_instance(n, m, c)
 
                     for key in output:
@@ -130,12 +134,12 @@ class TwoListTest(TestRunner):
                 delta = abs(higher - lower)
 
             for m in xrange(lower, higher, delta):
-                lower = n/2
+                lower = max(n/2, 4)
                 higher = n
                 delta = abs(higher - lower)/2
 
                 if delta == 0:
-                    delta = abs(higher - lower)
+                    delta = max(abs(higher - lower), 1)
 
                 for c in xrange(lower, higher, delta):
                     output = super(TwoListTest, self).run_instance(n, m, c, 2)
@@ -159,21 +163,21 @@ class BacktrackingTest(TestRunner):
         self.runs = 25
 
     def execute(self):
-        for n in xrange(5, 12):
+        for n in xrange(5, 30):
             lower = (n-1)*(n-2)/2 + 1
             higher = n*(n-1)/2
             delta = abs(higher - lower)/10
 
             if delta == 0:
-                delta = abs(higher - lower)/2
+                delta = max(abs(higher - lower)/2, 1)
 
             for m in xrange(lower, higher, delta):
-                lower = n/2
+                lower = max(4, n/2)
                 higher = n
                 delta = abs(higher - lower)/10
 
                 if delta == 0:
-                    delta = abs(higher - lower)/2
+                    delta = max(abs(higher - lower)/2, 1)
 
                 for c in xrange(lower, higher, delta):
                     output = super(BacktrackingTest, self).run_instance(n, m, c)
