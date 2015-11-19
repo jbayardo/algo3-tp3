@@ -98,8 +98,11 @@ class GreedyTest(TestRunner):
             a = (n-1)*(n-2)
             b = n*(n-1)
             for m in xrange(a/2 + 1, b/2):
-                for c in xrange(2, n):
-                    output = self.run_instance(n, m, c)
+                for c in xrange(4, n):
+                    try:
+                        output = self.run_instance(n, m, c)
+                    except Exception:
+                        continue
 
                     for key in output:
                         self.results[key].append(output[key])
