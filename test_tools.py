@@ -90,7 +90,7 @@ class GreedyTest(TestRunner):
         self.runs = 25
 
     def execute(self):
-        for n in xrange(5, 100):
+        for n in xrange(5, 50):
             for m in xrange(0, 1 + (n*(n-1))/2):
                 for c in xrange(4, n+1):
                     try:
@@ -116,25 +116,12 @@ class TwoListTest(TestRunner):
         super(TwoListTest, self).__init__(input, expected, family, "two-list")
         self.exercises = [1]
         self.runs = 25
+        self.directory = "two_list_tests"
 
     def execute(self):
-        for n in xrange(50, 1000, 50):
-            lower = (n-1)*(n-2)/2 + 1
-            higher = n*(n-1)/2
-            delta = abs(higher - lower)/10
-
-            if delta == 0:
-                delta = abs(higher - lower)
-
-            for m in xrange(lower, higher, delta):
-                lower = max(n/2, 4)
-                higher = n
-                delta = abs(higher - lower)/2
-
-                if delta == 0:
-                    delta = max(abs(higher - lower), 1)
-
-                for c in xrange(lower, higher, delta):
+        for n in xrange(5, 50):
+            for m in xrange(0, 1 + (n*(n-1))/2):
+                for c in xrange(4, n+1):
                     try:
                         output = super(TwoListTest, self).run_instance(n, m, c, 2)
                     except ValueError:
@@ -142,7 +129,7 @@ class TwoListTest(TestRunner):
 
                     for key in output:
                         self.results[key].append(output[key])
-
+	print "Done with %s"%(self.family)
         self.__print_results()
 
     def __print_results(self):
