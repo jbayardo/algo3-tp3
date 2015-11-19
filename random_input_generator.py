@@ -17,14 +17,17 @@ def header(n, m, c):
 
 
 def get_colors(n, c, prefix=[], top=None):
-    if top is None:
-        return [set(prefix + [randint(0, c-1)
-                for _ in xrange(randint(1, c-1))])
-                for _ in xrange(n)]
+    colors = [list(set(prefix + [randint(0, c-1)
+              for _ in xrange(randint(1, c-1))]))
+              for _ in xrange(n)]
+
+    for c in colors:
+        shuffle(c)
+
+    if top is not None:
+        return map(lambda x: x[:top], colors)
     else:
-        return [set((prefix + [randint(0, c-1)
-                for _ in xrange(randint(1, c-1))])[:top])
-                for _ in xrange(n)]
+        return colors
 
 
 def random_input(n, m, c, top=None):
@@ -58,7 +61,7 @@ def complete_graph(n, m, c, top=None):
     if m != (n*(n-1))/2:
         raise ValueError("m no compatible para grafo completo")
 
-    colors = [range(n) for _ in xrange(n)]
+    colors = get_colors(n, c, range(n), top)
 
     all_edges = list(combinations(xrange(n), 2))
 
@@ -111,18 +114,16 @@ def complete_bipartite(n, m, c, top=None):
 
 
 def cycle_graph(n, m, c, top=None):
+    lim = (2 + (n & 1))
 
-    if c is None:
-        raise ValueError("c no puede ser None")
-    colors = get_colors(n, c, [0, 1, 2], top)
+    if c < lim:
+        raise ValueError("no tiene solucion")
+    colors = get_colors(n, c, [0, 1, 2][:lim], top)
 
     edges = ["%d %d" % (x, x+1) for x in xrange(n-1)] + ["%d %d" % (n-1, 0)]
-    if m is None:
-        m = len(edges)
-    else:
-        if m > len(edges):
-            raise ValueError("m > maximo m posible")
-        edges = edges[:m]
+
+    if m != len(edges):
+        raise ValueError("m no existente para cycle correcto")
 
     edges = "\n".join(edges)
 
@@ -133,19 +134,16 @@ def wheel_graph(n, m, c, top=None):
     if n < 4:
         raise ValueError
 
-    if c is None:
-        raise ValueError("c no puede ser None")
+    if c < 4:
+        raise ValueError("c no coloreable")
 
     colors = get_colors(n, c, [0, 1, 2, 3], top)
 
     edges = ["%d %d" % (x, x+1) for x in xrange(n-2)] + \
             ["%d %d" % (n-2, 0)] + ["%d %d" % (n-1, x) for x in xrange(n-1)]
-    if m is None:
-        m = len(edges)
-    else:
-        if m > len(edges):
-            raise ValueError("m > maximo m posible")
-        edges = edges[:m]
+
+    if m != len(edges):
+        raise ValueError("m no existente para wheel correcto")
 
     return print_graph(header(n, m, c), "\n".join(edges), colors)
 

@@ -72,9 +72,9 @@
 
 \section{Problema 1}
 
-El primer problema presenta un grafo a colorear en los que cada nodo tiene solo 1 o 2 colores posibles a elegir. A la hora de resolverlo pensamos reducir este problema a un problema ya resuelto. Para este caso especifico logramos ver que es posible transformar una instancia de este problema a una instancia de 2-Satisfiability.
-Para conseguir esto necesitamos lograr convertir nuestra instancia en un conjunto de clausulas (que consisten de un OR entre varias variables o sus negaciones) tal que, si hay una asignación de estas variables que haga que todas las clausulas sean verdaderas, significa que nuestra instancia original tiene un coloreo valido. Y también necesitamos poder calcular este coloreo.
-Entendiendo esto procedemos a buscar una forma correcta de crear una formula de lógica booleana a partir de una instancia del problema dado.
+El primer problema presenta un grafo a colorear en los que cada nodo tiene solo 1 o 2 colores posibles a elegir. A la hora de resolverlo pensamos reducir este problema a un problema ya resuelto. Para este caso especifico logramos ver que es posible transformar una instancia de este problema a una instancia de 2-Satisfiability.\par
+Para conseguir esto necesitamos lograr convertir nuestra instancia en un conjunto de clausulas (que consisten de un OR entre varias variables o sus negaciones) tal que, si hay una asignación de estas variables que haga que todas las clausulas sean verdaderas, significa que nuestra instancia original tiene un coloreo valido. Y también necesitamos poder calcular este coloreo.\smallbreak
+Entendiendo esto procedemos a buscar una forma correcta de crear una formula de lógica booleana a partir de una instancia del problema dado.\par
 Cada nodo puede ser coloreado con uno o dos colores. 
 En el caso que un nodo (llamémoslo A) tenga dos colores (digamos azul y rojo), tendremos las siguientes posibilidades:
 \begin{enumerate}
@@ -90,6 +90,11 @@ En el caso en que tenga solo un color (digamos azul) tenemos las siguientes posi
 \item A es azul
 \item A no es azul
 \end{enumerate}
+En este caso como es un único color necesitamos que este nodo este coloreado de este único color, por lo tanto la única implicación que siempre resulta en verdad es: $A\neg a \implies Aa$
+
+Luego, supongamos que hay dos nodos: $A$ que puede colorearse con azul y rojo, y $B$ que puede colorearse con azul. $A$ y $B$ son adyacentes.
+
+Las implicaciones que vimos anteriormente siguen formando parte de la formula general, pero ahora los nodos son adyacentes y comparten un color en la lista de colores azul, por lo tanto tenemos que tener en cuenta que no pueden estar ambos nodos coloreados de este color al mismo tiempo. De esto ultimo generamos unas nuevas implicaciones: $Aa \implies B\neg a$ y $Ba \implies A\neg a$.
 
 \section{Problema 2}
 
@@ -192,10 +197,45 @@ El problema 3 pedía que desarrollemos una heurística golosa para el problema
 de list coloring. La heurística que decidimos aplicar es la de ordenar los nodos de manera descendente por grado, y a su vez, ordenar la lista de colores de cada nodo de manera descendente por frecuencia, para luego iterar desde el de mayor grado al de menor, eligiendo el color que menos conflictos generase. Si algún color al momento de ser elegido genera 0 conflictos, se elige ese color para ese vértice y se prosigue al siguiente vértice. 
 La idea es que al setear los colores de los nodos de mayor grado con los colores más frecuentes se generasen menos conflictos a futuro y a su vez se minimice la cantidad de colores total a usar.
 
-La complejidad de la heurística en peor caso es $O(N^{2}C)$, ya que hay que recorrer $O(N)$ vértices, y por cada vértice, recorrer todos sus colores, ($O(C)$ en peor caso), y a su vez, para cada color, calcular la cantidad de conflictos del vértice con sus vecinos, que pueden ser a lo sumo $O(N)$.
+La complejidad de la heurística es $O(N^{2}C)$, ya que hay que recorrer $O(N)$ vértices, y por cada vértice, recorrer todos sus colores, ($O(C)$ en peor caso), y a su vez, para cada color, calcular la cantidad de conflictos del vértice con sus vecinos, que pueden ser a lo sumo $O(N)$.
 
 El caso de un grafo completo es el peor posible, porque todos los nodos tienen que tener un color diferente, siendo la complejidad final $O(N^{2}C)$.
 En cambio, en familias de grafos conocidas que tengan un número cromático $K$ constante, es posible que la heurística tenga una complejidad de $O(N^2 * K)$, que finalmente es $O(N^2)$ al ser $K$ constante.
+
+
+
+\begin{algorithmic}
+\Function{greedyOrder}{graph, colorStorage}
+\State colors = colorStorage.sortByFrequency() \Comment $O(N*C)$
+\State vertexOrder = graph.descendingByDegree() \Comment $O(N Log(N))$
+\State coloring = ConflictColoring(graph)
+\For{v $\in$ vertexOrder}  \Comment $O(N)$
+    \State choice = 0
+    \State conflicts = $\infty$
+    \For{c $\in$ colors[v]}        \Comment $O(C)$
+        \State coloring.setu(v, c) \Comment $O(N)$
+        \State currentConflicts = coloring.conflicts(v) \Comment $O(1)$
+        \If{currentConflicts $<$ conflicts}
+            \State choice = c
+            \State conflicts = currentConflicts
+            \If{currentConflicts $==$ 0}
+                \State break
+            \EndIf
+        \EndIf
+    \EndFor
+    \State coloring.setu(v, choice) \Comment $O(N)$
+\EndFor
+\State \Return coloring
+\EndFunction
+\end{algorithmic}
+
+
+
+
+
+
+
+
 
 
 \section{Problema 4}
@@ -324,6 +364,14 @@ En el caso de la primera vecindad, no es muy complicado el análisis de compleji
 En el caso de la segunda vecindad, tomar el grado de un nodo es una operación $O(1)$ y todas las otras realizadas en el primer ciclo también lo son. Por lo que la complejidad temporal es $O((n + m) + (n - 1)) = O(n + m)$ para el primer ciclo, donde el primer término proviene de la primer iteración, y el segundo de todas las otras juntas. Luego, en términos del segundo ciclo, el mismo se realiza a lo sumo $c$ veces, y en el peor caso ningún cambio de color mejora la cantidad de conflictos, por lo que terminamos realizando $O(2n) = O(n)$ operaciones en cada iteración, por un total de $O(cn)$ en todo el ciclo. Finalmente, la complejidad del algoritmo para obtener el mejor vecino es $O(n + m + cn) = O(cn + m)$ (aunque cabe destacar que en realidad ese $O(cn)$ es una cota grosera para la complejidad real, que es $O(c * dg(best))$; pensamos que esta cota más ajustada podría servirnos cuando realicemos el análisis de mejor y peor caso con hipótesis adicionales sobre los grados de los nodos).
 
 Pensemos, entonces, qué sucede con la búsqueda local. En el mejor caso, el resultado del ejercicio 3 es un mínimo local de antemano, en cuyo caso vamos a estar ejecutando una única vez la iteración de la búsqueda, encontrando que no hay mejoría y saliendo de esta forma. En el peor caso, el resultado del ejercicio 3 tiene exactamente $m$ conflictos (es el caso en el que todos los nodos tienen el mismo color), y asumiendo que bajamos de a exactamente un conflicto hasta llegar al óptimo de cero conflictos, tenemos exactamente $m$ iteraciones de la vecindad. Por lo tanto, en el peor caso tendríamos $O(mn(c + log(k)))$ para la búsqueda local con la primer vecindad, y $O(m(cn + m))$ para la segunda vecindad.
+
+Sin embargo, según la experimentación que realizamos, la heurística del ejercicio 3 tiende a tener muy buenos resultados con las clases de grafos conocidas que utilizamos, por lo que no pudimos determinar claramente qué grafos nos resultarían en un peor caso del algoritmo (ya que a priori precisaríamos forzar a la heurística golosa a generar un resultado sumamente malo, para que las búsquedas locales se vean forzadas a correr múltiples veces). Por lo tanto, la forma de probar mejor y peor caso es básicamente comenzar la búsqueda local de mejor caso con un coloreo que sea un mínimo local y comenzar con un coloreo donde todos los nodos tengan el mismo color, respectivamente.
+
+%% TODO: GRAFICOS PEOR Y MEJOR CASO'
+
+\subsection{Análisis de efectividad}
+
+
 
 \section{Código fuente}
 
