@@ -16,7 +16,7 @@ class TestRunner(object):
         self.runs = 25
 
     def execute(self):
-        raise "Instancias no configuradas. Chris es puto."
+        raise "Instancias no configuradas. Juli es puto."
         return
 
     def __run_instance(self, n, m, c):
