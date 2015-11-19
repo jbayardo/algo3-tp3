@@ -48,7 +48,8 @@ all_tests = [test_bipartite,
              test_cycle,
              test_wheel,
              test_tree,
-             test_star]
+             test_star,
+             test_complete]
 
 if __name__ == '__main__':
     map(lambda t: t().execute(), all_tests)

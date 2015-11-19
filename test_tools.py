@@ -16,13 +16,9 @@ class TestRunner(object):
         self.runs = 25
         self.directory = directory
 
-    # def execute(self):
-    #     raise "Instancias no configuradas. Chris es puto."
-    #     return
-
     def run_instance(self, n, m, c, top = None):
-        expected = self.expected(n)
         input = self.input(n, m, c, top)
+        expected = self.expected(n)
         family = self.family
 
         dic = {}
@@ -133,15 +129,18 @@ class TwoListTest(TestRunner):
                 delta = abs(higher - lower)
 
             for m in xrange(lower, higher, delta):
-                lower = n/2
+                lower = max(n/2, 4)
                 higher = n
                 delta = abs(higher - lower)/2
 
                 if delta == 0:
-                    delta = abs(higher - lower)
+                    delta = max(abs(higher - lower), 1)
 
                 for c in xrange(lower, higher, delta):
-                    output = super(TwoListTest, self).run_instance(n, m, c, 2)
+                    try:
+                        output = super(TwoListTest, self).run_instance(n, m, c, 2)
+                    except ValueError:
+                        continue
 
                     for key in output:
                         self.results[key].append(output[key])
@@ -162,24 +161,27 @@ class BacktrackingTest(TestRunner):
         self.runs = 25
 
     def execute(self):
-        for n in xrange(5, 12):
+        for n in xrange(5, 30):
             lower = (n-1)*(n-2)/2 + 1
             higher = n*(n-1)/2
             delta = abs(higher - lower)/10
 
             if delta == 0:
-                delta = abs(higher - lower)/2
+                delta = max(abs(higher - lower)/2, 1)
 
             for m in xrange(lower, higher, delta):
-                lower = n/2
+                lower = max(4, n/2)
                 higher = n
                 delta = abs(higher - lower)/10
 
                 if delta == 0:
-                    delta = abs(higher - lower)/2
+                    delta = max(abs(higher - lower)/2, 1)
 
                 for c in xrange(lower, higher, delta):
-                    output = super(BacktrackingTest, self).run_instance(n, m, c)
+                    try:
+                        output = super(BacktrackingTest, self).run_instance(n, m, c)
+                    except ValueError:
+                        continue
 
                     for key in output:
                         self.results[key].append(output[key])
