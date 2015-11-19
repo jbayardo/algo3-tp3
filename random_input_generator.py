@@ -52,6 +52,7 @@ def random_input(n=None, m=None, c=None, top=None):
 
 def complete_graph(n, m=None, c=None, top=None):
     colors = [range(n) for _ in xrange(n)]
+    c = n
 
     all_edges = list(combinations(xrange(n), 2))
 
@@ -59,7 +60,7 @@ def complete_graph(n, m=None, c=None, top=None):
     m = len(edges)
     edges = "\n".join(edges)
 
-    return print_graph(header(n, m, n), edges, colors)
+    return print_graph(header(n, m, c), edges, colors)
 
 
 def star_graph(n, m=None, c=None, top=None):
@@ -77,7 +78,7 @@ def star_graph(n, m=None, c=None, top=None):
 
     edges = "\n".join(edges)
 
-    return print_graph(header(n, m, n), edges, colors)
+    return print_graph(header(n, m, c), edges, colors)
 
 
 def complete_bipartite(n, m=None, c=None, top=None):
@@ -97,7 +98,7 @@ def complete_bipartite(n, m=None, c=None, top=None):
         edges = edges[:m]
     edges = "\n".join(edges)
 
-    return print_graph(header(n, m, n), edges, colors)
+    return print_graph(header(n, m, c), edges, colors)
 
 
 def cycle_graph(n, m=None, c=None, top=None):
@@ -114,7 +115,7 @@ def cycle_graph(n, m=None, c=None, top=None):
 
     edges = "\n".join(edges)
 
-    return print_graph(header(n, m, n), edges, colors)
+    return print_graph(header(n, m, c), edges, colors)
 
 
 def wheel_graph(n, m=None, c=None, top=None):
@@ -132,7 +133,7 @@ def wheel_graph(n, m=None, c=None, top=None):
         m = min(m, len(edges))
         edges = edges[:m]
 
-    return print_graph(header(n, m, n), "\n".join(edges), colors)
+    return print_graph(header(n, m, c), "\n".join(edges), colors)
 
 
 def binary_balanced_tree(n, m=None, c=None, top=None):
@@ -165,7 +166,7 @@ def binary_balanced_tree(n, m=None, c=None, top=None):
 
     edges = "\n".join(edges)
 
-    return print_graph(header(n, m, n), edges, colors)
+    return print_graph(header(n, m, c), edges, colors)
 
 
 def no_edges_graph(n):
