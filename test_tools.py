@@ -4,8 +4,8 @@ import subprocess as s
 from functools import partial
 
 
+
 class TestRunner(object):
-    """Base Model for tests"""
     def __init__(self, input, expected, family):
         super(TestRunner, self).__init__()
         self.input = input
@@ -19,8 +19,8 @@ class TestRunner(object):
         raise "Instancias no configuradas. Chris es puto."
         return
 
-    def __run_instance(self, n, m, c):
-        expected = self.expected(n, m, c)
+    def run_instance(self, n, m, c):
+        expected = self.expected(n)
         input = self.input(n, m, c)
         family = self.family
 
@@ -94,7 +94,7 @@ class GreedyTest(TestRunner):
         for n in xrange(50, 1000, 50):
             for m in xrange((n-1)*(n-2)/2 + 1, n*(n-1)/2):
                 for c in xrange(self.expected(n), n):
-                    output = super(GreedyTest, self).__run_instance(n, m, c)
+                    output = super(GreedyTest, self).run_instance(n, m, c)
 
                     for key in output:
                         self.results[key].append(output[key])
@@ -119,7 +119,7 @@ class TwoListTest(TestRunner):
         for n in xrange(50, 1000, 50):
             for m in xrange((n-1)*(n-2)/2 + 1, n*(n-1)/2):
                 for c in xrange(1, 2):
-                    output = super(TwoListTest, self).__run_instance(n, m, c)
+                    output = super(TwoListTest, self).run_instance(n, m, c)
 
                     for key in output:
                         self.results[key].append(output[key])
@@ -143,7 +143,7 @@ class BacktrackingTest(object):
             for k in xrange(2, n):
 
                 self.input = partial(self.original_input, top=k)
-                output = self.__run_instance(n)
+                output = self.run_instance(n)
 
                 for key in output:
                     self.results[key].append(output[key])
