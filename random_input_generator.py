@@ -92,6 +92,7 @@ def complete_bipartite(n, m=None, c=None, top=None):
     if m is None:
         m = len(edges)
     else:
+        m = min(m, len(edges))
         edges = edges[:m]
     edges = "\n".join(edges)
 
