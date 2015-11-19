@@ -27,7 +27,7 @@ def get_colors(n, c, prefix=[], top=None):
                 for _ in xrange(n)]
 
 
-def random_input(n=None, m=None, c, top=None):
+def random_input(n, m, c, top=None):
     if n is None:
         n = randint(10, 100)
 
@@ -50,7 +50,7 @@ def random_input(n=None, m=None, c, top=None):
     return print_graph(header(n, m, c), edges, colors)
 
 
-def complete_graph(n, m=None, c, top=None):
+def complete_graph(n, m, c, top=None):
     colors = [range(n) for _ in xrange(n)]
     if c is None:
         raise ValueError("c no puede ser None")
@@ -66,7 +66,7 @@ def complete_graph(n, m=None, c, top=None):
     return print_graph(header(n, m, c), edges, colors)
 
 
-def star_graph(n, m=None, c, top=None):
+def star_graph(n, m, c, top=None):
 
     if c is None:
         raise ValueError("c no puede ser None")
@@ -86,7 +86,7 @@ def star_graph(n, m=None, c, top=None):
     return print_graph(header(n, m, c), edges, colors)
 
 
-def complete_bipartite(n, m=None, c, top=None):
+def complete_bipartite(n, m, c, top=None):
 
     if c is None:
         raise ValueError("c no puede ser None")
@@ -108,7 +108,7 @@ def complete_bipartite(n, m=None, c, top=None):
     return print_graph(header(n, m, c), edges, colors)
 
 
-def cycle_graph(n, m=None, c, top=None):
+def cycle_graph(n, m, c, top=None):
 
     if c is None:
         raise ValueError("c no puede ser None")
@@ -127,7 +127,7 @@ def cycle_graph(n, m=None, c, top=None):
     return print_graph(header(n, m, c), edges, colors)
 
 
-def wheel_graph(n, m=None, c, top=None):
+def wheel_graph(n, m, c, top=None):
     n = max(n, 4)
 
     if c is None:
@@ -147,7 +147,7 @@ def wheel_graph(n, m=None, c, top=None):
     return print_graph(header(n, m, c), "\n".join(edges), colors)
 
 
-def binary_balanced_tree(n, m=None, c, top=None):
+def binary_balanced_tree(n, m, c, top=None):
     def _tree_edges(n):
         # generador de arbol binario balanceado
         nodes = iter(range(n))
