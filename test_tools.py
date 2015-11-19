@@ -6,7 +6,7 @@ from functools import partial
 
 
 class TestRunner(object):
-    def __init__(self, input, expected, family):
+    def __init__(self, input, expected, family, directory = "tests"):
         super(TestRunner, self).__init__()
         self.input = input
         self.expected = expected
@@ -14,6 +14,7 @@ class TestRunner(object):
         self.results = defaultdict(list)
         self.exercises = []
         self.runs = 25
+        self.directory = directory
 
     # def execute(self):
     #     raise "Instancias no configuradas. Chris es puto."
@@ -26,22 +27,24 @@ class TestRunner(object):
 
         dic = {}
 
-        input_filename = "tests/test_{family}_{n}_{m}_{c}_{expected}.in".format(
+        input_filename = "{directory}/test_{family}_{n}_{m}_{c}_{expected}.in".format(
+            directory=self.directory,
             family=family,
             n=n,
             m=m,
             c=c,
             expected=expected)
 
-        if not os.path.exists("tests"):
-            os.makedirs("tests")
+        if not os.path.exists(self.directory):
+            os.makedirs(self.directory)
 
         if not os.path.isfile(input_filename):
             with open(input_filename, "w") as t:
                 t.write(input)
 
         for exercise in self.exercises:
-            output_filename = "tests/test_{exercise}_{family}_{n}_{m}_{c}_{expected}.out".format(
+            output_filename = "{directory}/test_{exercise}_{family}_{n}_{m}_{c}_{expected}.out".format(
+                directory=self.directory,
                 exercise=exercise,
                 family=family,
                 n=n,
@@ -113,7 +116,7 @@ class GreedyTest(TestRunner):
 
 class TwoListTest(TestRunner):
     def __init__(self, input, expected, family):
-        super(TwoListTest, self).__init__(input, expected, family)
+        super(TwoListTest, self).__init__(input, expected, family, "two-list")
         self.exercises = [1]
         self.runs = 25
 
@@ -135,26 +138,24 @@ class TwoListTest(TestRunner):
                     print "Error occurred. Relevant information: ", result
 
 
-class BacktrackingTest(object):
+class BacktrackingTest(TestRunner):
     def __init__(self, input, expected, family):
-        super(BacktrackingTest, self).__init__(input, expected, family)
-        self.original_input = input
+        super(BacktrackingTest, self).__init__(input, expected, family, "backtracking")
+        self.exercises = [2]
+        self.runs = 25
 
     def execute(self):
-        for n in xrange(5, 206):
-            for k in xrange(2, n):
+        for n in xrange(5, 12):
+            for m in xrange((n-1)*(n-2)/2 + 1, n*(n-1)/2, 1):
+                for c in xrange(n/2, n):
+                    output = super(BacktrackingTest, self).run_instance(n, m, c)
 
-                self.input = partial(self.original_input, top=k)
-                output = self.run_instance(n)
-
-                for key in output:
-                    self.results[key].append(output[key])
-        return
+                    for key in output:
+                        self.results[key].append(output[key])
 
     def __print_results(self):
         for exercise in self.exercises:
-            print "------ Statistics for exercise {exercise}, {family}:".format(exercise=exercise, family=self.family)
-            print "Valid Colorings: %d" % len(filter(lambda x: x['conflicts'] == 0, self.results[exercise]))
-            print "Invalid Colorings: %d" % len(filter(lambda x: x['conflicts'] != 0, self.results[exercise]))
-            print "Maximum Distance from Expected Number of Colors: %d\n" % max(map(lambda x: x['unique_colors'] - x['expected'], self.results[exercise]))
+            for result in self.results[exercise]:
+                if result['conflicts'] != 0:
+                    print "Error occurred. Relevant information: ", result
 
