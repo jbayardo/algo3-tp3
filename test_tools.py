@@ -16,16 +16,8 @@ class TestRunner(object):
         self.runs = 25
         self.directory = directory
 
-    # def execute(self):
-    #     raise "Instancias no configuradas. Chris es puto."
-    #     return
-
     def run_instance(self, n, m, c, top = None):
-        try:
-            input = self.input(n, m, c, top)
-        except:
-            return
-
+        input = self.input(n, m, c, top)
         expected = self.expected(n)
         family = self.family
 
@@ -103,7 +95,10 @@ class GreedyTest(TestRunner):
             b = n*(n-1)
             for m in xrange(a/2 + 1, b/2):
                 for c in xrange(4, n):
-                    output = self.run_instance(n, m, c)
+                    try:
+                        output = self.run_instance(n, m, c)
+                    except Exception:
+                        continue
 
                     for key in output:
                         self.results[key].append(output[key])
@@ -142,7 +137,10 @@ class TwoListTest(TestRunner):
                     delta = max(abs(higher - lower), 1)
 
                 for c in xrange(lower, higher, delta):
-                    output = super(TwoListTest, self).run_instance(n, m, c, 2)
+                    try:
+                        output = super(TwoListTest, self).run_instance(n, m, c, 2)
+                    except ValueError:
+                        continue
 
                     for key in output:
                         self.results[key].append(output[key])
@@ -180,7 +178,10 @@ class BacktrackingTest(TestRunner):
                     delta = max(abs(higher - lower)/2, 1)
 
                 for c in xrange(lower, higher, delta):
-                    output = super(BacktrackingTest, self).run_instance(n, m, c)
+                    try:
+                        output = super(BacktrackingTest, self).run_instance(n, m, c)
+                    except ValueError:
+                        continue
 
                     for key in output:
                         self.results[key].append(output[key])
