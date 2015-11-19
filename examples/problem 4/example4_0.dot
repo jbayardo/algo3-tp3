@@ -1,0 +1,8 @@
+graph G { 
+	0 -- 1 -- 2 -- 3;
+	3 -- 0;
+	0 [style=filled, fillcolor=green]
+	1 [style=filled, fillcolor=green]
+	2 [style=filled, fillcolor=green]
+	3 [style=filled, fillcolor=green]
+}
