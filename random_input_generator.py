@@ -6,20 +6,25 @@ from itertools import combinations
 def print_graph(head, edges, colors):
     color_out = []
 
-    color_out = [" ".join(["%d" % len(vals)] + ["%d" % x for x in vals])
-                 for vals in colors.values()]
+    color_out = [" ".join(["%d" % len(vals)] + ["%d" % x for x in vals]) + "\n"
+                 for vals in colors]
 
-    return head + "\n".join(color_out) + "\n" + edges
+    return head + "".join(color_out) + edges
 
 
 def header(n, m, c):
     return "%d %d %d\n" % (n, m, c)
 
 
-def get_colors(n, prefix=[], top=None):
-    return {k: set((prefix + [randint(0, n-1)
-            for _ in xrange(randint(0, n-1))])[:top])
-            for k in xrange(n)}
+def get_colors(n, c, prefix=[], top=None):
+    if top is None:
+        return [set(prefix + [randint(0, c-1)
+                for _ in xrange(randint(1, c-1))])
+                for _ in xrange(n)]
+    else:
+        return [set((prefix + [randint(0, c-1)
+                for _ in xrange(randint(1, c-1))])[:top])
+                for _ in xrange(n)]
 
 
 def random_input(n=None, m=None, c=None, top=None):
@@ -34,7 +39,7 @@ def random_input(n=None, m=None, c=None, top=None):
     if c is None:
         c = n
 
-    colors = get_colors(c, [], top)
+    colors = get_colors(n, c, [], top)
 
     all_edges = list(combinations(xrange(n), 2))
 
@@ -45,8 +50,8 @@ def random_input(n=None, m=None, c=None, top=None):
     return print_graph(header(n, m, c), edges, colors)
 
 
-def complete_graph(n):
-    colors = {k: range(n) for k in xrange(n)}
+def complete_graph(n, m=None, c=None, top=None):
+    colors = [range(n) for _ in xrange(n)]
 
     all_edges = list(combinations(xrange(n), 2))
 
@@ -61,7 +66,7 @@ def star_graph(n, m=None, c=None, top=None):
     if c is None:
         c = n
 
-    colors = get_colors(c, [1, 2], top)
+    colors = get_colors(n, c, [1, 2], top)
 
     edges = ["%d %d" % (x, n-1) for x in xrange(n-1)]
     if m is None:
@@ -78,7 +83,7 @@ def complete_bipartite(n, m=None, c=None, top=None):
     if c is None:
         c = n
 
-    colors = get_colors(c, [1, 2], top)
+    colors = get_colors(n, c, [1, 2], top)
 
     A = [x for x in xrange(n) if x & 1]
     B = [x for x in xrange(n) if not(x & 1)]
@@ -96,7 +101,7 @@ def complete_bipartite(n, m=None, c=None, top=None):
 def cycle_graph(n, m=None, c=None, top=None):
     if c is None:
         c = n
-    colors = get_colors(c, [1, 2, 3], top)
+    colors = get_colors(n, c, [1, 2, 3], top)
 
     edges = ["%d %d" % (x, x+1) for x in xrange(n-1)] + ["%d %d" % (n-1, 0)]
     if m is None:
@@ -114,7 +119,7 @@ def wheel_graph(n, m=None, c=None, top=None):
     if c is None:
         c = n
 
-    colors = get_colors(c, [1, 2, 3, 4], top)
+    colors = get_colors(n, c, [1, 2, 3, 4], top)
 
     edges = ["%d %d" % (x, x+1) for x in xrange(n-2)] + \
             ["%d %d" % (n-2, 0)] + ["%d %d" % (n-1, x) for x in xrange(n-1)]
@@ -144,7 +149,7 @@ def binary_balanced_tree(n, m=None, c=None, top=None):
     if c is None:
         c = n
 
-    colors = get_colors(c, [1, 2], top)
+    colors = get_colors(n, c, [1, 2], top)
 
     edges = ["%d %d" % (min(e), max(e)) for e in _tree_edges(n)]
 
