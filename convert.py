@@ -9,13 +9,13 @@ import pandas as pd
 dataset = []
 
 #files = map(lambda x: 'experiments/'+x, os.listdir('experiments'))
-files = map(lambda x: 'tests/'+x, os.listdir('tests'))
+files = map(lambda x: 'backtracking/'+x, os.listdir('backtracking'))
 
 for fname in files:
     if fname[-3:] != 'sts':
         continue
 
-    matches = re.match(r"^(experiments|tests)\/test_([1-5]+)_(.*)_([0-9]+)_([0-9]+)_([0-9]+)_([0-9]+)?\.sts$", fname)
+    matches = re.match(r"^(.*)\/test_([1-5]+)_(.*)_([0-9]+)_([0-9]+)_([0-9]+)_([0-9]+)?\.sts$", fname)
 
     method = int(matches.group(2).strip())
     family = matches.group(3).strip()
@@ -31,7 +31,12 @@ for fname in files:
     output = map(str.split, map(str.strip, output.strip().split('\n')))
 
     # Data coming from output
-    colors = map(int, output[0])
+    try:
+        colors = map(int, output[0])
+    except:
+        print "Error in file", fname
+        continue
+
     unique_colors = set(colors)
     conflicts = int(output[1][0])
     specific = map(int, output[2])
