@@ -122,8 +122,22 @@ class TwoListTest(TestRunner):
 
     def execute(self):
         for n in xrange(50, 1000, 50):
-            for m in xrange((n-1)*(n-2)/2 + 1, n*(n-1)/2, 60):
-                for c in xrange(n/2, n, 5):
+            lower = (n-1)*(n-2)/2 + 1
+            higher = n*(n-1)/2
+            delta = abs(higher - lower)/10
+
+            if delta == 0:
+                delta = abs(higher - lower)
+
+            for m in xrange(lower, higher, delta):
+                lower = n/2
+                higher = n
+                delta = abs(higher - lower)/2
+
+                if delta == 0:
+                    delta = abs(higher - lower)
+
+                for c in xrange(lower, higher, delta):
                     output = super(TwoListTest, self).run_instance(n, m, c, 2)
 
                     for key in output:
@@ -146,8 +160,22 @@ class BacktrackingTest(TestRunner):
 
     def execute(self):
         for n in xrange(5, 12):
-            for m in xrange((n-1)*(n-2)/2 + 1, n*(n-1)/2, 1):
-                for c in xrange(n/2, n):
+            lower = (n-1)*(n-2)/2 + 1
+            higher = n*(n-1)/2
+            delta = abs(higher - lower)/10
+
+            if delta == 0:
+                delta = abs(higher - lower)/2
+
+            for m in xrange(lower, higher, delta):
+                lower = n/2
+                higher = n
+                delta = abs(higher - lower)/10
+
+                if delta == 0:
+                    delta = abs(higher - lower)/2
+
+                for c in xrange(lower, higher, delta):
                     output = super(BacktrackingTest, self).run_instance(n, m, c)
 
                     for key in output:
