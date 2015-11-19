@@ -51,15 +51,18 @@ def random_input(n, m, c, top=None):
 
 
 def complete_graph(n, m, c, top=None):
-    colors = [range(n) for _ in xrange(n)]
+    if c < n:
+        raise ValueError("minimo n colores diferentes")
     if c is None:
         raise ValueError("c no puede ser None")
+    if m != (n*(n-1))/2:
+        raise ValueError("m no compatible para grafo completo")
+
+    colors = [range(n) for _ in xrange(n)]
 
     all_edges = list(combinations(xrange(n), 2))
 
     edges = ["%d %d" % (u, v) for (u, v) in all_edges]
-    if m != len(edges):
-        raise ValueError("m no compatible para grafo completo")
     edges = "\n".join(edges)
 
     return print_graph(header(n, m, c), edges, colors)
@@ -127,7 +130,8 @@ def cycle_graph(n, m, c, top=None):
 
 
 def wheel_graph(n, m, c, top=None):
-    n = max(n, 4)
+    if n < 4:
+        raise ValueError
 
     if c is None:
         raise ValueError("c no puede ser None")
