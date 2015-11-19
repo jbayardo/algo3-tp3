@@ -6,7 +6,7 @@ from functools import partial
 
 
 class TestRunner(object):
-    def __init__(self, input, expected, family, directory = "tests"):
+    def __init__(self, input, expected, family, directory="tests"):
         super(TestRunner, self).__init__()
         self.input = input
         self.expected = expected
@@ -16,7 +16,7 @@ class TestRunner(object):
         self.runs = 25
         self.directory = directory
 
-    def run_instance(self, n, m, c, top = None):
+    def run_instance(self, n, m, c, top=None):
         input = self.input(n, m, c, top)
         expected = self.expected(n)
         family = self.family
@@ -91,9 +91,8 @@ class GreedyTest(TestRunner):
 
     def execute(self):
         for n in xrange(5, 100):
-            b = n*(n-1)
-            for m in xrange(0, 1 + b/2):
-                for c in xrange(4, n):
+            for m in xrange(0, 1 + (n*(n-1))/2):
+                for c in xrange(4, n+1):
                     try:
                         output = self.run_instance(n, m, c)
                     except ValueError:
@@ -109,7 +108,7 @@ class GreedyTest(TestRunner):
             print "------ Statistics for exercise {exercise}, {family}:".format(exercise=exercise, family=self.family)
             print "Valid Colorings: %d" % len(filter(lambda x: x['conflicts'] == 0, self.results[exercise]))
             print "Invalid Colorings: %d" % len(filter(lambda x: x['conflicts'] != 0, self.results[exercise]))
-            #print "Maximum Distance from Expected Number of Colors: %d\n" % max(map(lambda x: x['unique_colors'] - x['expected'], self.results[exercise]))
+            print "Maximum Distance from Expected Number of Colors: %d\n" % max(map(lambda x: x['unique_colors'] - x['expected'], self.results[exercise]))
 
 
 class TwoListTest(TestRunner):
@@ -165,7 +164,7 @@ class BacktrackingTest(TestRunner):
             higher = 1 + n*(n-1)/2
 
             for m in xrange(lower, higher):
-                for c in xrange(4, n):
+                for c in xrange(4, n+1):
                     try:
                         output = self.run_instance(n, m, c)
                     except ValueError:

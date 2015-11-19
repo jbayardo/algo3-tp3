@@ -58,7 +58,7 @@ def complete_graph(n, m, c, top=None):
     if m != (n*(n-1))/2:
         raise ValueError("m no compatible para grafo completo")
 
-    colors = [range(n) for _ in xrange(n)]
+    colors = [range(c) for _ in xrange(n)]
 
     all_edges = list(combinations(xrange(n), 2))
 
