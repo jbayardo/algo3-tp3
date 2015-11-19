@@ -74,7 +74,7 @@ def star_graph(n, m=None, c=None, top=None):
         m = len(edges)
     else:
         if m > len(edges):
-            raise Exception
+            raise ValueError("m > maximo m posible")
         edges = edges[:m]
 
     edges = "\n".join(edges)
@@ -96,7 +96,7 @@ def complete_bipartite(n, m=None, c=None, top=None):
         m = len(edges)
     else:
         if m > len(edges):
-            raise Exception
+            raise ValueError("m > maximo m posible")
         edges = edges[:m]
     edges = "\n".join(edges)
 
@@ -113,7 +113,7 @@ def cycle_graph(n, m=None, c=None, top=None):
         m = len(edges)
     else:
         if m > len(edges):
-            raise Exception
+            raise ValueError("m > maximo m posible")
         edges = edges[:m]
 
     edges = "\n".join(edges)
@@ -134,7 +134,7 @@ def wheel_graph(n, m=None, c=None, top=None):
         m = len(edges)
     else:
         if m > len(edges):
-            raise Exception
+            raise ValueError("m > maximo m posible")
         edges = edges[:m]
 
     return print_graph(header(n, m, c), "\n".join(edges), colors)
@@ -166,7 +166,7 @@ def binary_balanced_tree(n, m=None, c=None, top=None):
         m = len(edges)
     else:
         if m > len(edges):
-            raise Exception
+            raise ValueError("m > maximo m posible")
         edges = edges[:m]
 
     edges = "\n".join(edges)
