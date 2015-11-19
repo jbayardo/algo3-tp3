@@ -37,6 +37,8 @@ class TestRunner(object):
         if not os.path.isfile(input_filename):
             with open(input_filename, "w") as t:
                 t.write(input)
+        else:
+            raise ValueError("File already exists. Experiment was already run.")
 
         for exercise in self.exercises:
             output_filename = "{directory}/test_{exercise}_{family}_{n}_{m}_{c}_{expected}.out".format(
@@ -96,7 +98,8 @@ class GreedyTest(TestRunner):
                 for c in xrange(4, n):
                     try:
                         output = self.run_instance(n, m, c)
-                    except ValueError:
+                    except ValueError, e:
+                        print e
                         continue
 
                     for key in output:
@@ -160,7 +163,7 @@ class BacktrackingTest(TestRunner):
         self.runs = 25
 
     def execute(self):
-        for n in xrange(5, 30):
+        for n in xrange(5, 25):
             lower = 0
             higher = 1 + n*(n-1)/2
 
@@ -168,7 +171,8 @@ class BacktrackingTest(TestRunner):
                 for c in xrange(4, n):
                     try:
                         output = self.run_instance(n, m, c)
-                    except ValueError:
+                    except ValueError, e:
+                        print e
                         continue
 
                     for key in output:
