@@ -19,9 +19,9 @@ class TestRunner(object):
     #     raise "Instancias no configuradas. Chris es puto."
     #     return
 
-    def run_instance(self, n, m, c):
+    def run_instance(self, n, m, c, top = None):
         expected = self.expected(n)
-        input = self.input(n, m, c)
+        input = self.input(n, m, c, top)
         family = self.family
 
         dic = {}
@@ -119,9 +119,9 @@ class TwoListTest(TestRunner):
 
     def execute(self):
         for n in xrange(50, 1000, 50):
-            for m in xrange((n-1)*(n-2)/2 + 1, n*(n-1)/2):
-                for c in xrange(1, 2):
-                    output = super(TwoListTest, self).run_instance(n, m, c)
+            for m in xrange((n-1)*(n-2)/2 + 1, n*(n-1)/2, 60):
+                for c in xrange(n/2, n, 5):
+                    output = super(TwoListTest, self).run_instance(n, m, c, 2)
 
                     for key in output:
                         self.results[key].append(output[key])

@@ -44,8 +44,7 @@ def test_random():
                       lambda x: x,
                       "random")
 
-all_tests = [test_random,
-             test_complete,
+all_tests = [test_complete,
              test_bipartite,
              test_cycle,
              test_wheel,
