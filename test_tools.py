@@ -94,7 +94,7 @@ class GreedyTest(TestRunner):
         self.runs = 25
 
     def execute(self):
-        for n in xrange(50, 1000, 50):
+        for n in xrange(5, 100):
             a = (n-1)*(n-2)
             b = n*(n-1)
             for m in xrange(a/2 + 1, b/2):
