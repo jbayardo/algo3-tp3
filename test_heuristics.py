@@ -50,9 +50,9 @@ all_tests = [
             test_cycle,
             test_tree,
             test_star,
-            # test_wheel,
-            # test_random,
-            # test_complete,
+            test_wheel,
+            test_random,
+            test_complete,
             ]
 
 if __name__ == '__main__':
