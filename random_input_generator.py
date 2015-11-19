@@ -189,7 +189,3 @@ def no_edges_graph(n):
     m = 0
 
     return print_graph(header(n, m, n), edges, colors)
-
-
-if __name__ == '__main__':
-    print random_input(150)
