@@ -1,10 +1,11 @@
 import os.path
 from collections import defaultdict
 import subprocess as s
+from functools import partial
 
 
 class TestRunner(object):
-    """docstring for TestRunner"""
+    """Base Model for tests"""
     def __init__(self, input, expected, family):
         super(TestRunner, self).__init__()
         self.input = input
@@ -79,7 +80,7 @@ class TestRunner(object):
 
 
 class GreedyTest(TestRunner):
-    """docstring for GreedyTest"""
+    """Test runner for greedy heuristics"""
     def __init__(self, input, expected, family):
         super(GreedyTest, self).__init__(input, expected, family)
         self.exercises = [3, 4, 5]
@@ -106,7 +107,8 @@ class DecisionTest(object):
     def execute(self):
         for n in xrange(5, 206):
             for k in xrange(2, n):
-                self.input = lambda x: self.original_input(x, k)
+
+                self.input = partial(self.original_input, top=k)
                 output = self.__run_instance(n)
 
                 for key in output:

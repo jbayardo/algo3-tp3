@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from random import randint, shuffle, randrange
+from random import randint, shuffle
 from itertools import combinations
 
 
@@ -80,8 +80,8 @@ def complete_bipartite(n, m=None, c=None, top=None):
 
     colors = get_colors(c, [1, 2], top)
 
-    A = [x for x in xrange(n) if x&1]
-    B = [x for x in xrange(n) if not(x&1)]
+    A = [x for x in xrange(n) if x & 1]
+    B = [x for x in xrange(n) if not(x & 1)]
 
     edges = ["%d %d" % (x, y) for x in A for y in B]
     if m is None:
