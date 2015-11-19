@@ -114,18 +114,16 @@ def complete_bipartite(n, m, c, top=None):
 
 
 def cycle_graph(n, m, c, top=None):
+    lim = (2 + (n & 1))
 
-    if c is None:
-        raise ValueError("c no puede ser None")
-    colors = get_colors(n, c, [0, 1, 2], top)
+    if c < lim:
+        raise ValueError("no tiene solucion")
+    colors = get_colors(n, c, [0, 1, 2][:lim], top)
 
     edges = ["%d %d" % (x, x+1) for x in xrange(n-1)] + ["%d %d" % (n-1, 0)]
-    if m is None:
-        m = len(edges)
-    else:
-        if m != len(edges):
-            raise ValueError("m > maximo m posible")
-        edges = edges[:m]
+
+    if m != len(edges):
+        raise ValueError("m no existente para cycle correcto")
 
     edges = "\n".join(edges)
 
@@ -136,19 +134,16 @@ def wheel_graph(n, m, c, top=None):
     if n < 4:
         raise ValueError
 
-    if c is None:
-        raise ValueError("c no puede ser None")
+    if c < 4:
+        raise ValueError("c no coloreable")
 
     colors = get_colors(n, c, [0, 1, 2, 3], top)
 
     edges = ["%d %d" % (x, x+1) for x in xrange(n-2)] + \
             ["%d %d" % (n-2, 0)] + ["%d %d" % (n-1, x) for x in xrange(n-1)]
-    if m is None:
-        m = len(edges)
-    else:
-        if m != len(edges):
-            raise ValueError("m > maximo m posible")
-        edges = edges[:m]
+
+    if m != len(edges):
+        raise ValueError("m no existente para wheel correcto")
 
     return print_graph(header(n, m, c), "\n".join(edges), colors)
 
