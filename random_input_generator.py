@@ -58,9 +58,8 @@ def complete_graph(n, m, c, top=None):
     all_edges = list(combinations(xrange(n), 2))
 
     edges = ["%d %d" % (u, v) for (u, v) in all_edges]
-    if m is not None and m != len(edges):
+    if m != len(edges):
         raise ValueError("m no compatible para grafo completo")
-    m = len(edges)
     edges = "\n".join(edges)
 
     return print_graph(header(n, m, c), edges, colors)
