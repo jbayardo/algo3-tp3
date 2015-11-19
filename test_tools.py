@@ -163,21 +163,13 @@ class BacktrackingTest(TestRunner):
     def execute(self):
         for n in xrange(5, 30):
             lower = (n-1)*(n-2)/2 + 1
-            higher = n*(n-1)/2
-            delta = abs(higher - lower)/10
+            higher = n*(n-1)/2 + 1
 
-            if delta == 0:
-                delta = max(abs(higher - lower)/2, 1)
-
-            for m in xrange(lower, higher, delta):
+            for m in xrange(lower, higher):
                 lower = max(4, n/2)
-                higher = n
-                delta = abs(higher - lower)/10
+                higher = n + 1
 
-                if delta == 0:
-                    delta = max(abs(higher - lower)/2, 1)
-
-                for c in xrange(lower, higher, delta):
+                for c in xrange(lower, higher):
                     try:
                         output = super(BacktrackingTest, self).run_instance(n, m, c)
                     except ValueError:
