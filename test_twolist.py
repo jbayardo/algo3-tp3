@@ -1,6 +1,7 @@
 #!/usr/bin/pypy
 from random_input_generator import *
 from test_tools import TwoListTest
+from multiprocessing import Process
 
 
 def test_complete():
@@ -52,4 +53,6 @@ all_tests = [test_complete,
              test_star]
 
 if __name__ == '__main__':
-    map(lambda t: t().execute(), all_tests)
+    procs = [Process(target=t().execute) for t in all_tests]
+    map(lambda p: p.start(), procs)
+    map(lambda p: p.join(), procs)
