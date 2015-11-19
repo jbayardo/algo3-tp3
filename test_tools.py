@@ -97,7 +97,7 @@ class GreedyTest(TestRunner):
                 for c in xrange(4, n):
                     try:
                         output = self.run_instance(n, m, c)
-                    except Exception:
+                    except ValueError:
                         continue
 
                     for key in output:
