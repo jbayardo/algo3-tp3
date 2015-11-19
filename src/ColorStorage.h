@@ -96,6 +96,7 @@ public:
 
         return colors[index];
     }
+
     std::size_t inline total_number() const {
     	return _total_number;
     }

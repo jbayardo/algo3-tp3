@@ -1,5 +1,4 @@
 #!/usr/bin/pypy
-
 from random_input_generator import *
 from test_tools import GreedyTest
 

@@ -16,23 +16,21 @@ class TestRunner(object):
         self.runs = 25
 
     def execute(self):
-        for n in xrange(5, 206):
-            output = self.__run_instance(n)
-
-            for key in output:
-                self.results[key].append(output[key])
+        raise "Instancias no configuradas. Chris es puto."
         return
 
-    def __run_instance(self, size):
-        expected = self.expected(size)
-        input = self.input(size)
+    def __run_instance(self, n, m, c):
+        expected = self.expected(n, m, c)
+        input = self.input(n, m, c)
         family = self.family
 
         dic = {}
 
-        input_filename = "tests/test_{family}_{size}_{expected}.in".format(
+        input_filename = "tests/test_{family}_{n}_{m}_{c}_{expected}.in".format(
             family=family,
-            size=size,
+            n=n,
+            m=m,
+            c=c,
             expected=expected)
 
         if not os.path.exists("tests"):
@@ -43,10 +41,12 @@ class TestRunner(object):
                 t.write(input)
 
         for exercise in self.exercises:
-            output_filename = "tests/test_{exercise}_{family}_{size}_{expected}.out".format(
+            output_filename = "tests/test_{exercise}_{family}_{n}_{m}_{c}_{expected}.out".format(
                 exercise=exercise,
                 family=family,
-                size=size,
+                n=n,
+                m=m,
+                c=c,
                 expected=expected)
 
             command = "./algo3_tp3 {exercise} {input_filename} {output_filename} {runs}".format(
@@ -62,7 +62,11 @@ class TestRunner(object):
 
             dic[exercise] = {
                 # Tamano de la instancia
-                'size': size,
+                'n': n,
+                # Aristas de la instancia
+                'm': m,
+                # Cantidad de colores total
+                'c': c,
                 # X(G) para el grafo
                 'expected': expected,
                 # Colores utilizados
@@ -86,17 +90,23 @@ class GreedyTest(TestRunner):
         self.exercises = [3, 4, 5]
         self.runs = 25
 
+    def execute(self):
+        for n in xrange(50, 1000, 50):
+            for m in xrange((n-1)*(n-2)/2 + 1, n*(n-1)/2):
+                for c in xrange(self.expected(n), n):
+                    output = self.__run_instance(n, m, c)
+
+                    for key in output:
+                        self.results[key].append(output[key])
+
+        self.__print_results()
+
     def __print_results(self):
         for exercise in self.exercises:
             print "------ Statistics for exercise {exercise}, {family}:".format(exercise=exercise, family=self.family)
             print "Valid Colorings: %d" % len(filter(lambda x: x['conflicts'] == 0, self.results[exercise]))
             print "Invalid Colorings: %d" % len(filter(lambda x: x['conflicts'] != 0, self.results[exercise]))
-            print "Maximum Distance from Expected Number of Colors: %d\n" % max(map(lambda x: x['unique_colors'] - x['expected'], self.results[exercise]))
-
-    def execute(self):
-        super(GreedyTest, self).execute()
-        self.__print_results()
-
+            #print "Maximum Distance from Expected Number of Colors: %d\n" % max(map(lambda x: x['unique_colors'] - x['expected'], self.results[exercise]))
 
 class DecisionTest(object):
     """docstring for DecisionTest"""
@@ -121,4 +131,5 @@ class DecisionTest(object):
             print "Valid Colorings: %d" % len(filter(lambda x: x['conflicts'] == 0, self.results[exercise]))
             print "Invalid Colorings: %d" % len(filter(lambda x: x['conflicts'] != 0, self.results[exercise]))
             print "Maximum Distance from Expected Number of Colors: %d\n" % max(map(lambda x: x['unique_colors'] - x['expected'], self.results[exercise]))
+
 
