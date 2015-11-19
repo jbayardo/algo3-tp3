@@ -15,12 +15,12 @@ class TestRunner(object):
         self.exercises = []
         self.runs = 25
 
-    def execute(self):
-        raise "Instancias no configuradas. Chris es puto."
-        return
+    # def execute(self):
+    #     raise "Instancias no configuradas. Chris es puto."
+    #     return
 
-    def __run_instance(self, n, m, c):
-        expected = self.expected(n, m, c)
+    def run_instance(self, n, m, c):
+        expected = self.expected(n)
         input = self.input(n, m, c)
         family = self.family
 
@@ -92,9 +92,11 @@ class GreedyTest(TestRunner):
 
     def execute(self):
         for n in xrange(50, 1000, 50):
-            for m in xrange((n-1)*(n-2)/2 + 1, n*(n-1)/2):
-                for c in xrange(self.expected(n), n):
-                    output = self.__run_instance(n, m, c)
+            a = (n-1)*(n-2)
+            b = n*(n-1)
+            for m in xrange(a/2 + 1, b/2):
+                for c in xrange(2, n):
+                    output = self.run_instance(n, m, c)
 
                     for key in output:
                         self.results[key].append(output[key])
