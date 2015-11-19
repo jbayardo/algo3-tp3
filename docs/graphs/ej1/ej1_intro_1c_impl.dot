@@ -1,0 +1,5 @@
+digraph graphname {
+	node [shape=circle size=.5 fontname=monokai color=blue4];
+	rankdir="LR";
+	A¬a -> Aa;
+}

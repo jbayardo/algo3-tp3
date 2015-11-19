@@ -1,0 +1,5 @@
+graph graphname {
+	node [shape=circle fontname=monokai color=blue4];
+	rankdir="LR";
+	A[label = "A \n [azul, rojo]"];
+}
