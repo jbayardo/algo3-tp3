@@ -1,8 +1,10 @@
 graph G { 
 	0 -- 1 -- 2 -- 3;
 	3 -- 0;
-	0 [style=filled, fillcolor=green]
-	1 [style=filled, fillcolor=green]
+	{rank=same 0 1}
+	{rank=same 3 2}
+	0 [style=filled, fillcolor=red]
+	1 [style=filled, fillcolor=yellow]
 	2 [style=filled, fillcolor=green]
 	3 [style=filled, fillcolor=green]
 }

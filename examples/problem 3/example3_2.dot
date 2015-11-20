@@ -6,6 +6,8 @@ graph G {
 	0 -- 1;
 	0 -- 4;
 	1 -- 4;
+	{rank=same 0 1}
+	{rank=same 2 3}
     1 [style=filled, fillcolor=green]
 	0 [style=filled, fillcolor=red]
 }
