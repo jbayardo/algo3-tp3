@@ -6,15 +6,11 @@ def copy_filtered_headers(filename):
         with open("copy_"+filename, "w") as destiny:
             header = source.readline()
             destiny.write(header)
-            while True:
-                line_s = source.readline()
-                if len(line_s) == 0:
-                    break
-                elif line_s == header:
+            for line_s in source:
+                if line_s == header:
                     continue
                 else:
                     destiny.write(line_s)
-
     print "copy_"+filename
 
 
