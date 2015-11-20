@@ -41,19 +41,19 @@ bool isAdmissible(const Graph &graph, const Coloring &current, std::size_t node,
 
 Coloring coloringExists(const Graph &graph, const ColorStorage &colors, Coloring current, std::size_t node) {
     if (current.complete()) {
+#ifndef PODAS
+        if (current.conflicts_exists()) {
+            throw std::runtime_error("Existen conflictos!!");
+        }
+#endif
         return current;
     } else {
         // Chequear si es 2 list coloring
+#ifdef PODAS
         if (is2ListColoring(graph, colors, current)) {
             ColorStorage storage = transform(graph, colors, current);
             Problem1 instance(graph, storage);
-            Coloring output = instance.solve();
-
-            if (!output.complete()) {
-                throw std::runtime_error("No encontramos coloreo");
-            } else {
-                return output;
-            }
+            return instance.solve();
         }
 
         // Probamos con todos los colores
@@ -68,9 +68,19 @@ Coloring coloringExists(const Graph &graph, const ColorStorage &colors, Coloring
                 }
             }
         }
-
-        throw std::runtime_error("No encontramos coloreo");
+#else
+        for (auto &colour : colors.get(node)) {
+            current.set(node, colour);
+            try {
+                return coloringExists(graph, colors, current, node + 1);
+            } catch (...) {
+                continue;
+            }
+        }
+#endif
     }
+
+    throw std::runtime_error("Se fue todo a la chota");
 }
 
 Coloring Problem::solve2() const {

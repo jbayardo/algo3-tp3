@@ -1,0 +1,15 @@
+graph G { 
+	2 -- 3 -- 1;
+	2 -- 1;
+	2 -- 0 -- 1;
+	4 -- 0;
+	4 -- 1;
+	{rank=same 2 3}
+	{rank=same 0 1}
+	{rank=same 4}
+	0 [style=filled, fillcolor=blue]
+	1 [style=filled, fillcolor=green]
+	2 [style=filled, fillcolor=green]
+	3 [style=filled, fillcolor=green]
+	4 [style=filled, fillcolor=green]
+}

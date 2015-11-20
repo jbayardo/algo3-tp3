@@ -128,6 +128,24 @@ public:
         return (colors[index] = color);
     }
 
+    /*! Chequea si existe algun conflicto
+     *  @return true si hay algun conflicto, false otherwise
+     *  @complexity O(N²)
+     */
+    inline bool conflicts_exists() const {
+        for (std::size_t v = 0; v < graph.size(); v++) {
+            if (!isset(v)) {
+                continue;
+            }
+            for (auto& n : graph.neighbours(v)) {
+                if ((v < n) && isset(n) && (get(n) == get(v))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /*! Descolorea un nodo
      *
      * @param index número de nodo
@@ -137,6 +155,7 @@ public:
     inline std::size_t unset(std::size_t index) {
         return set(index, uncolored());
     }
+
 
     /*! Destructor
      * @complexity O(1)
