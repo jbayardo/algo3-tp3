@@ -64,9 +64,9 @@ Coloring coloringExists(const Graph &graph, const ColorStorage &colors, Coloring
             }
         }
 
-        throw std::runtime_error("Se fue todo a la chota");
         #else
         for (auto &colour : colors.get(node)) {
+            current.set(node, colour);
             try {
                 return coloringExists(graph, colors, current, node + 1);
             } catch (...) {
@@ -75,6 +75,7 @@ Coloring coloringExists(const Graph &graph, const ColorStorage &colors, Coloring
         }
         #endif
 
+        throw std::runtime_error("Se fue todo a la chota");
     }
 }
 
