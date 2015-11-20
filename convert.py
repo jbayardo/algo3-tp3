@@ -1,15 +1,20 @@
 #!/home/julian/Software/anaconda/bin/python
-import scipy
 import os
 import re
 import pandas as pd
 # Este script larga output.csv, con el formato que buscamos para que lo tome
 # el software para graficar, Tableau.
 
-dataset = []
+directories = ['backtracking_podas', 'backtracking_sin_podas', 'test_heuristics', 'two_list_tests']
 
-#files = map(lambda x: 'experiments/'+x, os.listdir('experiments'))
-files = map(lambda x: 'backtracking/'+x, os.listdir('backtracking'))
+# Obtenemos archivos a mirar
+files = []
+
+for directory in directories:
+    files += map(lambda x: directory+'/'+x, os.listdir(directory))
+
+# Pasamos por todos los archivos y armamos el dataset
+dataset = []
 
 for fname in files:
     if fname[-3:] != 'sts':
@@ -17,6 +22,7 @@ for fname in files:
 
     matches = re.match(r"^(.*)\/test_([1-5]+)_(.*)_([0-9]+)_([0-9]+)_([0-9]+)_([0-9]+)?\.sts$", fname)
 
+    batch = matches.group(1).strip()
     method = int(matches.group(2).strip())
     family = matches.group(3).strip()
     n = int(matches.group(4).strip())
@@ -60,6 +66,7 @@ for fname in files:
 
         for run, measure in enumerate(line[1]):
             output = {
+                'batch': batch,
                 'family': family,
                 'method': method,
                 'n': n,

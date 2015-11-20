@@ -550,60 +550,6 @@
         <cols>[textscan.42325.497135729165].[none:n:ok]</cols>
       </table>
     </worksheet>
-    <worksheet name='Sheet 7'>
-      <table>
-        <view>
-          <datasources>
-            <datasource caption='output' name='textscan.42325.497135729165' />
-          </datasources>
-          <datasource-dependencies datasource='textscan.42325.497135729165'>
-            <column caption='[Unique Colors]-[Expected]' datatype='integer' name='[Calculation_4291119154444895]' role='measure' type='quantitative' user:unnamed='Sheet 7'>
-              <calculation class='tableau' formula='[unique_colors]-[expected]' />
-            </column>
-            <column caption='Family' datatype='string' name='[family]' role='dimension' type='nominal'>
-              <aliases>
-                <alias key='&quot;bbtree&quot;' value='Árbol Binario' />
-                <alias key='&quot;bipartite&quot;' value='Bipartito' />
-                <alias key='&quot;complete&quot;' value='Completo' />
-                <alias key='&quot;cycle&quot;' value='Ciclo' />
-                <alias key='&quot;star&quot;' value='Estrella' />
-                <alias key='&quot;wheel&quot;' value='Rueda' />
-              </aliases>
-            </column>
-            <column aggregation='Sum' caption='M' datatype='integer' name='[m]' role='dimension' type='ordinal'>
-            </column>
-            <column-instance column='[Calculation_4291119154444895]' derivation='None' name='[none:Calculation_4291119154444895:qk]' pivot='key' type='quantitative' />
-            <column-instance column='[family]' derivation='None' name='[none:family:nk]' pivot='key' type='nominal' />
-            <column-instance column='[m]' derivation='None' name='[none:m:ok]' pivot='key' type='ordinal' />
-          </datasource-dependencies>
-          <filter class='categorical' column='[textscan.42325.497135729165].[none:m:ok]'>
-            <groupfilter function='except' user:ui-domain='database' user:ui-enumeration='exclusive' user:ui-marker='enumerate'>
-              <groupfilter function='level-members' level='[none:m:ok]' />
-              <groupfilter function='member' level='[none:m:ok]' member='0' />
-            </groupfilter>
-          </filter>
-          <slices>
-            <column>[textscan.42325.497135729165].[none:m:ok]</column>
-          </slices>
-          <aggregation value='true' />
-        </view>
-        <style>
-        </style>
-        <panes>
-          <pane id='1'>
-            <view>
-              <breakdown value='auto' />
-            </view>
-            <mark class='Automatic' />
-            <encodings>
-              <color column='[textscan.42325.497135729165].[:Measure Names]' />
-            </encodings>
-          </pane>
-        </panes>
-        <rows>[textscan.42325.497135729165].[none:Calculation_4291119154444895:qk]</rows>
-        <cols>[textscan.42325.497135729165].[none:family:nk]</cols>
-      </table>
-    </worksheet>
     <worksheet name='Tiempos Ej3'>
       <table>
         <view>
@@ -913,7 +859,7 @@
         </color-one-way>
       </highlight>
     </window>
-    <window auto-hidden='0' class='worksheet' maximized='1' name='Ejercicio 2: Variar N'>
+    <window auto-hidden='0' class='worksheet' maximized='0' name='Ejercicio 2: Variar N'>
       <cards>
         <edge name='left'>
           <strip size='160'>
@@ -947,7 +893,7 @@
         </color-one-way>
       </highlight>
     </window>
-    <window auto-hidden='0' class='worksheet' maximized='0' name='Ejercicio 2: Variar C. N=24'>
+    <window auto-hidden='0' class='worksheet' maximized='1' name='Ejercicio 2: Variar C. N=24'>
       <cards>
         <edge name='left'>
           <strip size='160'>
@@ -974,34 +920,6 @@
           <field>[textscan.42325.497135729165].[none:method:ok]</field>
           <field>[textscan.42325.497135729165].[none:n:ok]</field>
           <field>[textscan.42325.497135729165].[none:timer:nk]</field>
-        </color-one-way>
-      </highlight>
-    </window>
-    <window auto-hidden='0' class='worksheet' maximized='0' name='Sheet 7'>
-      <cards>
-        <edge name='left'>
-          <strip size='160'>
-            <card type='pages' />
-            <card type='filters' />
-            <card type='marks' />
-            <card pane-specification-id='1' param='[textscan.42325.497135729165].[:Measure Names]' type='color' />
-          </strip>
-        </edge>
-        <edge name='top'>
-          <strip size='2147483647'>
-            <card type='columns' />
-          </strip>
-          <strip size='2147483647'>
-            <card type='rows' />
-          </strip>
-        </edge>
-      </cards>
-      <highlight>
-        <color-one-way>
-          <field>[textscan.42325.497135729165].[none:Calculation_4291119154444895:qk]</field>
-          <field>[textscan.42325.497135729165].[none:expected:qk]</field>
-          <field>[textscan.42325.497135729165].[none:family:nk]</field>
-          <field>[textscan.42325.497135729165].[none:m:ok]</field>
         </color-one-way>
       </highlight>
     </window>
@@ -1330,52 +1248,6 @@
       8bl41ufhg72xrj9+INDT2z/EEzo8tDkD2bk9PhfHur3+wYEBdvtUQEggEPCHIm63a7Tbn8bt
       9bk41uPiRo6caM5/dg+XV589fZpj+aPJBLPtd2vKlUxV/X9V3BC/w044QAAAAABJRU5ErkJg
       gg==
-    </thumbnail>
-    <thumbnail height='192' name='Sheet 7' width='192'>
-      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
-      9/xfSjSk/gtPQ33C0QzGswAAAABJRU5ErkJggg==
     </thumbnail>
   </thumbnails>
 </workbook>

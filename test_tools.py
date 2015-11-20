@@ -122,7 +122,7 @@ class TwoListTest(TestRunner):
         self.directory = "two_list_tests"
 
     def execute(self):
-        for n in xrange(5, 50):
+        for n in xrange(5, 100):
             for m in xrange(0, 1 + (n*(n-1))/2):
                 for c in xrange(4, n+1):
                     try:
