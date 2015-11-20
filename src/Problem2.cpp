@@ -44,6 +44,7 @@ Coloring coloringExists(const Graph &graph, const ColorStorage &colors, Coloring
         return current;
     } else {
         // Chequear si es 2 list coloring
+        #ifdef PODAS
         if (is2ListColoring(graph, colors, current)) {
             ColorStorage storage = transform(graph, colors, current);
             Problem1 instance(graph, storage);
@@ -64,6 +65,16 @@ Coloring coloringExists(const Graph &graph, const ColorStorage &colors, Coloring
         }
 
         throw std::runtime_error("Se fue todo a la chota");
+        #else
+        for (auto &colour : colors.get(node)) {
+            try {
+                return coloringExists(graph, colors, current, node + 1);
+            } catch (...) {
+                    continue;
+            }
+        }
+        #endif
+
     }
 }
 
