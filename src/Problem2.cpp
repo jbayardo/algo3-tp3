@@ -41,11 +41,12 @@ bool isAdmissible(const Graph &graph, const Coloring &current, std::size_t node,
 
 Coloring coloringExists(const Graph &graph, const ColorStorage &colors, Coloring current, std::size_t node) {
     if (current.complete()) {
+        #ifndef PODAS
         if (current.conflicts_exists()) {
             throw std::runtime_error("Existen conflictos!!");
-        } else {
-            return current;
         }
+        #endif
+        return current;
     } else {
         // Chequear si es 2 list coloring
         #ifdef PODAS
