@@ -1,0 +1,977 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+<workbook source-platform='win' version='9.0' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <!-- build 9000.15.0527.1215                                -->
+  <preferences>
+    <preference name='ui.encoding.shelf.height' value='24' />
+    <preference name='ui.shelf.height' value='26' />
+  </preferences>
+  <datasources>
+    <datasource caption='E3' inline='true' name='textscan.42328.538650937502' version='9.0'>
+      <connection class='textscan' directory='//VBOXSVR/algo3-tp3' filename='e3.csv' password='' server=''>
+        <relation name='e3#csv' table='[e3#csv]' type='table'>
+          <columns character-set='UTF-8' header='yes' locale='en_US' separator=','>
+            <column datatype='string' name='batch' ordinal='0' />
+            <column datatype='integer' name='c' ordinal='1' />
+            <column datatype='integer' name='conflicts' ordinal='2' />
+            <column datatype='integer' name='expected' ordinal='3' />
+            <column datatype='string' name='family' ordinal='4' />
+            <column datatype='integer' name='m' ordinal='5' />
+            <column datatype='integer' name='method' ordinal='6' />
+            <column datatype='integer' name='n' ordinal='7' />
+            <column datatype='integer' name='run' ordinal='8' />
+            <column datatype='string' name='timer' ordinal='9' />
+            <column datatype='integer' name='unique_colors' ordinal='10' />
+            <column datatype='integer' name='value' ordinal='11' />
+          </columns>
+        </relation>
+        <metadata-records>
+          <metadata-record class='column'>
+            <remote-name>batch</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[batch]</local-name>
+            <parent-name>[e3#csv]</parent-name>
+            <remote-alias>batch</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteCollation'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='DebugRemoteMetadata (compression)'>&quot;heap&quot;</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>4294967292</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (storagewidth)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;str&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>c</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[c]</local-name>
+            <parent-name>[e3#csv]</parent-name>
+            <remote-alias>c</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>conflicts</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[conflicts]</local-name>
+            <parent-name>[e3#csv]</parent-name>
+            <remote-alias>conflicts</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>expected</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[expected]</local-name>
+            <parent-name>[e3#csv]</parent-name>
+            <remote-alias>expected</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>family</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[family]</local-name>
+            <parent-name>[e3#csv]</parent-name>
+            <remote-alias>family</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteCollation'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='DebugRemoteMetadata (compression)'>&quot;heap&quot;</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>4294967292</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (storagewidth)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;str&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>m</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[m]</local-name>
+            <parent-name>[e3#csv]</parent-name>
+            <remote-alias>m</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>method</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[method]</local-name>
+            <parent-name>[e3#csv]</parent-name>
+            <remote-alias>method</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>n</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[n]</local-name>
+            <parent-name>[e3#csv]</parent-name>
+            <remote-alias>n</remote-alias>
+            <ordinal>7</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>run</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[run]</local-name>
+            <parent-name>[e3#csv]</parent-name>
+            <remote-alias>run</remote-alias>
+            <ordinal>8</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>timer</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[timer]</local-name>
+            <parent-name>[e3#csv]</parent-name>
+            <remote-alias>timer</remote-alias>
+            <ordinal>9</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteCollation'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='DebugRemoteMetadata (compression)'>&quot;heap&quot;</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>4294967292</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (storagewidth)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;str&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>unique_colors</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[unique_colors]</local-name>
+            <parent-name>[e3#csv]</parent-name>
+            <remote-alias>unique_colors</remote-alias>
+            <ordinal>10</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>value</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[value]</local-name>
+            <parent-name>[e3#csv]</parent-name>
+            <remote-alias>value</remote-alias>
+            <ordinal>11</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='capability'>
+            <remote-name></remote-name>
+            <remote-type>0</remote-type>
+            <parent-name>[e3#csv]</parent-name>
+            <remote-alias></remote-alias>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='character-set'>&quot;UTF-8&quot;</attribute>
+              <attribute datatype='string' name='collation'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='field-delimiter'>&quot;,&quot;</attribute>
+              <attribute datatype='string' name='header-row'>&quot;true&quot;</attribute>
+              <attribute datatype='string' name='locale'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='single-char'>&quot;&quot;</attribute>
+            </attributes>
+          </metadata-record>
+        </metadata-records>
+      </connection>
+      <aliases enabled='yes' />
+      <column datatype='integer' name='[Number of Records]' role='measure' type='quantitative' user:auto-column='numrec'>
+        <calculation class='tableau' formula='1' />
+      </column>
+      <column caption='Batch' datatype='string' name='[batch]' role='dimension' type='nominal'>
+      </column>
+      <column aggregation='Sum' caption='C' datatype='integer' name='[c]' role='dimension' type='ordinal'>
+      </column>
+      <column caption='Conflicts' datatype='integer' name='[conflicts]' role='measure' type='quantitative'>
+      </column>
+      <column aggregation='Sum' caption='Expected' datatype='integer' name='[expected]' role='dimension' type='ordinal'>
+      </column>
+      <column caption='Family' datatype='string' name='[family]' role='dimension' type='nominal'>
+      </column>
+      <column aggregation='Sum' caption='M' datatype='integer' name='[m]' role='dimension' type='ordinal'>
+      </column>
+      <column aggregation='Sum' caption='Method' datatype='integer' name='[method]' role='dimension' type='ordinal'>
+      </column>
+      <column aggregation='Sum' caption='N' datatype='integer' name='[n]' role='dimension' type='ordinal'>
+      </column>
+      <column aggregation='Sum' caption='Run' datatype='integer' name='[run]' role='dimension' type='ordinal'>
+      </column>
+      <column caption='Timer' datatype='string' name='[timer]' role='dimension' type='nominal'>
+      </column>
+      <column caption='Unique Colors' datatype='integer' name='[unique_colors]' role='measure' type='quantitative'>
+      </column>
+      <column caption='Value' datatype='integer' name='[value]' role='measure' type='quantitative'>
+      </column>
+      <layout dim-ordering='alphabetic' dim-percentage='0.5' measure-ordering='alphabetic' measure-percentage='0.4' show-structure='true' />
+      <semantic-values>
+        <semantic-value key='[Country].[Name]' value='&quot;United States&quot;' />
+      </semantic-values>
+    </datasource>
+    <datasource caption='E4' inline='true' name='textscan.42328.539009733795' version='9.0'>
+      <connection class='textscan' directory='//VBOXSVR/algo3-tp3' filename='e4.csv' password='' server=''>
+        <relation name='e4#csv' table='[e4#csv]' type='table'>
+          <columns character-set='UTF-8' header='yes' locale='en_US' separator=','>
+            <column datatype='string' name='batch' ordinal='0' />
+            <column datatype='integer' name='c' ordinal='1' />
+            <column datatype='integer' name='conflicts' ordinal='2' />
+            <column datatype='integer' name='expected' ordinal='3' />
+            <column datatype='string' name='family' ordinal='4' />
+            <column datatype='integer' name='m' ordinal='5' />
+            <column datatype='integer' name='method' ordinal='6' />
+            <column datatype='integer' name='n' ordinal='7' />
+            <column datatype='integer' name='run' ordinal='8' />
+            <column datatype='string' name='timer' ordinal='9' />
+            <column datatype='integer' name='unique_colors' ordinal='10' />
+            <column datatype='integer' name='value' ordinal='11' />
+          </columns>
+        </relation>
+        <metadata-records>
+          <metadata-record class='column'>
+            <remote-name>batch</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[batch]</local-name>
+            <parent-name>[e4#csv]</parent-name>
+            <remote-alias>batch</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteCollation'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='DebugRemoteMetadata (compression)'>&quot;heap&quot;</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>4294967292</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (storagewidth)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;str&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>c</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[c]</local-name>
+            <parent-name>[e4#csv]</parent-name>
+            <remote-alias>c</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>conflicts</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[conflicts]</local-name>
+            <parent-name>[e4#csv]</parent-name>
+            <remote-alias>conflicts</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>expected</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[expected]</local-name>
+            <parent-name>[e4#csv]</parent-name>
+            <remote-alias>expected</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>family</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[family]</local-name>
+            <parent-name>[e4#csv]</parent-name>
+            <remote-alias>family</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteCollation'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='DebugRemoteMetadata (compression)'>&quot;heap&quot;</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>4294967292</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (storagewidth)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;str&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>m</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[m]</local-name>
+            <parent-name>[e4#csv]</parent-name>
+            <remote-alias>m</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>method</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[method]</local-name>
+            <parent-name>[e4#csv]</parent-name>
+            <remote-alias>method</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>n</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[n]</local-name>
+            <parent-name>[e4#csv]</parent-name>
+            <remote-alias>n</remote-alias>
+            <ordinal>7</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>run</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[run]</local-name>
+            <parent-name>[e4#csv]</parent-name>
+            <remote-alias>run</remote-alias>
+            <ordinal>8</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>timer</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[timer]</local-name>
+            <parent-name>[e4#csv]</parent-name>
+            <remote-alias>timer</remote-alias>
+            <ordinal>9</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteCollation'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='DebugRemoteMetadata (compression)'>&quot;heap&quot;</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>4294967292</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (storagewidth)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;str&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>unique_colors</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[unique_colors]</local-name>
+            <parent-name>[e4#csv]</parent-name>
+            <remote-alias>unique_colors</remote-alias>
+            <ordinal>10</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>value</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[value]</local-name>
+            <parent-name>[e4#csv]</parent-name>
+            <remote-alias>value</remote-alias>
+            <ordinal>11</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='capability'>
+            <remote-name></remote-name>
+            <remote-type>0</remote-type>
+            <parent-name>[e4#csv]</parent-name>
+            <remote-alias></remote-alias>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='character-set'>&quot;UTF-8&quot;</attribute>
+              <attribute datatype='string' name='collation'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='field-delimiter'>&quot;,&quot;</attribute>
+              <attribute datatype='string' name='header-row'>&quot;true&quot;</attribute>
+              <attribute datatype='string' name='locale'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='single-char'>&quot;&quot;</attribute>
+            </attributes>
+          </metadata-record>
+        </metadata-records>
+      </connection>
+      <aliases enabled='yes' />
+      <column datatype='integer' name='[Number of Records]' role='measure' type='quantitative' user:auto-column='numrec'>
+        <calculation class='tableau' formula='1' />
+      </column>
+      <column caption='Batch' datatype='string' name='[batch]' role='dimension' type='nominal'>
+      </column>
+      <column aggregation='Sum' caption='C' datatype='integer' name='[c]' role='dimension' type='ordinal'>
+      </column>
+      <column caption='Conflicts' datatype='integer' name='[conflicts]' role='measure' type='quantitative'>
+      </column>
+      <column aggregation='Sum' caption='Expected' datatype='integer' name='[expected]' role='dimension' type='ordinal'>
+      </column>
+      <column caption='Family' datatype='string' name='[family]' role='dimension' type='nominal'>
+      </column>
+      <column aggregation='Sum' caption='M' datatype='integer' name='[m]' role='dimension' type='ordinal'>
+      </column>
+      <column aggregation='Sum' caption='Method' datatype='integer' name='[method]' role='dimension' type='ordinal'>
+      </column>
+      <column aggregation='Sum' caption='N' datatype='integer' name='[n]' role='dimension' type='ordinal'>
+      </column>
+      <column aggregation='Sum' caption='Run' datatype='integer' name='[run]' role='dimension' type='ordinal'>
+      </column>
+      <column caption='Timer' datatype='string' name='[timer]' role='dimension' type='nominal'>
+      </column>
+      <column caption='Unique Colors' datatype='integer' name='[unique_colors]' role='measure' type='quantitative'>
+      </column>
+      <column caption='Value' datatype='integer' name='[value]' role='measure' type='quantitative'>
+      </column>
+      <layout dim-ordering='alphabetic' dim-percentage='0.5' measure-ordering='alphabetic' measure-percentage='0.4' show-structure='true' />
+      <semantic-values>
+        <semantic-value key='[Country].[Name]' value='&quot;United States&quot;' />
+      </semantic-values>
+    </datasource>
+    <datasource caption='E5' inline='true' name='textscan.42328.539111724538' version='9.0'>
+      <connection class='textscan' directory='//VBOXSVR/algo3-tp3' filename='e5.csv' password='' server=''>
+        <relation name='e5#csv' table='[e5#csv]' type='table'>
+          <columns character-set='UTF-8' header='yes' locale='en_US' separator=','>
+            <column datatype='string' name='batch' ordinal='0' />
+            <column datatype='integer' name='c' ordinal='1' />
+            <column datatype='integer' name='conflicts' ordinal='2' />
+            <column datatype='integer' name='expected' ordinal='3' />
+            <column datatype='string' name='family' ordinal='4' />
+            <column datatype='integer' name='m' ordinal='5' />
+            <column datatype='integer' name='method' ordinal='6' />
+            <column datatype='integer' name='n' ordinal='7' />
+            <column datatype='integer' name='run' ordinal='8' />
+            <column datatype='string' name='timer' ordinal='9' />
+            <column datatype='integer' name='unique_colors' ordinal='10' />
+            <column datatype='integer' name='value' ordinal='11' />
+          </columns>
+        </relation>
+        <metadata-records>
+          <metadata-record class='column'>
+            <remote-name>batch</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[batch]</local-name>
+            <parent-name>[e5#csv]</parent-name>
+            <remote-alias>batch</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteCollation'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='DebugRemoteMetadata (compression)'>&quot;heap&quot;</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>4294967292</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (storagewidth)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;str&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>c</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[c]</local-name>
+            <parent-name>[e5#csv]</parent-name>
+            <remote-alias>c</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>conflicts</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[conflicts]</local-name>
+            <parent-name>[e5#csv]</parent-name>
+            <remote-alias>conflicts</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>expected</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[expected]</local-name>
+            <parent-name>[e5#csv]</parent-name>
+            <remote-alias>expected</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>family</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[family]</local-name>
+            <parent-name>[e5#csv]</parent-name>
+            <remote-alias>family</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteCollation'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='DebugRemoteMetadata (compression)'>&quot;heap&quot;</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>4294967292</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (storagewidth)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;str&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>m</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[m]</local-name>
+            <parent-name>[e5#csv]</parent-name>
+            <remote-alias>m</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>method</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[method]</local-name>
+            <parent-name>[e5#csv]</parent-name>
+            <remote-alias>method</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>n</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[n]</local-name>
+            <parent-name>[e5#csv]</parent-name>
+            <remote-alias>n</remote-alias>
+            <ordinal>7</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>run</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[run]</local-name>
+            <parent-name>[e5#csv]</parent-name>
+            <remote-alias>run</remote-alias>
+            <ordinal>8</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>timer</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[timer]</local-name>
+            <parent-name>[e5#csv]</parent-name>
+            <remote-alias>timer</remote-alias>
+            <ordinal>9</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteCollation'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='DebugRemoteMetadata (compression)'>&quot;heap&quot;</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>4294967292</attribute>
+              <attribute datatype='integer' name='DebugRemoteMetadata (storagewidth)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;str&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>unique_colors</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[unique_colors]</local-name>
+            <parent-name>[e5#csv]</parent-name>
+            <remote-alias>unique_colors</remote-alias>
+            <ordinal>10</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>value</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[value]</local-name>
+            <parent-name>[e5#csv]</parent-name>
+            <remote-alias>value</remote-alias>
+            <ordinal>11</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='integer' name='DebugRemoteMetadata (size)'>8</attribute>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;sint64&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='capability'>
+            <remote-name></remote-name>
+            <remote-type>0</remote-type>
+            <parent-name>[e5#csv]</parent-name>
+            <remote-alias></remote-alias>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='character-set'>&quot;UTF-8&quot;</attribute>
+              <attribute datatype='string' name='collation'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='field-delimiter'>&quot;,&quot;</attribute>
+              <attribute datatype='string' name='header-row'>&quot;true&quot;</attribute>
+              <attribute datatype='string' name='locale'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='single-char'>&quot;&quot;</attribute>
+            </attributes>
+          </metadata-record>
+        </metadata-records>
+      </connection>
+      <aliases enabled='yes' />
+      <column datatype='integer' name='[Number of Records]' role='measure' type='quantitative' user:auto-column='numrec'>
+        <calculation class='tableau' formula='1' />
+      </column>
+      <column caption='Batch' datatype='string' name='[batch]' role='dimension' type='nominal'>
+      </column>
+      <column aggregation='Sum' caption='C' datatype='integer' name='[c]' role='dimension' type='ordinal'>
+      </column>
+      <column caption='Conflicts' datatype='integer' name='[conflicts]' role='measure' type='quantitative'>
+      </column>
+      <column aggregation='Sum' caption='Expected' datatype='integer' name='[expected]' role='dimension' type='ordinal'>
+      </column>
+      <column caption='Family' datatype='string' name='[family]' role='dimension' type='nominal'>
+      </column>
+      <column aggregation='Sum' caption='M' datatype='integer' name='[m]' role='dimension' type='ordinal'>
+      </column>
+      <column aggregation='Sum' caption='Method' datatype='integer' name='[method]' role='dimension' type='ordinal'>
+      </column>
+      <column aggregation='Sum' caption='N' datatype='integer' name='[n]' role='dimension' type='ordinal'>
+      </column>
+      <column aggregation='Sum' caption='Run' datatype='integer' name='[run]' role='dimension' type='ordinal'>
+      </column>
+      <column caption='Timer' datatype='string' name='[timer]' role='dimension' type='nominal'>
+      </column>
+      <column caption='Unique Colors' datatype='integer' name='[unique_colors]' role='measure' type='quantitative'>
+      </column>
+      <column caption='Value' datatype='integer' name='[value]' role='measure' type='quantitative'>
+      </column>
+      <layout dim-ordering='alphabetic' dim-percentage='0.5' measure-ordering='alphabetic' measure-percentage='0.4' show-structure='true' />
+      <semantic-values>
+        <semantic-value key='[Country].[Name]' value='&quot;United States&quot;' />
+      </semantic-values>
+    </datasource>
+  </datasources>
+  <worksheets>
+    <worksheet name='Ej3: Conflictos Por Familia'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='E3' name='textscan.42328.538650937502' />
+            <datasource caption='E4' name='textscan.42328.539009733795' />
+          </datasources>
+          <datasource-dependencies datasource='textscan.42328.538650937502'>
+            <column-instance column='[conflicts]' derivation='Avg' name='[avg:conflicts:qk]' pivot='key' type='quantitative' />
+            <column caption='Conflicts' datatype='integer' name='[conflicts]' role='measure' type='quantitative'>
+            </column>
+            <column caption='Family' datatype='string' name='[family]' role='dimension' type='nominal'>
+            </column>
+            <column-instance column='[family]' derivation='None' name='[none:family:nk]' pivot='key' type='nominal' />
+          </datasource-dependencies>
+          <datasource-dependencies datasource='textscan.42328.539009733795'>
+            <column aggregation='Sum' caption='C' datatype='integer' name='[c]' role='dimension' type='ordinal'>
+            </column>
+            <column caption='Conflicts' datatype='integer' name='[conflicts]' role='measure' type='quantitative'>
+            </column>
+            <column aggregation='Sum' caption='M' datatype='integer' name='[m]' role='dimension' type='ordinal'>
+            </column>
+            <column aggregation='Sum' caption='N' datatype='integer' name='[n]' role='dimension' type='ordinal'>
+            </column>
+            <column aggregation='Sum' caption='Run' datatype='integer' name='[run]' role='dimension' type='ordinal'>
+            </column>
+            <column-instance column='[conflicts]' derivation='Sum' name='[sum:conflicts:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='axis'>
+            <format attr='title' class='0' field='[textscan.42328.538650937502].[avg:conflicts:qk]' scope='rows' value='Cantidad de Conflictos Promedio' />
+            <format attr='subtitle' class='0' field='[textscan.42328.538650937502].[avg:conflicts:qk]' scope='rows' value='' />
+            <format attr='auto-subtitle' class='0' field='[textscan.42328.538650937502].[avg:conflicts:qk]' scope='rows' value='true' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+          </pane>
+          <pane id='1' y-axis-name='[textscan.42328.538650937502].[avg:conflicts:qk]'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+          </pane>
+          <pane id='2' y-axis-name='[textscan.42328.539009733795].[sum:conflicts:qk]'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+          </pane>
+        </panes>
+        <rows>([textscan.42328.538650937502].[avg:conflicts:qk] + [textscan.42328.539009733795].[sum:conflicts:qk])</rows>
+        <cols>[textscan.42328.538650937502].[none:family:nk]</cols>
+        <join-lod-include-overrides>
+          <column>[textscan.42328.539009733795].[c]</column>
+          <column>[textscan.42328.539009733795].[m]</column>
+          <column>[textscan.42328.539009733795].[n]</column>
+          <column>[textscan.42328.539009733795].[run]</column>
+        </join-lod-include-overrides>
+      </table>
+    </worksheet>
+  </worksheets>
+  <windows>
+    <window class='schema' source-height='-1' />
+    <window auto-hidden='0' class='worksheet' maximized='1' name='Ej3: Conflictos Por Familia'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+        </edge>
+      </cards>
+      <highlight>
+        <color-one-way>
+          <field>[textscan.42328.538650937502].[none:family:nk]</field>
+        </color-one-way>
+      </highlight>
+    </window>
+  </windows>
+  <thumbnails>
+    <thumbnail height='192' name='Ej3: Conflictos Por Familia' width='192'>
+      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
+      9k/DEPaWuZAJpwAAAABJRU5ErkJggg==
+    </thumbnail>
+  </thumbnails>
+</workbook>
